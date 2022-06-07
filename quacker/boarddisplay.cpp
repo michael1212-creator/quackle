@@ -36,9 +36,12 @@ BoardWithQuickEntry::BoardWithQuickEntry(QWidget *parent)
 	connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(quickEditReturnPressed()));
 	connect(m_lineEdit, SIGNAL(shiftReturnPressed()), this, SLOT(quickEditShiftReturnPressed()));
 
-	QLabel *placeLabel = new QLabel(tr("Move: '<position> <word>' or 'exchange <tiles|number>'"));
-	placeLabel->setBuddy(m_lineEdit);
-	m_vlayout->addWidget(placeLabel);
+        QLabel *placeLabel = new QLabel(tr("Move: '<position> <word>' or 'exchange <tiles|number>'"));
+        QLabel *placeLabel2 = new QLabel(tr("Move: '<position> <word>' or 'exchange <tiles|number>'"));
+        placeLabel->setBuddy(m_lineEdit);
+        m_vlayout->addWidget(placeLabel);
+        placeLabel2->setBuddy(m_lineEdit);
+        m_vlayout->addWidget(placeLabel2);
 
 	QHBoxLayout *placeEditLayout = new QHBoxLayout;
 	Geometry::setupInnerLayout(placeEditLayout);
