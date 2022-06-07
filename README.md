@@ -13,6 +13,11 @@ Building Quackle:
 Quackle runs automated GitHub CI builds on Qt 5.12 and 5.15, so it should work with any Qt version in that range.
 See README.MacOS and README.Windows for platform-specific instructions.  Generally:
 
+Install Qt by:
+
+    sudo apt-get install qt5-qmake
+    sudo apt-get install qtbase5-dev
+
 Clone the repo or download the tarball and untar.  Use qmake to build quackle.pro and quackleio/quackleio.pro:
 
 	qmake quackle.pro && make
