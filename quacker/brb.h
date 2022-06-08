@@ -47,6 +47,7 @@ private:
 	View *m_boardDisplay;
 	View *m_rackDisplay;
 	View *m_bagDisplay;
+        View *m_hintsDisplay;
 };
 
 #endif

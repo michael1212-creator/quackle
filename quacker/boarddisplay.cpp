@@ -37,20 +37,24 @@ BoardWithQuickEntry::BoardWithQuickEntry(QWidget *parent)
 	connect(m_lineEdit, SIGNAL(shiftReturnPressed()), this, SLOT(quickEditShiftReturnPressed()));
 
         QLabel *placeLabel = new QLabel(tr("Move: '<position> <word>' or 'exchange <tiles|number>'"));
-        QLabel *placeLabel2 = new QLabel(tr("Move: '<position> <word>' or 'exchange <tiles|number>'"));
         placeLabel->setBuddy(m_lineEdit);
         m_vlayout->addWidget(placeLabel);
-        placeLabel2->setBuddy(m_lineEdit);
-        m_vlayout->addWidget(placeLabel2);
 
-	QHBoxLayout *placeEditLayout = new QHBoxLayout;
-	Geometry::setupInnerLayout(placeEditLayout);
-	m_vlayout->addLayout(placeEditLayout);
-	placeEditLayout->addWidget(m_lineEdit);
+        QHBoxLayout *placeEditLayout = new QHBoxLayout;
+        Geometry::setupInnerLayout(placeEditLayout);
+        m_vlayout->addLayout(placeEditLayout);
+        placeEditLayout->addWidget(m_lineEdit);
 
-	QPushButton *placeButton = new QPushButton(tr("Enter move"));
-	connect(placeButton, SIGNAL(clicked()), this, SLOT(quickEditReturnPressed()));
-	//placeEditLayout->addWidget(placeButton);
+/*        for (int i = 0; i < 10; i ++) {
+          QHBoxLayout *placeEditLayout2 = new QHBoxLayout;
+          Geometry::setupInnerLayout(placeEditLayout2);
+          m_vlayout->addLayout(placeEditLayout2);
+          placeEditLayout2->addWidget(m_lineEdit);
+
+          QPushButton *scoreAdditionButton = new QPushButton(tr("+5"));
+          connect(scoreAdditionButton, SIGNAL(clicked()), this, SLOT(plusFive()));
+          placeEditLayout2->addWidget(scoreAdditionButton);
+        }*/
 
 	QPushButton *scoreAdditionButton = new QPushButton(tr("+5"));
 	connect(scoreAdditionButton, SIGNAL(clicked()), this, SLOT(plusFive()));
@@ -59,10 +63,6 @@ BoardWithQuickEntry::BoardWithQuickEntry(QWidget *parent)
 	m_commitButton = new QPushButton(tr("Commit"));
 	connect(m_commitButton, SIGNAL(clicked()), this, SLOT(performCommit()));
 	placeEditLayout->addWidget(m_commitButton);
-
-	QPushButton *resetButton = new QPushButton(tr("Rese&t"));
-	connect(resetButton, SIGNAL(clicked()), this, SLOT(reset()));
-	//placeEditLayout->addWidget(resetButton);
 }
 
 BoardWithQuickEntry::~BoardWithQuickEntry()

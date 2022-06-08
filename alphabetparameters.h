@@ -50,7 +50,7 @@ namespace Quackle
 {
 
 // Letter & LetterString are internally encoded strings mapped
-// from UVString (UV == user visible) to 1-n indices.  The are intended 
+// from UVString (UV == user visible) to 1-n indices. They are intended
 // to be language independent whereas UVStrings are language dependent.
 #define LETTER_STRING_MAXIMUM_LENGTH FIXED_STRING_MAXIMUM_LENGTH
 typedef unsigned char Letter;

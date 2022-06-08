@@ -56,16 +56,6 @@ BagDisplay::~BagDisplay()
 void BagDisplay::positionChanged(const Quackle::GamePosition &position)
 {
 	showTiles(position.unseenBag().tiles());
-
-	// Birthday
-	for (const auto& it : position.players())
-	{
-		if (it.name() == "zorbonauts")
-		{
-			m_label->setText(tr("The bag is collapsed in a transparent dead jellyfish-like heap on the table while flies buzz round"));
-			break;
-		}
-	}
 }
 
 void BagDisplay::showTiles(const Quackle::LongLetterString &tiles)

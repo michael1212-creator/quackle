@@ -29,7 +29,7 @@ Finally, build the main binary.
 
 i.e.
 
-    qmake quackle.pro && make && cd quackleio && qmake && make && cd .. && cd quacker && qmake && make && ./Quackle
+    qmake quackle.pro && make && cd quackleio && qmake && make && cd .. && cd quacker && qmake && make && ./Quackle && cd ..
 
 The binary will build as 'Quackle'.  It might be found in the quacker directory or in the release subdirectory.
 

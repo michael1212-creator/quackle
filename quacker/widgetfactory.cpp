@@ -17,6 +17,7 @@
  */
 
 #include "bagdisplay.h"
+#include "hintsdisplay.h"
 #include "boarddisplay.h"
 #include "graphicalboard.h"
 #include "boardsetup.h"
@@ -38,6 +39,11 @@ View *TextFactory::createBagDisplay()
 	return new BagDisplay;
 }
 
+View *TextFactory::createHintsDisplay()
+{
+	return new HintsDisplay;
+}
+
 View *GraphicalFactory::createBoardDisplay()
 {
 	return new GraphicalBoard;
@@ -53,6 +59,11 @@ View *GraphicalFactory::createBagDisplay()
 	return new BagDisplay;
 }
 
+View *GraphicalFactory::createHintsDisplay()
+{
+	return new HintsDisplay;
+}
+
 View *BoardSetupFactory::createBoardDisplay()
 {
 	return new BoardSetup;
@@ -65,6 +76,10 @@ View *BoardSetupFactory::createRackDisplay()
 
 View *BoardSetupFactory::createBagDisplay()
 {
-	return new View;
+        return new View;
 }
 
+View *BoardSetupFactory::createHintsDisplay()
+{
+        return new View;
+}

@@ -49,12 +49,16 @@ BRB::BRB(WidgetFactory *widgetFactory, QWidget *parent)
 
 	topHorizontalLayout->setStretchFactor(leftVerticalLayout, 10);
 
-	m_bagDisplay = widgetFactory->createBagDisplay();
-	rightVerticalLayout->addWidget(m_bagDisplay);
+        m_bagDisplay = widgetFactory->createBagDisplay();
+        rightVerticalLayout->addWidget(m_bagDisplay);
+
+        m_hintsDisplay = widgetFactory->createHintsDisplay();
+        rightVerticalLayout->addWidget(m_hintsDisplay);
 
 	m_subviews.push_back(m_boardDisplay);
 	m_subviews.push_back(m_rackDisplay);
-	m_subviews.push_back(m_bagDisplay);
+        m_subviews.push_back(m_bagDisplay);
+        m_subviews.push_back(m_hintsDisplay);
 	connectSubviewSignals();
 }
 

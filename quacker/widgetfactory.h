@@ -27,7 +27,8 @@ public:
 	virtual ~WidgetFactory() { };
 	virtual View *createBoardDisplay() = 0;
 	virtual View *createRackDisplay() = 0;
-	virtual View *createBagDisplay() = 0;
+    virtual View *createBagDisplay() = 0;
+    virtual View *createHintsDisplay() = 0;
 };
 
 class TextFactory : public WidgetFactory
@@ -37,6 +38,7 @@ public:
 	virtual View *createBoardDisplay();
 	virtual View *createRackDisplay();
 	virtual View *createBagDisplay();
+	virtual View *createHintsDisplay();
 };
 
 class GraphicalFactory : public WidgetFactory
@@ -46,6 +48,7 @@ public:
 	virtual View *createBoardDisplay();
 	virtual View *createRackDisplay();
 	virtual View *createBagDisplay();
+	virtual View *createHintsDisplay();
 };
 
 class BoardSetupFactory : public WidgetFactory
@@ -55,6 +58,7 @@ public:
 	virtual View *createBoardDisplay();
 	virtual View *createRackDisplay();
 	virtual View *createBagDisplay();
+	virtual View *createHintsDisplay();
 };
 
 #endif
