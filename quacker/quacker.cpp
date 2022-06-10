@@ -1428,7 +1428,7 @@ void TopLevel::advanceGame()
 {
 	if (isPlayerOnTurnComputer())
 		startOppoThread();
-
+        m_game->currentPosition().appendHint(UVString("asdfasdfasfasdf\n\n"));
 	showToHuman();
 }
 
