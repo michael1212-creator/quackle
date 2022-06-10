@@ -188,11 +188,12 @@ GamePosition::GamePosition(const PlayerList &players)
 	setEmptyBoard();
 	resetMoveMade();
 	resetBag();
+        clearHints();
 	m_tilesInBag = m_bag.fullBagTileCount() - (QUACKLE_PARAMETERS->rackSize() * m_players.size()); 
 }
 
 GamePosition::GamePosition(const GamePosition &position)
-	: m_players(position.m_players), m_moves(position.m_moves), m_moveMade(position.m_moveMade), m_committedMove(position.m_committedMove), m_turnNumber(position.m_turnNumber), m_nestedness(position.m_nestedness), m_scorelessTurnsInARow(position.m_scorelessTurnsInARow), m_gameOver(position.m_gameOver), m_tilesInBag(position.m_tilesInBag), m_tilesOnRack(position.m_tilesOnRack), m_board(position.m_board), m_bag(position.m_bag), m_drawingOrder(position.m_drawingOrder), m_explanatoryNote(position.m_explanatoryNote)
+	: m_players(position.m_players), m_moves(position.m_moves), m_moveMade(position.m_moveMade), m_committedMove(position.m_committedMove), m_turnNumber(position.m_turnNumber), m_nestedness(position.m_nestedness), m_scorelessTurnsInARow(position.m_scorelessTurnsInARow), m_gameOver(position.m_gameOver), m_tilesInBag(position.m_tilesInBag), m_tilesOnRack(position.m_tilesOnRack), m_board(position.m_board), m_bag(position.m_bag), m_drawingOrder(position.m_drawingOrder), m_explanatoryNote(position.m_explanatoryNote), m_playerHints(position.m_playerHints)
 {
 	// reset iterator
 	if (position.turnNumber() == 0)
@@ -244,6 +245,7 @@ GamePosition::GamePosition()
 	setEmptyBoard();
 	resetMoveMade();
 	resetBag();
+        clearHints();
 }
 
 void GamePosition::kibitz(int nmoves)
@@ -493,7 +495,27 @@ double GamePosition::calculateSharedConsideration(const Move &move)
 
 Bag GamePosition::unseenBag() const
 {
-	return unseenBagFromPlayerPerspective(currentPlayer());
+        return unseenBagFromPlayerPerspective(currentPlayer());
+}
+
+LongLetterString GamePosition::playerHints() const
+{
+        return m_playerHints;
+}
+
+void GamePosition::setHints(const Quackle::LongLetterString &hints)
+{
+        m_playerHints = hints;
+}
+
+void GamePosition::clearHints()
+{
+        m_playerHints.clear();
+}
+
+void GamePosition::appendHint(const Quackle::LongLetterString &hint)
+{
+        m_playerHints.append(hint);
 }
 
 Bag GamePosition::unseenBagFromPlayerPerspective(const Player &player) const

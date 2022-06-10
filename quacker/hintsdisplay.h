@@ -7,8 +7,7 @@
 class QLabel;
 class QTextEdit;
 
-class HintsDisplay : public View
-{
+class HintsDisplay : public View {
   Q_OBJECT
 
 public:

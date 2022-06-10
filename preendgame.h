@@ -43,7 +43,7 @@ private:
 	int calculateTimeLimit() const;
 	int calculateInitialCandidates() const;
 
-	// Warning: this function has many side affects!
+	// Warning: this function has many side effects!
 	void getInitialMoves(MoveList *moves);
 
 	double calculateFractionAllottedToInitialBogo() const;
