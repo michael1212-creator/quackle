@@ -3,10 +3,10 @@ DEPENDPATH += .
 INCLUDEPATH += . .. ../..
 
 # enable/disable debug symbols
-#CONFIG += debug
+CONFIG += debug
 CONFIG += release
 CONFIG += c++14
-CONFIG -= debug
+#CONFIG -= debug
 
 debug {
   OBJECTS_DIR = obj/debug

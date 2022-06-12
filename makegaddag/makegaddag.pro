@@ -2,7 +2,7 @@ TEMPLATE = app
 DEPENDPATH += .. ../quackleio
 INCLUDEPATH += . ..
 CONFIG += release
-CONFIG -= debug
+#CONFIG -= debug
 
 debug {
   OBJECTS_DIR = obj/debug
@@ -17,7 +17,7 @@ release {
 MOC_DIR = moc
 
 # enable/disable debug symbols
-# CONFIG += debug
+CONFIG += debug
 
 CONFIG += console c++14
 CONFIG -= app_bundle

@@ -16,7 +16,7 @@ release {
 MOC_DIR = moc
 
 # enable/disable debug symbols
-#CONFIG += debug staticlib
+CONFIG += debug staticlib
 CONFIG += release staticlib c++14
 CONFIG -= x11
 
