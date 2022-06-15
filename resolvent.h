@@ -52,7 +52,7 @@ public:
 	virtual ComputerPlayer *clone() { return new InferringPlayer; }
 };
 
-class TorontoPlayer : public Resolvent
+class TorontoPlayer : public Resolvent // Championship Player / ChampionshipPlayer
 {
 public:
 	TorontoPlayer();

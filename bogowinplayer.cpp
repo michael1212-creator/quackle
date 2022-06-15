@@ -89,41 +89,12 @@ MoveList SmartBogowin::moves(int nmoves)
 	Stopwatch stopwatch;
 	
 	if (currentPosition().bag().empty())
-    {
-        signalFractionDone(0);
+        {
+                signalFractionDone(0);
 		EndgamePlayer endgame;
 		endgame.setPosition(currentPosition());
 		return endgame.moves(nmoves);
 	}
-
-    // TODO
-    // Move this all to an Inferrer class
-    //
-    // Generate all moves for all racks opp could have had.
-    // This can be done efficiently by making a big "rack" out of the bag (with the computer
-    // player's own rack removed) and generating moves from that big "rack" with some smarts
-    // added to the move generator to not create moves that have so many tiles not in the
-    // opp's play that they wouldn't have been possible from any of the racks we're looking
-    // for. Make a ProbableRackList of racks from which the opp's play is best or nearly
-    // (really what we're looking for is least bad). Most heavily weight the leaves for which
-    // the play is as close to optimal as possible (an x-point static mistake), and let the
-    // weights taper off to zero as the mistakes approach say x+7.
-    //
-    // Make the Simulator able to select racks randomly from the ProbableRackList
-    if (m_parameters.inferring) {
-        int numPlayers = (int)currentPosition().players().size();
-        UVcout << "numPlayers: " << numPlayers << endl;
-        if (numPlayers == 2) {
-            bool hasPreviousPosition;
-            GamePosition previous = m_simulator.history().previousPosition(&hasPreviousPosition);
-            if (hasPreviousPosition) {
-                UVcout << "previous position:" << endl;
-                UVcout << previous << endl;
-            } else {
-                UVcout << "no previous position" << endl;
-            }
-        }
-    }
 
 	UVcout << "SmartBogowin generating move from position:" << endl;
 	UVcout << currentPosition() << endl;
