@@ -22,60 +22,53 @@
 #include "alphabetparameters.h"
 #include "computerplayer.h"
 
-namespace Quackle
-{
+namespace Quackle {
 
-class Resolvent : public ComputerPlayer
-{
+class Resolvent : public ComputerPlayer {
 public:
-	Resolvent();
-	virtual ~Resolvent();
+  Resolvent();
+  virtual ~Resolvent();
 
-	virtual Move move();
-	virtual MoveList moves(int nmoves);
-	virtual ComputerPlayer *clone() { return new Resolvent; }
+  virtual Move move();
+  virtual MoveList moves(int nmoves);
+  virtual ComputerPlayer *clone() { return new Resolvent; }
 
-	virtual bool isSlow() const;
-	virtual bool isUserVisible() const;
+  virtual bool isSlow() const;
+  virtual bool isUserVisible() const;
 };
 
-inline bool Resolvent::isUserVisible() const
-{
-	return true;
-}
+inline bool Resolvent::isUserVisible() const { return true; }
 
-class InferringPlayer : public Resolvent
-{
+class InferringPlayer : public Resolvent {
 public:
-	InferringPlayer();
-	virtual ~InferringPlayer();
-	virtual ComputerPlayer *clone() { return new InferringPlayer; }
+  InferringPlayer();
+  virtual ~InferringPlayer();
+  virtual ComputerPlayer *clone() { return new InferringPlayer; }
 };
 
-class TorontoPlayer : public Resolvent // Championship Player / ChampionshipPlayer
+class TorontoPlayer
+    : public Resolvent // Championship Player / ChampionshipPlayer
 {
 public:
-	TorontoPlayer();
-	virtual ~TorontoPlayer();
-	virtual ComputerPlayer *clone() { return new TorontoPlayer; }
+  TorontoPlayer();
+  virtual ~TorontoPlayer();
+  virtual ComputerPlayer *clone() { return new TorontoPlayer; }
 };
 
-class FiveMinutePlayer : public Resolvent
-{
+class FiveMinutePlayer : public Resolvent {
 public:
-	FiveMinutePlayer();
-	virtual ~FiveMinutePlayer();
-	virtual ComputerPlayer *clone() { return new FiveMinutePlayer; }
+  FiveMinutePlayer();
+  virtual ~FiveMinutePlayer();
+  virtual ComputerPlayer *clone() { return new FiveMinutePlayer; }
 };
 
-class TwentySecondPlayer : public Resolvent
-{
+class TwentySecondPlayer : public Resolvent {
 public:
-	TwentySecondPlayer();
-	virtual ~TwentySecondPlayer();
-	virtual ComputerPlayer *clone() { return new TwentySecondPlayer; }
+  TwentySecondPlayer();
+  virtual ~TwentySecondPlayer();
+  virtual ComputerPlayer *clone() { return new TwentySecondPlayer; }
 };
 
-}
+} // namespace Quackle
 
 #endif
