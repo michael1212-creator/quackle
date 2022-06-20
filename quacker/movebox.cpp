@@ -147,11 +147,7 @@ void MoveBox::setMoves(const Quackle::MoveList &moves,
     resorted = true;
   }
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "UnusedLocalVariable"
-#pragma ide diagnostic ignored "UnusedValue"
   bool hasNewItems = false;
-#pragma clang diagnostic pop
 
   Quackle::MoveList::const_iterator end(moves.end());
   for (Quackle::MoveList::const_iterator it = moves.begin(); it != end; ++it) {

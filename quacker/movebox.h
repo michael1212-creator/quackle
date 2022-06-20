@@ -30,43 +30,49 @@ class QPushButton;
 class QTreeWidget;
 class QTreeWidgetItem;
 
-class MoveBox : public View
-{
-Q_OBJECT
+class MoveBox : public View {
+  Q_OBJECT
 
 public:
-	MoveBox(QWidget *parent = 0);
+  MoveBox(QWidget *parent = 0);
 
-	// Sets the moves shown in the movebox and the current (selected) move
-	void setMoves(const Quackle::MoveList &moves, const Quackle::Move &selectedMove);
+  // Sets the moves shown in the movebox and the current (selected) move
+  void setMoves(const Quackle::MoveList &moves,
+                const Quackle::Move &selectedMove);
 
 public slots:
-	virtual void positionChanged(const Quackle::GamePosition &position);
-	virtual void movesChanged(const Quackle::MoveList &moves);
+  virtual void positionChanged(const Quackle::GamePosition &position);
+  virtual void movesChanged(const Quackle::MoveList &moves);
 
 private slots:
-	void moveActivated(QTreeWidgetItem *item);
-	void selectionChanged();
-	void removeMove();
-	void checkGeometry();
+  void moveActivated(QTreeWidgetItem *item);
+  void selectionChanged();
+  void removeMove();
+  void checkGeometry();
 
 protected:
-	QTreeWidgetItem *createItem(const Quackle::Move &move);
+  QTreeWidgetItem *createItem(const Quackle::Move &move);
 
-	QString formatWinPercentage(double winPercentage);
-	QString formatValuation(double valuation);
+  QString formatWinPercentage(double winPercentage);
+  QString formatValuation(double valuation);
 
-	void setSelectionWatchingEnabled(bool enabled);
+  void setSelectionWatchingEnabled(bool enabled);
 
-	QMap<Quackle::Move, QTreeWidgetItem *> m_moveMap;
-	Quackle::MoveList m_previousMoves;
-	Quackle::Move m_previousSelection;
-	Quackle::Rack m_rack;
+  QMap<Quackle::Move, QTreeWidgetItem *> m_moveMap;
+  Quackle::MoveList m_previousMoves;
+  Quackle::Move m_previousSelection;
+  Quackle::Rack m_rack;
 
-	enum Columns { PlayColumn = 0, ScoreColumn = 1, LeaveColumn = 2, WinPercentageColumn = 3, EquityColumn = 4 };
-	QTreeWidget *m_treeWidget;
-	QPushButton *m_removeButton;
-	QPushButton *m_commitButton;
+  enum Columns {
+    PlayColumn = 0,
+    ScoreColumn = 1,
+    LeaveColumn = 2,
+    WinPercentageColumn = 3,
+    EquityColumn = 4
+  };
+  QTreeWidget *m_treeWidget;
+  QPushButton *m_removeButton;
+  QPushButton *m_commitButton;
 };
 
 #endif

@@ -186,7 +186,7 @@ protected slots:
   // set history location to view
   void goToHistoryLocation(const Quackle::HistoryLocation &location);
 
-  // stop simulation, opponenent thread, etc
+  // stop simulation, opponent thread, etc
   void stopEverything();
 
   // update all views (usually because of a settings change)
