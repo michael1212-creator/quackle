@@ -2,13 +2,13 @@ import pandas as pd
 
 DEBUG = False
 
-base_dir = "Champ1_v_Champ2_results/"
-p1_name = "Champ1"
-p2_name = "Champ2"
+# base_dir = "Champ1_v_Champ2_results/"
+# p1_name = "Champ1"
+# p2_name = "Champ2"
 
-# base_dir = "Static_v_Champ_results/"
-# p1_name = "Champ"
-# p2_name = "Static"
+base_dir = "Static_v_Champ_results/"
+p1_name = "Champ"
+p2_name = "Static"
 
 # base_dir = "Static1_v_Static2_results/"
 # p1_name = "Static1"
@@ -75,8 +75,8 @@ p1_total_score = 0
 p2_total_score = 0
 p1_score_averages_per_turn = 0
 p2_score_averages_per_turn = 0
-p1_scores_over_51 = 0
-p2_scores_over_51 = 0
+p1_bingos = 0
+p2_bingos = 0
 total_number_of_turns = 0
 for i in range(1, 1001):
     table = []
@@ -154,8 +154,9 @@ for i in range(1, 1001):
     for row in table[:-1]:
         p1_number_of_turns += row[0] == p1_name
         p2_number_of_turns += row[0] == p2_name
-        p1_scores_over_51 += row[-2] > 50 and row[0] == p1_name
-        p2_scores_over_51 += row[-2] > 50 and row[0] == p2_name
+        p1_bingos += row[-3].is_placement and len(row[-3].word.replace('.', '')) == 7 and row[0] == p1_name
+        p2_bingos += row[-3].is_placement and len(row[-3].word.replace('.', '')) == 7 and row[0] == p2_name
+
     p1_average_score_per_turn = p1_final_score / p1_number_of_turns
     p2_average_score_per_turn = p2_final_score / p2_number_of_turns
     p1_score_averages_per_turn += p1_average_score_per_turn
@@ -193,10 +194,10 @@ with open(base_dir + out_file_name, 'w') as f:
     f.write("{0}'s average score per turn is {1}\n".format(p2_name, p2_score_averages_per_turn_average))
     f.write("They have a combined average of {0}\n\n".format(combined_average))
 
-    p1_average_bingos_per_game = p1_scores_over_51 / number_of_games
-    p2_average_bingos_per_game = p2_scores_over_51 / number_of_games
+    p1_average_bingos_per_game = p1_bingos / number_of_games
+    p2_average_bingos_per_game = p2_bingos / number_of_games
     combined_average = (p1_average_bingos_per_game + p2_average_bingos_per_game) / 2
-    f.write("{0} has an average of {1} times when the move scores >50 points per game.\n".format(p1_name, p1_average_bingos_per_game))
-    f.write("{0} has an average of {1} times when the move scores >50 points per game.\n".format(p2_name, p2_average_bingos_per_game))
+    f.write("{0} has an average of {1} bingos per game.\n".format(p1_name, p1_average_bingos_per_game))
+    f.write("{0} has an average of {1} bingos per game.\n".format(p2_name, p2_average_bingos_per_game))
     f.write("They have a combined average of {0}\n".format(combined_average))
 
