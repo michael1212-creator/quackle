@@ -251,6 +251,12 @@ const Move &GamePosition::staticBestMove() {
   return m_moves.back();
 }
 
+const Move &GamePosition::greedyBestMove() {
+  kibitz(1);
+  m_moves.sort(m_moves, m_moves.Score);
+  return m_moves.back();
+}
+
 void GamePosition::removeMove(const Quackle::Move &move) {
   const MoveList::iterator end(m_moves.end());
   for (MoveList::iterator it = m_moves.begin(); it != end; ++it) {

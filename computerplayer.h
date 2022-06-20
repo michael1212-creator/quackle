@@ -30,8 +30,8 @@ namespace Quackle
 // Settings that all players should follow.
 struct ComputerParameters
 {
-	// upper bound on time to contemplate current moves
-	int secondsPerTurn;
+    // upper bound on time to contemplate current moves
+    int secondsPerTurn;
 
     // when simming, use likely rack leaves for opponent based on their previous play
     bool inferring;
@@ -207,8 +207,12 @@ public:
 
 	virtual Move move();
 	virtual MoveList moves(int nmoves);
+
+        bool isUserVisible() const;
 };
 
-}
+inline bool StaticPlayer::isUserVisible() const { return true; }
+
+} // namespace Quackle
 
 #endif

@@ -391,19 +391,6 @@ void Simulator::simulateOnePosition(SimmedMoveMessage &message,
           message.logStream << message.xmlIndent << "<pc value=\""
                             << residualAddend << "\" />" << endl;
 
-        if (isVeryFinalTurnOfSimulation) {
-          // experimental -- do shared resource considerations
-          // matter in a plied simulation?
-
-          const double sharedResidual =
-              game.currentPosition().calculateSharedConsideration(move);
-          residualAddend += sharedResidual;
-
-          if (constants.isLogging && sharedResidual != 0)
-            message.logStream << message.xmlIndent << "<sc value=\""
-                              << sharedResidual << "\" />" << endl;
-        }
-
         if (playerId == constants.startPlayerId)
           residual += residualAddend;
         else

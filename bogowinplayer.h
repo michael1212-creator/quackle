@@ -80,5 +80,6 @@ inline int SmartBogowin::maxIterations() const
 	return m_maxIterationsPerSecond * m_parameters.secondsPerTurn;
 }
 
-}
+} // namespace Quackle
+
 #endif
