@@ -1,10 +1,20 @@
 import pandas as pd
 
 DEBUG = False
-base_dir = "Static_v_Champ_results/"
-p1_name = "Champ"
-p2_name = "Static"
-out_file_name = "Static_v_Champ_results"
+
+base_dir = "Champ1_v_Champ2_results/"
+p1_name = "Champ1"
+p2_name = "Champ2"
+
+# base_dir = "Static_v_Champ_results/"
+# p1_name = "Champ"
+# p2_name = "Static"
+
+# base_dir = "Static1_v_Static2_results/"
+# p1_name = "Static1"
+# p2_name = "Static2"
+
+out_file_name = "results"
 out_file = base_dir + out_file_name
 
 
@@ -67,6 +77,7 @@ p1_score_averages_per_turn = 0
 p2_score_averages_per_turn = 0
 p1_scores_over_51 = 0
 p2_scores_over_51 = 0
+total_number_of_turns = 0
 for i in range(1, 1001):
     table = []
     p1_final_score = 0
@@ -149,6 +160,7 @@ for i in range(1, 1001):
     p2_average_score_per_turn = p2_final_score / p2_number_of_turns
     p1_score_averages_per_turn += p1_average_score_per_turn
     p2_score_averages_per_turn += p2_average_score_per_turn
+    total_number_of_turns += p1_number_of_turns + p2_number_of_turns
 
     if DEBUG:
         df = pd.DataFrame(table, columns=titles)
@@ -160,7 +172,9 @@ for i in range(1, 1001):
 
 with open(base_dir + out_file_name, 'w') as f:
     non_draws = number_of_games - draws
+    average_total_number_of_turns = total_number_of_turns / number_of_games
     f.write("A total of {0} games were played, with {1} draws.\n".format(number_of_games, draws))
+    f.write("The average number of turns per game is {0}\n\n".format(average_total_number_of_turns))
     f.write(p1_name + " wins " + str(p1_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p1_wins/non_draws, 100*p1_wins/number_of_games))
     f.write(p2_name + " wins " + str(p2_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p2_wins/non_draws, 100*p2_wins/number_of_games))
     f.write("There were " + str(draws) + " draws ({0}% of all games).\n\n".format(100*draws/number_of_games))
