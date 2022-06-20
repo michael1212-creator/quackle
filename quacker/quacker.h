@@ -369,6 +369,7 @@ private:
   // end encapsulation, hah
 
   QString m_filename;
+  int m_filenamenum = 0;
   QuackleIO::Logania *m_logania;
   bool m_modified;
   QString m_ourCaption;
