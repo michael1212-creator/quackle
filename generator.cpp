@@ -40,23 +40,23 @@ Generator::Generator(const GamePosition &position) : m_position(position) {}
 
 Generator::~Generator() {}
 
-void Generator::kibitz(int kibitzLength, int flags) {
+void Generator::kibitz(int kibitzLength, int flags, bool greedy) {
   // don't just record best move, unless kibitz length is one
-  setrecordall(kibitzLength > 1);
+  setrecordall(kibitzLength > 1 || greedy);
 
   // perform actual kibitz
   findstaticbest(!(flags & CannotExchange));
 
   m_kibitzList.clear();
 
-  if (kibitzLength <= 1) {
+  if (kibitzLength <= 1 and !greedy) {
     m_kibitzList.push_back(best);
     return;
   }
 
   filterOutDuplicatePlays();
 
-  MoveList::sort(m_moveList, MoveList::Equity);
+  MoveList::sort(m_moveList, greedy ? MoveList::Score : MoveList::Equity);
 
   int i = 0;
   MoveList::iterator end(m_moveList.end());

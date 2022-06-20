@@ -71,7 +71,7 @@ public:
 	// kibitzLength = 1 means kibitz list is of length one, and contains
 	// only the best move, and allPossiblePlays() is invalid.
 	// kibitzLength <= 1 interpreted as kibitz length of 1
-	void kibitz(int kibitzLength = 10, int flags = AnagramRearrange);
+	void kibitz(int kibitzLength = 10, int flags = AnagramRearrange, bool greedy = false);
 
 	const MoveList &kibitzList();
 	const MoveList &allPossiblePlays();

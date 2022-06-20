@@ -84,7 +84,7 @@ public:
   const GamePosition &operator=(const GamePosition &position);
 
   // kibitz up to nmoves best moves; stored in move list
-  void kibitz(int nmoves = 10);
+  void kibitz(int nmoves = 10, bool greedy = false);
 
   // get what's in the move list
   const MoveList &moves() const;
@@ -94,6 +94,10 @@ public:
   // kibitz (destroying previous move list)
   // and return the best move based on static evaluation
   const Move &staticBestMove();
+
+  // kibitz (destroying previous move list)
+  // and return the best move based on score evaluation
+  const Move &greedyBestMove();
 
   // erase a move from move list that equals move
   void removeMove(const Move &move);

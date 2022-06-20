@@ -14,6 +14,6 @@ Greedy::~Greedy() {}
 Move Greedy::move() { return m_simulator.currentPosition().greedyBestMove(); }
 
 MoveList Greedy::moves(int nmoves) {
-  m_simulator.currentPosition().kibitz(nmoves);
+  m_simulator.currentPosition().kibitz(nmoves, true);
   return m_simulator.currentPosition().moves();
 }

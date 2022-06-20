@@ -235,10 +235,10 @@ GamePosition::GamePosition()
   clearHints();
 }
 
-void GamePosition::kibitz(int nmoves) {
+void GamePosition::kibitz(int nmoves, bool greedy) {
   Generator generator(*this);
   generator.kibitz(nmoves, exchangeAllowed() ? Generator::RegularKibitz
-                                             : Generator::CannotExchange);
+                                             : Generator::CannotExchange, greedy);
 
   m_moves = generator.kibitzList();
 
@@ -253,7 +253,7 @@ const Move &GamePosition::staticBestMove() {
 
 const Move &GamePosition::greedyBestMove() {
   kibitz(1);
-  m_moves.sort(m_moves, m_moves.Score);
+//  m_moves.sort(m_moves, m_moves.Score);
   return m_moves.back();
 }
 
