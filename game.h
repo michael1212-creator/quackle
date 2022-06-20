@@ -84,7 +84,7 @@ public:
   const GamePosition &operator=(const GamePosition &position);
 
   // kibitz up to nmoves best moves; stored in move list
-  void kibitz(int nmoves = 10, bool greedy = false);
+  void kibitz(int nmoves = 9999, bool greedy = false);
 
   // get what's in the move list
   const MoveList &moves() const;
