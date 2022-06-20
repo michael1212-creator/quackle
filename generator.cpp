@@ -1662,26 +1662,21 @@ Move Generator::findstaticbest(bool canExchange) {
   if (QUACKLE_LEXICON_PARAMETERS->hasSomething()) {
     if (board().isEmpty()) {
       anagram();
+    }
+    else if (QUACKLE_LEXICON_PARAMETERS->hasGaddag()) {
+      gordongenerate();
     } else {
-      // UVcout << rack() << endl;
-      // UVcout << board() << endl;
-
-      if (QUACKLE_LEXICON_PARAMETERS->hasGaddag())
-        gordongenerate();
-      else
-        generate();
-
-      // UVcout << "gaddag says: " << best << " " << best.score << " " <<
-      // best.equity; UVcout << endl; UVcout << " dawg says: " << best << " " <<
-      // best.score << " " << best.equity << endl;
+      generate();
     }
   }
 
-  if (canExchange)
+  if (canExchange) {
     exchange();
+  }
 
-  if (m_moveList.empty())
+  if (m_moveList.empty()) {
     m_moveList.push_back(best);
+  }
 
   return best;
 }

@@ -253,7 +253,6 @@ const Move &GamePosition::staticBestMove() {
 
 const Move &GamePosition::greedyBestMove() {
   kibitz(1);
-//  m_moves.sort(m_moves, m_moves.Score);
   return m_moves.back();
 }
 
