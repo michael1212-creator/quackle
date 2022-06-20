@@ -108,3 +108,16 @@ void ScalingDispatch::signalFractionDone(double fractionDone)
 {
 	m_shadow->signalFractionDone(fractionDone * m_scale + m_addition);
 }
+GreedyPlayer::GreedyPlayer() {
+  m_name = MARK_UV("Greedy Player");
+  m_id = 3;
+}
+
+GreedyPlayer::~GreedyPlayer() {}
+
+Move GreedyPlayer::move() { return m_simulator.currentPosition().greedyBestMove(); }
+
+MoveList GreedyPlayer::moves(int nmoves) {
+  m_simulator.currentPosition().kibitz(nmoves, true);
+  return m_simulator.currentPosition().moves();
+}

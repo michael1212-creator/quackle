@@ -213,6 +213,20 @@ public:
 
 inline bool StaticPlayer::isUserVisible() const { return true; }
 
+class GreedyPlayer : public ComputerPlayer {
+public:
+  GreedyPlayer();
+  ~GreedyPlayer();
+
+  Move move();
+  MoveList moves(int nmoves);
+  ComputerPlayer *clone() { return new GreedyPlayer; }
+
+  bool isUserVisible() const;
+};
+
+inline bool GreedyPlayer::isUserVisible() const { return true; }
+
 } // namespace Quackle
 
 #endif

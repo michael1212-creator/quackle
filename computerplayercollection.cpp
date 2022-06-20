@@ -45,7 +45,8 @@ ComputerPlayerCollection ComputerPlayerCollection::fullCollection()
 {
 	ComputerPlayerCollection ret;
 	ret.addPlayer(new EndgamePlayer());
-	ret.addPlayer(new StaticPlayer());
+        ret.addPlayer(new StaticPlayer());
+        ret.addPlayer(new GreedyPlayer());
 	ret.addPlayer(new FiveMinutePlayer());
 	ret.addPlayer(new TwentySecondPlayer());
 	ret.addPlayer(new TorontoPlayer());
