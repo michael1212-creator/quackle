@@ -1,0 +1,35 @@
+#character-encoding UTF-8
+#player1 Static Static
+#player2 Champ Champ
+>Static: CHMORSV -V +0 0
+>Champ: EFLOOTV -FOOV +0 0
+>Static: CHMORST -M +0 0
+>Champ: ELNRTTZ -LTZ +0 0
+>Static: ACHORST -H +0 0
+>Champ: EGNRTTV -GTV +0 0
+>Static: ACOORST -O +0 0
+>Champ: AEENNRT -N +0 0
+>Static: ACORSTU 8D CUATROS +62 62
+>Champ: AEENRTV H1 TAVERNE. +86 86
+>Static: AFFINWY 4C WAFFI. +30 92
+>Champ: BIMNOST 3B MOB +28 114
+>Static: EIINTYY 5C TYE +36 128
+>Champ: DDINQST E7 Q.IDS +30 144
+>Static: EIINORY 6F YO.I +15 143
+>Champ: DHNORTX 9I NORTH +18 162
+>Static: EEIKNRU 8M UKE +26 169
+>Champ: DEOORTX 10I OX +54 216
+>Static: BEEGINR H10 BEIGNE +42 211
+>Champ: DENNORT 12H .NDENTOR +70 286
+>Static: EHIRRST 1H .HIRSTER +86 297
+>Champ: AEIJMPS N10 EM.JI +32 318
+>Static: ?ACEGIO 14B CAnOEI.G +74 371
+>Champ: ?ANPSUV 13C PUN +21 339
+>Static: AEEILWZ F2 WI.E. +29 400
+>Champ: ?ADLLSV K11 V.LD +16 355
+>Static: AAAELUZ 5H .AZE +28 428
+>Champ: ?AILOPS L5 SLIP. +37 392
+>Static: AADGLLU O3 ULLAG.D +10 438
+>Champ: ?AAO O12 .OtA +19 411
+>Static: A F13 A. +8 446
+>Static:  (A) +2 448

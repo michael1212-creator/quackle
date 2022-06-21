@@ -1,0 +1,32 @@
+#character-encoding UTF-8
+#player1 Static Static
+#player2 Champ Champ
+>Static: ABGLNOS 8F GLOB +7 7
+>Champ: AEINOTV J6 VOE +22 22
+>Static: AAAEINS 7F AA +9 16
+>Champ: ACINRTT F6 T.. +6 28
+>Static: AEEINSU E4 EAU +8 24
+>Champ: ACGINRT D3 TRACING +83 111
+>Static: EFINSTV 4D ..F +6 30
+>Champ: EILLRYZ 9G LEY +28 139
+>Static: EINSTVW K8 SWIVET +33 63
+>Champ: ILMRRSZ 12H MIL.R +20 159
+>Static: ?GHILNX 10J X. +25 88
+>Champ: EJNPRSZ I11 J.N +11 170
+>Static: ?GHILNN I11 ...N +11 99
+>Champ: EEOPRSZ 15D ZEROES +87 257
+>Static: ?GHILNO M7 LONGIsH +81 180
+>Champ: AEEIPRT C7 PEATIER +89 346
+>Static: AACIRTW C1 WAIT +25 205
+>Champ: EEOOPUY 1A YO.E +33 379
+>Static: ?ACMNRR 12A CR.AM +24 229
+>Champ: ADEEOPU A12 .OUP +24 403
+>Static: ?BKNRSS 10C .SK +18 247
+>Champ: ADDEEQU B1 .DD +20 423
+>Static: ?ABINRS B11 B.AN +23 270
+>Champ: AEEEQTU A3 EQUATE +80 503
+>Static: ?DHIIRS B6 HI +32 302
+>Champ: DEFINOU N6 FINE +21 524
+>Static: ?DIORS O4 ROaDS +35 337
+>Champ: DOU N13 OUD +13 537
+>Champ:  (I) +2 539
