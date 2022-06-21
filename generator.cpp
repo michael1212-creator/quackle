@@ -45,7 +45,7 @@ void Generator::kibitz(int kibitzLength, int flags, bool greedy) {
   setrecordall(kibitzLength > 1 || greedy);
 
   // perform actual kibitz
-  findstaticbest(!(flags & CannotExchange));
+  findstaticbest((bool)(!(flags & CannotExchange)) && !greedy);
 
   m_kibitzList.clear();
 
@@ -1662,8 +1662,7 @@ Move Generator::findstaticbest(bool canExchange) {
   if (QUACKLE_LEXICON_PARAMETERS->hasSomething()) {
     if (board().isEmpty()) {
       anagram();
-    }
-    else if (QUACKLE_LEXICON_PARAMETERS->hasGaddag()) {
+    } else if (QUACKLE_LEXICON_PARAMETERS->hasGaddag()) {
       gordongenerate();
     } else {
       generate();
