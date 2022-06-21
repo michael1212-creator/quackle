@@ -74,9 +74,9 @@ ScorePlusLeaveEvaluator::sharedConsideration(const GamePosition &position,
 double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave) const {
   LetterString alphabetized = String::alphabetize(leave);
 
-  if (QUACKLE_STRATEGY_PARAMETERS->hasSuperleaves() &&
-      QUACKLE_STRATEGY_PARAMETERS->superleave(alphabetized))
-    return QUACKLE_STRATEGY_PARAMETERS->superleave(alphabetized);
+  //  if (QUACKLE_STRATEGY_PARAMETERS->hasSuperleaves() &&
+  //      QUACKLE_STRATEGY_PARAMETERS->superleave(alphabetized))
+  //    return QUACKLE_STRATEGY_PARAMETERS->superleave(alphabetized);
 
   double value = 0;
 
@@ -84,29 +84,41 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave) const {
     double synergy = 0;
     LetterString uniqleave;
 
-    if (QUACKLE_STRATEGY_PARAMETERS->hasWorths())
-      for (const auto &leaveIt : leave)
+    // each letter is assigned a value for how good it is; add it to value
+    if (QUACKLE_STRATEGY_PARAMETERS->hasWorths()) {
+      for (const auto &leaveIt : leave) {
         value += QUACKLE_STRATEGY_PARAMETERS->tileWorth(leaveIt);
+      }
+    }
 
-    if (QUACKLE_STRATEGY_PARAMETERS->hasSyn2())
-      for (unsigned int i = 0; i < alphabetized.length() - 1; ++i)
+    // calculate value for pairs of the same letter
+    if (QUACKLE_STRATEGY_PARAMETERS->hasSyn2()) {
+      for (unsigned int i = 0; i < alphabetized.length() - 1; ++i) {
         if (alphabetized[i] == alphabetized[i + 1])
           value += QUACKLE_STRATEGY_PARAMETERS->syn2(alphabetized[i],
                                                      alphabetized[i]);
+      }
+    }
 
+    // remove duplicate letters
     uniqleave += alphabetized[0];
-    for (unsigned int i = 1; i < alphabetized.length(); ++i)
-      if (uniqleave[uniqleave.length() - 1] != alphabetized[i])
+    for (unsigned int i = 1; i < alphabetized.length(); ++i) {
+      if (uniqleave[uniqleave.length() - 1] != alphabetized[i]) {
         uniqleave += alphabetized[i];
+      }
+    }
 
+    // consider the value add of each pair of unique letters
     if (uniqleave.length() >= 2 && QUACKLE_STRATEGY_PARAMETERS->hasSyn2()) {
-      for (unsigned int i = 0; i < uniqleave.length() - 1; ++i)
-        for (unsigned int j = i + 1; j < uniqleave.length(); ++j)
+      for (unsigned int i = 0; i < uniqleave.length() - 1; ++i) {
+        for (unsigned int j = i + 1; j < uniqleave.length(); ++j) {
           synergy +=
               QUACKLE_STRATEGY_PARAMETERS->syn2(uniqleave[i], uniqleave[j]);
+        }
+      }
 
-      // TODO handle the Q
-
+      // letters with a worth <-5.5 are considered bad; does the player hold
+      // any?
       bool holding_bad_tile = false;
       for (unsigned int i = 0; i < uniqleave.length(); ++i) {
         if (QUACKLE_STRATEGY_PARAMETERS->tileWorth(uniqleave[i]) < -5.5) {
@@ -114,6 +126,8 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave) const {
         }
       }
 
+      // if there is no bad letter and the pairs of letters we have are good
+      //  (synergise well), then add extra value to the leave rack
       if ((synergy > 3.0) && !holding_bad_tile) {
         synergy += 1.5 * (synergy - 3.0);
       }
@@ -125,12 +139,14 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave) const {
   int vowels = 0;
   int cons = 0;
 
+  // add extra score for good balance of vowels and consonants
   for (const auto &leaveIt : leave) {
     if (leaveIt != QUACKLE_BLANK_MARK) {
-      if (QUACKLE_ALPHABET_PARAMETERS->isVowel(leaveIt))
+      if (QUACKLE_ALPHABET_PARAMETERS->isVowel(leaveIt)) {
         vowels++;
-      else
+      } else {
         cons++;
+      }
     }
   }
 
@@ -153,8 +169,9 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave) const {
 
   value += vcvalues[vowels][cons];
 
-  if (value < -40)
+  if (value < -40) {
     value = -40;
+  }
 
 #ifdef DEBUG_BOARD
   UVcout << "leave " << QUACKLE_ALPHABET_PARAMETERS->userVisible(leave)
