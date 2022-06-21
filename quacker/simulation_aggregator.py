@@ -2,13 +2,13 @@ import pandas as pd
 
 DEBUG = False
 
-# base_dir = "Champ1_v_Champ2_results/"
-# p1_name = "Champ1"
-# p2_name = "Champ2"
+base_dir = "Champ1_v_Champ2_results/"
+p1_name = "Champ1"
+p2_name = "Champ2"
 
-base_dir = "Static_v_Champ_results/"
-p1_name = "Champ"
-p2_name = "Static"
+# base_dir = "Static_v_Champ_results/"
+# p1_name = "Champ"
+# p2_name = "Static"
 
 # base_dir = "Static1_v_Static2_results/"
 # p1_name = "Static1"
@@ -78,7 +78,7 @@ p2_score_averages_per_turn = 0
 p1_bingos = 0
 p2_bingos = 0
 total_number_of_turns = 0
-for i in range(1, 1001):
+for i in range(1, 1028):
     table = []
     p1_final_score = 0
     p2_final_score = 0

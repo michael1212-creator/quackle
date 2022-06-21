@@ -1662,8 +1662,7 @@ Move Generator::findstaticbest(bool canExchange) {
   if (QUACKLE_LEXICON_PARAMETERS->hasSomething()) {
     if (board().isEmpty()) {
       anagram();
-    }
-    else if (QUACKLE_LEXICON_PARAMETERS->hasGaddag()) {
+    } else if (QUACKLE_LEXICON_PARAMETERS->hasGaddag()) {
       gordongenerate();
     } else {
       generate();
