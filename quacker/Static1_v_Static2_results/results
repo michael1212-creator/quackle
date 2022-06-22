@@ -1,5 +1,5 @@
 A total of 1000 games were played, with 6 draws.
-The mode number of turns per game is 24
+The mode number of turns per game is 24 with a count of 195
 The mean number of turns per game is 24.018
 The standard deviation of number of turns per game is 2.1985622574764627
 The median number of turns per game is 24.0
@@ -10,13 +10,13 @@ Static1 wins 523 times (52.3% of games), which is 52.61569416498994% of all non-
 Static2 wins 471 times (47.1% of games), which is 47.38430583501006% of all non-draw games.
 There were 6 draws (0.6% of all games).
 
-Static1's mode score is 411
+Static1's mode score is 411 with a count of 11
 Static1's mean score is 432.704
 Static1's standard deviation in score is 60.219053330320634
 Static1's median score is 430.5
 Static1's inter-quartile range score is 82.5 - from 390.75 to 473.25
 Static1's range in score is 373 - from 245 to 618
-Static2's mode score is 423
+Static2's mode score is 423 with a count of 16
 Static2's mean score is 430.503
 Static2's standard deviation in score is 58.76025860222196
 Static2's median score is 425.0
@@ -24,13 +24,13 @@ Static2's inter-quartile range score is 78.0 - from 390.0 to 468.0
 Static2's range in score is 452 - from 277 to 729
 They have a combined mean of 431.6035
 
-Static1's mean score per turn mode is 32.0
+Static1's mean score per turn mode is 32.0 with a count of 10
 Static1's mean score per turn mean is 36.3372169556786
 Static1's mean score per turn standard deviation is 6.226509087111331
 Static1's mean score per turn median is 35.833333333333336
 Static1's mean score per turn inter-quartile range is 8.166666666666664 - from 32.089015151515156 to 40.25568181818182
 Static1's mean score per turn range is 48.278260869565216 - from 13.521739130434783 to 61.8
-Static2's mean score per turn mode is 36.0
+Static2's mean score per turn mode is 36.0 with a count of 9
 Static2's mean score per turn mean is 36.2322941666035
 Static2's mean score per turn standard deviation is 6.198373817475471
 Static2's mean score per turn median is 35.883116883116884
@@ -38,13 +38,13 @@ Static2's mean score per turn inter-quartile range is 7.833333333333336 - from 3
 Static2's mean score per turn range is 47.8060606060606 - from 18.466666666666665 to 66.27272727272727
 They have a combined mean of 36.284755561141054
 
-Static1 has a mode of 2 bingos per game.
+Static1 has a mode of 2 bingos per game with a count of 370.
 Static1 has a mean of 2.147 bingos per game.
 Static1's standard deviation in bingos per game is 1.055173445458139.
 Static1 has a median of 2.0 bingos per game.
 Static1's inter-quartile range in bingos per game is 2.0 - from 1.0 to 3.0.
 Static1's range in bingos per game is 6 - from 0 to 6.
-Static2 has a mode of 2 bingos per game.
+Static2 has a mode of 2 bingos per game with a count of 371.
 Static2 has a mean of 2.184 bingos per game.
 Static2's standard deviation in bingos per game is 1.0421823256992993.
 Static2 has a median of 2.0 bingos per game.

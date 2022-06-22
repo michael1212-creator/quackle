@@ -1,5 +1,5 @@
 A total of 499 games were played, with 3 draws.
-The mode number of turns per game is 23
+The mode number of turns per game is 23 with a count of 82
 The mean number of turns per game is 24.741482965931862
 The standard deviation of number of turns per game is 2.4163982631890604
 The median number of turns per game is 25.0
@@ -10,13 +10,13 @@ Champ1 wins 258 times (51.703406813627254% of games), which is 52.01612903225806
 Champ2 wins 238 times (47.69539078156313% of games), which is 47.983870967741936% of all non-draw games.
 There were 3 draws (0.6012024048096193% of all games).
 
-Champ1's mode score is 397
+Champ1's mode score is 397 with a count of 7
 Champ1's mean score is 428.59519038076155
 Champ1's standard deviation in score is 61.61939919886501
 Champ1's median score is 428.0
 Champ1's inter-quartile range score is 84.5 - from 386.0 to 470.5
 Champ1's range in score is 351 - from 267 to 618
-Champ2's mode score is 381
+Champ2's mode score is 381 with a count of 7
 Champ2's mean score is 426.46492985971946
 Champ2's standard deviation in score is 61.81684979341679
 Champ2's median score is 426.0
@@ -24,13 +24,13 @@ Champ2's inter-quartile range score is 88.0 - from 382.5 to 470.5
 Champ2's range in score is 361 - from 275 to 636
 They have a combined mean of 427.5300601202405
 
-Champ1's mean score per turn mode is 36.0
+Champ1's mean score per turn mode is 36.0 with a count of 5
 Champ1's mean score per turn mean is 34.997534740921516
 Champ1's mean score per turn standard deviation is 6.160758058672943
 Champ1's mean score per turn median is 34.666666666666664
 Champ1's mean score per turn inter-quartile range is 8.581876456876458 - from 30.679487179487182 to 39.26136363636364
 Champ1's mean score per turn range is 33.59523809523809 - from 19.071428571428573 to 52.666666666666664
-Champ2's mean score per turn mode is 31.75
+Champ2's mean score per turn mode is 31.75 with a count of 4
 Champ2's mean score per turn mean is 34.86965462972329
 Champ2's mean score per turn standard deviation is 6.357301351622913
 Champ2's mean score per turn median is 34.833333333333336
@@ -38,13 +38,13 @@ Champ2's mean score per turn inter-quartile range is 8.462912087912091 - from 30
 Champ2's mean score per turn range is 35.06666666666666 - from 19.333333333333332 to 54.4
 They have a combined mean of 34.933594685322404
 
-Champ1 has a mode of 2 bingos per game.
+Champ1 has a mode of 2 bingos per game with a count of 170.
 Champ1 has a mean of 2.308617234468938 bingos per game.
 Champ1's standard deviation in bingos per game is 1.0426505320804582.
 Champ1 has a median of 2.0 bingos per game.
 Champ1's inter-quartile range in bingos per game is 1.0 - from 2.0 to 3.0.
 Champ1's range in bingos per game is 5 - from 0 to 5.
-Champ2 has a mode of 2 bingos per game.
+Champ2 has a mode of 2 bingos per game with a count of 167.
 Champ2 has a mean of 2.270541082164329 bingos per game.
 Champ2's standard deviation in bingos per game is 1.0464913741680089.
 Champ2 has a median of 2.0 bingos per game.
