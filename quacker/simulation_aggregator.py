@@ -213,11 +213,11 @@ bingos_combined_mean = (p1_bingos_stats["mean"] + p2_bingos_stats["mean"]) / 2
 with open(base_dir + out_file_name, 'w') as f:
     f.write("A total of {0} games were played, with {1} draws.\n".format(number_of_games, draws))
 
-    f.write("The mode number of turns per game is {0}\n\n".format(number_of_turns_stats["mode"]))
-    f.write("The mean number of turns per game is {0}\n\n".format(number_of_turns_stats["mean"]))
-    f.write("The standard deviation of number of turns per game is {0}\n\n".format(number_of_turns_stats["std"]))
-    f.write("The median number of turns per game is {0}\n\n".format(number_of_turns_stats["median"]))
-    f.write("The inter-quartile range of number of turns per game is {0} - from {1} to {2}\n\n".format(number_of_turns_stats["iqr"], number_of_turns_stats["q1"], number_of_turns_stats["q3"]))
+    f.write("The mode number of turns per game is {0}\n".format(number_of_turns_stats["mode"]))
+    f.write("The mean number of turns per game is {0}\n".format(number_of_turns_stats["mean"]))
+    f.write("The standard deviation of number of turns per game is {0}\n".format(number_of_turns_stats["std"]))
+    f.write("The median number of turns per game is {0}\n".format(number_of_turns_stats["median"]))
+    f.write("The inter-quartile range of number of turns per game is {0} - from {1} to {2}\n".format(number_of_turns_stats["iqr"], number_of_turns_stats["q1"], number_of_turns_stats["q3"]))
     f.write("The range of number of turns per game is {0} - from {1} to {2}\n\n".format(number_of_turns_stats["range"], number_of_turns_stats["min"], number_of_turns_stats["max"]))
 
     f.write(p1_name + " wins " + str(p1_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p1_wins/non_draw_games, 100*p1_wins/number_of_games))
