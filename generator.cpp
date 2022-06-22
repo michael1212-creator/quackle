@@ -1625,13 +1625,18 @@ Move Generator::exchange() {
   map<LetterString, bool> throwmap;
 
   const int rackSize = rack().tiles().length();
+
+  // treated as a bit vector; 1 represents that the tile is 'thrown' away
+  //  (i.e. exchanged)
   const int permutations = 1 << rackSize;
 
   for (int i = 1; i < permutations; i++) {
     LetterString thrown;
-    for (int j = 0; j < rackSize; j++)
-      if (i & (1 << j))
+    for (int j = 0; j < rackSize; j++) {
+      if (i & (1 << j)) {
         thrown += rack().tiles()[j];
+      }
+    }
 
     Move move;
     move.action = Move::Exchange;
@@ -1640,11 +1645,13 @@ Move Generator::exchange() {
     move.equity = equity(move);
 
     if (throwmap.find(move.tiles()) == throwmap.end()) {
-      if (m_recordall)
+      if (m_recordall) {
         m_moveList.push_back(move);
+      }
 
-      if (MoveList::equityComparator(best, move))
+      if (MoveList::equityComparator(best, move)) {
         best = move;
+      }
 
       throwmap[move.tiles()] = true;
     }
