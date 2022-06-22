@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+from scipy import stats
 
 DEBUG = False
 
@@ -70,14 +72,16 @@ p1_wins = 0
 p2_wins = 0
 draws = 0
 
-number_of_games = 0
-p1_total_score = 0
-p2_total_score = 0
-p1_score_averages_per_turn = 0
-p2_score_averages_per_turn = 0
-p1_bingos = 0
-p2_bingos = 0
-total_number_of_turns = 0
+turns_per_game = []
+
+p1_score_means_per_turn_per_game = []
+p2_score_means_per_turn_per_game = []
+
+p1_bingos_per_game = []
+p2_bingos_per_game = []
+
+p1_scores_per_game = []
+p2_scores_per_game = []
 for i in range(1, 1028):
     table = []
     p1_final_score = 0
@@ -125,8 +129,6 @@ for i in range(1, 1028):
         print(e)
         continue
 
-    number_of_games += 1
-
     if table[-1][0] == p1_name:
         p1_final_score = table[-1][-1]
         p2_final_score = table[-3][-1] - added_score
@@ -146,22 +148,26 @@ for i in range(1, 1028):
             print("draw at {0}".format(i))
         draws += 1
 
-    p1_total_score += p1_final_score
-    p2_total_score += p2_final_score
+    p1_scores_per_game.append(p1_final_score)
+    p2_scores_per_game.append(p2_final_score)
 
     p1_number_of_turns = 0
     p2_number_of_turns = 0
+    p1_bingos = 0
+    p2_bingos = 0
     for row in table[:-1]:
         p1_number_of_turns += row[0] == p1_name
         p2_number_of_turns += row[0] == p2_name
-        p1_bingos += row[-3].is_placement and len(row[-3].word.replace('.', '')) == 7 and row[0] == p1_name
-        p2_bingos += row[-3].is_placement and len(row[-3].word.replace('.', '')) == 7 and row[0] == p2_name
+        p1_bingos += (int(row[-3].is_placement and len(row[-3].word.replace('.', '')) == 7 and row[0] == p1_name))
+        p2_bingos += (int(row[-3].is_placement and len(row[-3].word.replace('.', '')) == 7 and row[0] == p2_name))
+    p1_bingos_per_game.append(p1_bingos)
+    p2_bingos_per_game.append(p2_bingos)
 
-    p1_average_score_per_turn = p1_final_score / p1_number_of_turns
-    p2_average_score_per_turn = p2_final_score / p2_number_of_turns
-    p1_score_averages_per_turn += p1_average_score_per_turn
-    p2_score_averages_per_turn += p2_average_score_per_turn
-    total_number_of_turns += p1_number_of_turns + p2_number_of_turns
+    p1_mean_score_per_turn = p1_final_score / p1_number_of_turns
+    p2_mean_score_per_turn = p2_final_score / p2_number_of_turns
+    p1_score_means_per_turn_per_game.append(p1_mean_score_per_turn)
+    p2_score_means_per_turn_per_game.append(p2_mean_score_per_turn)
+    turns_per_game.append(p1_number_of_turns + p2_number_of_turns)
 
     if DEBUG:
         df = pd.DataFrame(table, columns=titles)
@@ -171,33 +177,52 @@ for i in range(1, 1028):
         print(df)
 
 
+def calculate_stats(ls):
+    ret = {}
+    ret["total"] = sum(ls)
+    ret["mean"] = np.mean(ls)
+    ret["median"] = np.median(ls)
+    ret["mode"] = stats.mode(ls)
+    ret["std"] = np.std(ls)
+    ret["range"] = max(ls) - min(ls)
+    ret["iqr"] = stats.iqr(ls)
+
+    return ret
+
+number_of_games = len(p1_scores_per_game)
+non_draw_games = number_of_games - draws
+
+number_of_turns_stats = calculate_stats(turns_per_game)
+
+p1_score_stats = calculate_stats(p1_scores_per_game)
+p2_score_stats = calculate_stats(p2_scores_per_game)
+scores_combined_mean = (p1_score_stats["mean"] + p2_score_stats["mean"]) / 2
+
+p1_mean_turn_score_stats = calculate_stats(p1_score_means_per_turn_per_game)
+p2_mean_turn_score_stats = calculate_stats(p2_score_means_per_turn_per_game)
+mean_score_per_turn_combined_mean = (p1_mean_turn_score_stats["mean"] + p2_mean_turn_score_stats["mean"]) / 2
+
+p1_bingos_stats = calculate_stats(p1_bingos_per_game)
+p2_bingos_stats = calculate_stats(p2_bingos_per_game)
+bingos_combined_mean = (p1_bingos_stats["mean"] + p2_bingos_stats["mean"]) / 2
+
 with open(base_dir + out_file_name, 'w') as f:
-    non_draws = number_of_games - draws
-    average_total_number_of_turns = total_number_of_turns / number_of_games
     f.write("A total of {0} games were played, with {1} draws.\n".format(number_of_games, draws))
-    f.write("The average number of turns per game is {0}\n\n".format(average_total_number_of_turns))
-    f.write(p1_name + " wins " + str(p1_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p1_wins/non_draws, 100*p1_wins/number_of_games))
-    f.write(p2_name + " wins " + str(p2_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p2_wins/non_draws, 100*p2_wins/number_of_games))
+
+    f.write("The mean number of turns per game is {0}\n\n".format(number_of_turns_stats["mean"]))
+
+    f.write(p1_name + " wins " + str(p1_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p1_wins/non_draw_games, 100*p1_wins/number_of_games))
+    f.write(p2_name + " wins " + str(p2_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p2_wins/non_draw_games, 100*p2_wins/number_of_games))
     f.write("There were " + str(draws) + " draws ({0}% of all games).\n\n".format(100*draws/number_of_games))
 
-    p1_average_score = p1_total_score / number_of_games
-    p2_average_score = p2_total_score / number_of_games
-    combined_average = (p1_average_score + p2_average_score) / 2
-    f.write("{0}'s average score is {1}\n".format(p1_name, p1_average_score))
-    f.write("{0}'s average score is {1}\n".format(p2_name, p2_average_score))
-    f.write("They have a combined average of {0}\n\n".format(combined_average))
+    f.write("{0}'s mean score is {1}\n".format(p1_name, p1_score_stats["mean"]))
+    f.write("{0}'s mean score is {1}\n".format(p2_name, p2_score_stats["mean"]))
+    f.write("They have a combined mean of {0}\n\n".format(scores_combined_mean))
 
-    p1_score_averages_per_turn_average = p1_score_averages_per_turn / number_of_games
-    p2_score_averages_per_turn_average = p2_score_averages_per_turn / number_of_games
-    combined_average = (p1_score_averages_per_turn_average + p2_score_averages_per_turn_average) / 2
-    f.write("{0}'s average score per turn is {1}\n".format(p1_name, p1_score_averages_per_turn_average))
-    f.write("{0}'s average score per turn is {1}\n".format(p2_name, p2_score_averages_per_turn_average))
-    f.write("They have a combined average of {0}\n\n".format(combined_average))
+    f.write("{0}'s mean score per turn is {1}\n".format(p1_name, p1_mean_turn_score_stats["mean"]))
+    f.write("{0}'s mean score per turn is {1}\n".format(p2_name, p2_mean_turn_score_stats["mean"]))
+    f.write("They have a combined mean of {0}\n\n".format(mean_score_per_turn_combined_mean))
 
-    p1_average_bingos_per_game = p1_bingos / number_of_games
-    p2_average_bingos_per_game = p2_bingos / number_of_games
-    combined_average = (p1_average_bingos_per_game + p2_average_bingos_per_game) / 2
-    f.write("{0} has an average of {1} bingos per game.\n".format(p1_name, p1_average_bingos_per_game))
-    f.write("{0} has an average of {1} bingos per game.\n".format(p2_name, p2_average_bingos_per_game))
-    f.write("They have a combined average of {0}\n".format(combined_average))
-
+    f.write("{0} has an mean of {1} bingos per game.\n".format(p1_name, p1_bingos_stats["mean"]))
+    f.write("{0} has an mean of {1} bingos per game.\n".format(p2_name, p2_bingos_stats["mean"]))
+    f.write("They have a combined mean of {0}\n".format(bingos_combined_mean))
