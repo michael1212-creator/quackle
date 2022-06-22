@@ -1,18 +1,58 @@
 A total of 1022 games were played, with 1 draws.
-The average number of turns per game is 24.504892367906066
+The mode number of turns per game is 24
+
+The mean number of turns per game is 24.504892367906066
+
+The standard deviation of number of turns per game is 2.3739196818204094
+
+The median number of turns per game is 24.0
+
+The inter-quartile range of number of turns per game is 3.0 - from 23.0 to 26.0
+
+The range of number of turns per game is 15 - from 19 to 34
 
 Champ wins 605 times (59.19765166340509% of games), which is 59.25563173359451% of all non-draw games.
 Static wins 416 times (40.70450097847358% of games), which is 40.74436826640549% of all non-draw games.
 There were 1 draws (0.09784735812133072% of all games).
 
-Champ's average score is 436.77886497064577
-Static's average score is 425.8444227005871
-They have a combined average of 431.31164383561645
+Champ's mode score is 426
+Champ's mean score is 436.77886497064577
+Champ's standard deviation in score is 59.40538715451531
+Champ's median score is 438.0
+Champ's inter-quartile range score is 80.0 - from 396.0 to 476.0
+Champ's range in score is 388 - from 240 to 628
+Static's mode score is 447
+Static's mean score is 425.8444227005871
+Static's standard deviation in score is 63.81885033998659
+Static's median score is 423.0
+Static's inter-quartile range score is 80.0 - from 383.0 to 463.0
+Static's range in score is 451 - from 245 to 696
+They have a combined mean of 431.31164383561645
 
-Champ's average score per turn is 35.905921364139154
-Static's average score per turn is 35.247693966464844
-They have a combined average of 35.576807665302
+Champ's mean score per turn mode is 32.0
+Champ's mean score per turn mean is 35.905921364139104
+Champ's mean score per turn standard deviation is 6.283436277372861
+Champ's mean score per turn median is 35.56439393939394
+Champ's mean score per turn inter-quartile range is 8.077447552447552 - from 31.620629370629374 to 39.698076923076925
+Champ's mean score per turn range is 36.78321678321679 - from 20.307692307692307 to 57.09090909090909
+Static's mean score per turn mode is 26.0
+Static's mean score per turn mean is 35.24769396646483
+Static's mean score per turn standard deviation is 6.388525683686473
+Static's mean score per turn median is 35.083333333333336
+Static's mean score per turn inter-quartile range is 8.775203962703962 - from 30.62820512820513 to 39.40340909090909
+Static's mean score per turn range is 40.06666666666666 - from 17.933333333333334 to 58.0
+They have a combined mean of 35.57680766530197
 
-Champ has an average of 2.292563600782779 bingos per game.
-Static has an average of 2.1898238747553815 bingos per game.
-They have a combined average of 2.2411937377690805
+Champ has a mode of 2 bingos per game.
+Champ has a mean of 2.292563600782779 bingos per game.
+Champ's standard deviation in bingos per game is 1.0210712896933092.
+Champ has a median of 2.0 bingos per game.
+Champ's inter-quartile range in bingos per game is 1.0 - from 2.0 to 3.0.
+Champ's range in bingos per game is 5 - from 0 to 5.
+Static has a mode of 2 bingos per game.
+Static has a mean of 2.1898238747553815 bingos per game.
+Static's standard deviation in bingos per game is 1.0398960170701925.
+Static has a median of 2.0 bingos per game.
+Static's inter-quartile range in bingos per game is 2.0 - from 1.0 to 3.0.
+Static's range in bingos per game is 6 - from 0 to 6.
+They have a combined mean of 2.2411937377690805

@@ -4,13 +4,13 @@ from scipy import stats
 
 DEBUG = False
 
-base_dir = "Champ1_v_Champ2_results/"
-p1_name = "Champ1"
-p2_name = "Champ2"
+# base_dir = "Champ1_v_Champ2_results/"
+# p1_name = "Champ1"
+# p2_name = "Champ2"
 
-# base_dir = "Static_v_Champ_results/"
-# p1_name = "Champ"
-# p2_name = "Static"
+base_dir = "Static_v_Champ_results/"
+p1_name = "Champ"
+p2_name = "Static"
 
 # base_dir = "Static1_v_Static2_results/"
 # p1_name = "Static1"
@@ -179,13 +179,17 @@ for i in range(1, 1028):
 
 def calculate_stats(ls):
     ret = {}
-    ret["total"] = sum(ls)
     ret["mean"] = np.mean(ls)
     ret["median"] = np.median(ls)
-    ret["mode"] = stats.mode(ls)
+    ret["mode"] = stats.mode(ls)[0][0]
+    ret["mode_count"] = stats.mode(ls)[1][0]
     ret["std"] = np.std(ls)
     ret["range"] = max(ls) - min(ls)
-    ret["iqr"] = stats.iqr(ls)
+    ret["max"] = max(ls)
+    ret["min"] = min(ls)
+    ret["q1"] = np.percentile(ls, 25)
+    ret["q3"] = np.percentile(ls, 75)
+    ret["iqr"] = ret["q3"] - ret["q1"]
 
     return ret
 
@@ -209,20 +213,55 @@ bingos_combined_mean = (p1_bingos_stats["mean"] + p2_bingos_stats["mean"]) / 2
 with open(base_dir + out_file_name, 'w') as f:
     f.write("A total of {0} games were played, with {1} draws.\n".format(number_of_games, draws))
 
+    f.write("The mode number of turns per game is {0}\n\n".format(number_of_turns_stats["mode"]))
     f.write("The mean number of turns per game is {0}\n\n".format(number_of_turns_stats["mean"]))
+    f.write("The standard deviation of number of turns per game is {0}\n\n".format(number_of_turns_stats["std"]))
+    f.write("The median number of turns per game is {0}\n\n".format(number_of_turns_stats["median"]))
+    f.write("The inter-quartile range of number of turns per game is {0} - from {1} to {2}\n\n".format(number_of_turns_stats["iqr"], number_of_turns_stats["q1"], number_of_turns_stats["q3"]))
+    f.write("The range of number of turns per game is {0} - from {1} to {2}\n\n".format(number_of_turns_stats["range"], number_of_turns_stats["min"], number_of_turns_stats["max"]))
 
     f.write(p1_name + " wins " + str(p1_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p1_wins/non_draw_games, 100*p1_wins/number_of_games))
     f.write(p2_name + " wins " + str(p2_wins) + " times ({1}% of games), which is {0}% of all non-draw games.\n".format(100*p2_wins/non_draw_games, 100*p2_wins/number_of_games))
     f.write("There were " + str(draws) + " draws ({0}% of all games).\n\n".format(100*draws/number_of_games))
 
+    f.write("{0}'s mode score is {1}\n".format(p1_name, p1_score_stats["mode"]))
     f.write("{0}'s mean score is {1}\n".format(p1_name, p1_score_stats["mean"]))
+    f.write("{0}'s standard deviation in score is {1}\n".format(p1_name, p1_score_stats["std"]))
+    f.write("{0}'s median score is {1}\n".format(p1_name, p1_score_stats["median"]))
+    f.write("{0}'s inter-quartile range score is {1} - from {2} to {3}\n".format(p1_name, p1_score_stats["iqr"], p1_score_stats["q1"], p1_score_stats["q3"]))
+    f.write("{0}'s range in score is {1} - from {2} to {3}\n".format(p1_name, p1_score_stats["range"], p1_score_stats["min"], p1_score_stats["max"]))
+    f.write("{0}'s mode score is {1}\n".format(p2_name, p2_score_stats["mode"]))
     f.write("{0}'s mean score is {1}\n".format(p2_name, p2_score_stats["mean"]))
+    f.write("{0}'s standard deviation in score is {1}\n".format(p2_name, p2_score_stats["std"]))
+    f.write("{0}'s median score is {1}\n".format(p2_name, p2_score_stats["median"]))
+    f.write("{0}'s inter-quartile range score is {1} - from {2} to {3}\n".format(p2_name, p2_score_stats["iqr"], p2_score_stats["q1"], p2_score_stats["q3"]))
+    f.write("{0}'s range in score is {1} - from {2} to {3}\n".format(p2_name, p2_score_stats["range"], p2_score_stats["min"], p2_score_stats["max"]))
     f.write("They have a combined mean of {0}\n\n".format(scores_combined_mean))
 
-    f.write("{0}'s mean score per turn is {1}\n".format(p1_name, p1_mean_turn_score_stats["mean"]))
-    f.write("{0}'s mean score per turn is {1}\n".format(p2_name, p2_mean_turn_score_stats["mean"]))
+    f.write("{0}'s mean score per turn mode is {1}\n".format(p1_name, p1_mean_turn_score_stats["mode"]))
+    f.write("{0}'s mean score per turn mean is {1}\n".format(p1_name, p1_mean_turn_score_stats["mean"]))
+    f.write("{0}'s mean score per turn standard deviation is {1}\n".format(p1_name, p1_mean_turn_score_stats["std"]))
+    f.write("{0}'s mean score per turn median is {1}\n".format(p1_name, p1_mean_turn_score_stats["median"]))
+    f.write("{0}'s mean score per turn inter-quartile range is {1} - from {2} to {3}\n".format(p1_name, p1_mean_turn_score_stats["iqr"], p1_mean_turn_score_stats["q1"], p1_mean_turn_score_stats["q3"]))
+    f.write("{0}'s mean score per turn range is {1} - from {2} to {3}\n".format(p1_name, p1_mean_turn_score_stats["range"], p1_mean_turn_score_stats["min"], p1_mean_turn_score_stats["max"]))
+    f.write("{0}'s mean score per turn mode is {1}\n".format(p2_name, p2_mean_turn_score_stats["mode"]))
+    f.write("{0}'s mean score per turn mean is {1}\n".format(p2_name, p2_mean_turn_score_stats["mean"]))
+    f.write("{0}'s mean score per turn standard deviation is {1}\n".format(p2_name, p2_mean_turn_score_stats["std"]))
+    f.write("{0}'s mean score per turn median is {1}\n".format(p2_name, p2_mean_turn_score_stats["median"]))
+    f.write("{0}'s mean score per turn inter-quartile range is {1} - from {2} to {3}\n".format(p2_name, p2_mean_turn_score_stats["iqr"], p2_mean_turn_score_stats["q1"], p2_mean_turn_score_stats["q3"]))
+    f.write("{0}'s mean score per turn range is {1} - from {2} to {3}\n".format(p2_name, p2_mean_turn_score_stats["range"], p2_mean_turn_score_stats["min"], p2_mean_turn_score_stats["max"]))
     f.write("They have a combined mean of {0}\n\n".format(mean_score_per_turn_combined_mean))
 
-    f.write("{0} has an mean of {1} bingos per game.\n".format(p1_name, p1_bingos_stats["mean"]))
-    f.write("{0} has an mean of {1} bingos per game.\n".format(p2_name, p2_bingos_stats["mean"]))
+    f.write("{0} has a mode of {1} bingos per game.\n".format(p1_name, p1_bingos_stats["mode"]))
+    f.write("{0} has a mean of {1} bingos per game.\n".format(p1_name, p1_bingos_stats["mean"]))
+    f.write("{0}'s standard deviation in bingos per game is {1}.\n".format(p1_name, p1_bingos_stats["std"]))
+    f.write("{0} has a median of {1} bingos per game.\n".format(p1_name, p1_bingos_stats["median"]))
+    f.write("{0}'s inter-quartile range in bingos per game is {1} - from {2} to {3}.\n".format(p1_name, p1_bingos_stats["iqr"], p1_bingos_stats["q1"], p1_bingos_stats["q3"]))
+    f.write("{0}'s range in bingos per game is {1} - from {2} to {3}.\n".format(p1_name, p1_bingos_stats["range"], p1_bingos_stats["min"], p1_bingos_stats["max"]))
+    f.write("{0} has a mode of {1} bingos per game.\n".format(p2_name, p2_bingos_stats["mode"]))
+    f.write("{0} has a mean of {1} bingos per game.\n".format(p2_name, p2_bingos_stats["mean"]))
+    f.write("{0}'s standard deviation in bingos per game is {1}.\n".format(p2_name, p2_bingos_stats["std"]))
+    f.write("{0} has a median of {1} bingos per game.\n".format(p2_name, p2_bingos_stats["median"]))
+    f.write("{0}'s inter-quartile range in bingos per game is {1} - from {2} to {3}.\n".format(p2_name, p2_bingos_stats["iqr"], p2_bingos_stats["q1"], p2_bingos_stats["q3"]))
+    f.write("{0}'s range in bingos per game is {1} - from {2} to {3}.\n".format(p2_name, p2_bingos_stats["range"], p2_bingos_stats["min"], p2_bingos_stats["max"]))
     f.write("They have a combined mean of {0}\n".format(bingos_combined_mean))
