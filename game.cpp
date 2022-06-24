@@ -252,7 +252,7 @@ const Move &GamePosition::staticBestMove() {
 }
 
 const Move &GamePosition::greedyBestMove() {
-  kibitz(1);
+  kibitz(9999, true);
   return m_moves.back();
 }
 

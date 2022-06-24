@@ -139,7 +139,7 @@ bool operator<(const Quackle::Move &move1, const Quackle::Move &move2);
 class MoveList : public vector<Move>
 {
 public:
-	enum SortType { Equity, Score, Alphabetical, Win};
+	enum SortType { Equity, Valuation=Equity, Score, Alphabetical, Win};
 
 	// perform stable sort
 	static void sort(MoveList &list, SortType type = Equity);

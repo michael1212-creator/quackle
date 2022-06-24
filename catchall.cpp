@@ -26,48 +26,61 @@ using namespace Quackle;
 
 double CatchallEvaluator::equity(const GamePosition &position,
                                  const Move &move) const {
-  if (position.board().isEmpty()) {
+  if (position.board().isEmpty()) { // starting player
     double adjustment = 0;
 
     if (move.action == Move::Place) {
-      int start = move.startcol;
+      // this assumes symmetry between horizontal and vertical start:
+
+      int start =
+          move.startcol; // between 1 and 7 (inclusive); assumes horizontal word
       if (move.startrow < start) {
-        start = move.startrow;
+        start = move.startrow; // otherwise the word is vertical;
       }
 
       LetterString wordTiles = move.tiles();
-
       int length = wordTiles.length();
 
+      // count (in the form of a bit vector) how many consonants there are
       int consbits = 0;
       for (signed int i = wordTiles.length() - 1; i >= 0; i--) {
         consbits <<= 1;
+        // any blank letter has already been assigned an actual value;
+        //  this just deals with that so that it is correctly counted
         if (QUACKLE_ALPHABET_PARAMETERS->isVowel(
                 QUACKLE_ALPHABET_PARAMETERS->clearBlankness(wordTiles[i]))) {
           consbits |= 1;
         }
       }
 
+      // add weighting based on the consonant placement of the word in
+      // conjunction with its location and length
       adjustment =
           QUACKLE_STRATEGY_PARAMETERS->vcPlace(start, length, consbits);
     } else {
+      //'favour' exchange (ass opposed to word placement) on initial turn
+      // weighted by 3.5
       adjustment = 3.5;
     }
 
+    // Finally, use other equity evaluator to determine rest of equity
     return ScorePlusLeaveEvaluator::equity(position, move) + adjustment;
   }
 
   else if (position.bag().size() > 0) {
+    // if there are still tiles in the bag (i.e. we are not in an endgame
+    // situation)
     int leftInBagPlusSeven =
         position.bag().size() - move.usedTiles().length() + 7;
-    double heuristicArray[13] = {0.0, -8.0, 0.0, -0.5, -2.0, -3.5, -2.0,
-                                 2.0, 10.0, 7.0, 4.0,  -1.0, -2.0};
+    double heuristicArray[12] = {-8.0, 0.0,  -0.5, -2.0, -3.5, -2.0,
+                                 2.0,  10.0, 7.0,  4.0,  -1.0, -2.0};
     double timingHeuristic = 0.0;
-    if (leftInBagPlusSeven < 13) {
-      timingHeuristic = heuristicArray[leftInBagPlusSeven];
+    if (leftInBagPlusSeven <= 12) {
+      timingHeuristic = heuristicArray[leftInBagPlusSeven - 1];
     }
     return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
   } else {
+    // When there are no more tiles in the bag; endgame situation
     return endgameResult(position, move) + move.score;
   }
 }
@@ -77,6 +90,9 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   Rack leave = position.currentPlayer().rack() - move;
 
   if (leave.empty()) {
+    // the move ends the game
+
+    // add opposing player's sum of tiles score to deadwood
     double deadwood = 0;
     for (PlayerList::const_iterator it = position.players().begin();
          it != position.players().end(); ++it) {
@@ -88,5 +104,9 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
     return deadwood * 2;
   }
 
+  // If the move doesn't end the game, the opponent might have a chance of
+  // ending the game, which can increase their score by a significant enough
+  // amount, dependent on our rack.
+  // The constant is there because we like ending the game (?)
   return -8.00 - 2.61 * leave.score();
 }

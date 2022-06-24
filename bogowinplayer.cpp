@@ -91,8 +91,9 @@ MoveList SmartBogowin::moves(int nmoves) {
   const int zerothPrune = 33;
   int plies = 2;
 
-  if (currentPosition().bag().size() <= QUACKLE_PARAMETERS->rackSize() * 2)
+  if (currentPosition().bag().size() <= QUACKLE_PARAMETERS->rackSize() * 2) {
     plies = -1;
+  }
 
   const int initialCandidates = m_additionalInitialCandidates + nmoves;
 
