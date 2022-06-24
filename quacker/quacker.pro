@@ -8,12 +8,12 @@ QT += widgets core gui
 MOC_DIR = moc
 
 # enable/disable debug symbols
-#CONFIG += debug
 CONFIG += release
+CONFIG += debug
 
 #Um, why is this necessary?  I don't know.  But if this isn't here,
 #qmake messes up resulting Visual Studio project files.
-CONFIG -= debug
+#CONFIG -= debug
 
 CONFIG += c++14
 

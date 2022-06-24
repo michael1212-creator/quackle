@@ -82,6 +82,8 @@ MoveList SmartBogowin::moves(int nmoves) {
   Stopwatch stopwatch;
 
   if (currentPosition().bag().empty()) {
+    //if the current bag is empty, then this is the wrong AI for move generation;
+    // Call the end-game AI to do the work;
     signalFractionDone(0);
     EndgamePlayer endgame;
     endgame.setPosition(currentPosition());
@@ -95,12 +97,19 @@ MoveList SmartBogowin::moves(int nmoves) {
     plies = -1;
   }
 
-  const int initialCandidates = m_additionalInitialCandidates + nmoves;
+  const int initialCandidates = m_additionalInitialCandidates /* 13 */ + nmoves;
 
   currentPosition().kibitz(initialCandidates);
 
+  // update the simulator to include all of the moves which the above kibitz
+  // generated (these are also probably also the only ones?)
   m_simulator.setIncludedMoves(m_simulator.currentPosition().moves());
+
+  // only keep the moves with equity at least 33 below the equity of the move
+  // with highest equity; however if there are more than 'initialCandidates'
+  // such moves, discard the rest.
   m_simulator.pruneTo(zerothPrune, initialCandidates);
+
   m_simulator.makeSureConsideredMovesAreIncluded();
   m_simulator.setIgnoreOppos(false);
 

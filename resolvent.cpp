@@ -36,17 +36,12 @@ Resolvent::~Resolvent() {}
 Move Resolvent::move() { return moves(1).back(); }
 
 MoveList Resolvent::moves(int nmoves) {
-  // UVcout << "Resolvent generating move from position:" << endl;
-  // UVcout << m_simulator.currentPosition() << endl;
-
   ComputerPlayer *delegatee;
 
   if (m_simulator.currentPosition().bag().empty()) {
-    // Case 1: Straight endgame.
     delegatee = new EndgamePlayer;
   } else if (currentPosition().bag().size() <=
              Preendgame::maximumTilesInBagToEngage()) {
-    // Case 2: Preendgame.
     delegatee = new Preendgame;
   } else {
     // Case 3: Beginning and middle of the game.

@@ -142,7 +142,7 @@ void Simulator::setIncludedMoves(const MoveList &moves) {
 }
 
 void Simulator::makeSureConsideredMovesAreIncluded() {
-  MoveList movesSuperset(moves(/* prune */ true, /* sort by win */ true));
+  MoveList movesSuperset(moves(true, true));
   for (const auto &it : m_consideredMoves)
     if (!movesSuperset.contains(it))
       movesSuperset.push_back(it);

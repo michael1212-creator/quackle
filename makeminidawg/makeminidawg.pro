@@ -3,9 +3,9 @@ DEPENDPATH += .. ../quackleio
 INCLUDEPATH += . ..
 
 # enable/disable debug symbols
-# CONFIG += debug
 CONFIG += release
-CONFIG -= debug
+CONFIG += debug
+#CONFIG -= debug
 
 CONFIG += console c++14
 CONFIG -= x11

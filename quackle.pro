@@ -18,8 +18,8 @@ release {
 }
 
 # enable/disable debug symbols
-#CONFIG += debug staticlib
 CONFIG += release staticlib c++14
+CONFIG += debug staticlib
 CONFIG -= x11
 
 # Input
