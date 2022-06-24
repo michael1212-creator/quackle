@@ -67,8 +67,15 @@ inline bool SmartBogowin::isUserVisible() const
 inline int SmartBogowin::minIterations() const
 {
 	if (currentPosition().nestedness() > 0)
+                // 1 *
+                // ComputerPlayer = 10
+                // SmartBogowin = 20
+                // InferringPlayer = 20
+                // TwentySecondPlayer = 20
+                // TorontoPlayer/Championship = 66
+                // FiveMinutePlayer = 60*5 = 300
 		return m_nestedMinIterationsPerSecond * m_parameters.secondsPerTurn;
-		
+        // 2 * (see above)
 	return m_minIterationsPerSecond * m_parameters.secondsPerTurn;
 }
 

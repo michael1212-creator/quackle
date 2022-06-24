@@ -16,8 +16,9 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <climits>
+
 #include "computerplayer.h"
-#include "endgameplayer.h"
 
 using namespace Quackle;
 
@@ -64,7 +65,7 @@ void ComputerPlayer::setConsideredMoves(const MoveList &moves)
 	m_simulator.setConsideredMoves(moves);
 }
 
-MoveList ComputerPlayer::moves(int /* nmoves */)
+MoveList ComputerPlayer::moves(int nmoves)
 {
 	MoveList ret;
 	ret.push_back(move());
@@ -118,6 +119,6 @@ GreedyPlayer::~GreedyPlayer() {}
 Move GreedyPlayer::move() { return m_simulator.currentPosition().greedyBestMove(); }
 
 MoveList GreedyPlayer::moves(int nmoves) {
-  m_simulator.currentPosition().kibitz(nmoves, true);
+  m_simulator.currentPosition().kibitz(INT_MAX, true);
   return m_simulator.currentPosition().moves();
 }

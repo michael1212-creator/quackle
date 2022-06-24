@@ -82,8 +82,9 @@ MoveList SmartBogowin::moves(int nmoves) {
   Stopwatch stopwatch;
 
   if (currentPosition().bag().empty()) {
-    //if the current bag is empty, then this is the wrong AI for move generation;
-    // Call the end-game AI to do the work;
+    // if the current bag is empty, then this is the wrong AI for move
+    // generation;
+    //  Call the end-game AI to do the work;
     signalFractionDone(0);
     EndgamePlayer endgame;
     endgame.setPosition(currentPosition());
@@ -105,16 +106,16 @@ MoveList SmartBogowin::moves(int nmoves) {
   // generated (these are also probably also the only ones?)
   m_simulator.setIncludedMoves(m_simulator.currentPosition().moves());
 
-  // only keep the moves with equity at least 33 below the equity of the move
-  // with highest equity; however if there are more than 'initialCandidates'
-  // such moves, discard the rest.
+  // only keep the moves with equity at least 'zerothPrune' below the equity of
+  // the move with highest equity; however if there are more than
+  // 'initialCandidates' such moves, discard the rest.
   m_simulator.pruneTo(zerothPrune, initialCandidates);
 
+  // Some moves are considered as immune to pruning; make sure they are included
   m_simulator.makeSureConsideredMovesAreIncluded();
   m_simulator.setIgnoreOppos(false);
 
-  MoveList staticMoves =
-      m_simulator.moves(/* prune */ true, /* sort by equity */ false);
+  MoveList staticMoves = m_simulator.moves(true, false);
   m_simulator.moveConsideredMovesToBeginning(staticMoves);
 
   MoveList firstMove;
@@ -127,10 +128,9 @@ MoveList SmartBogowin::moves(int nmoves) {
   signalFractionDone(0);
 
   m_simulator.setIncludedMoves(firstMove);
-  m_simulator.simulate(plies, minIterations());
+  m_simulator.simulate(plies, minIterations() /* 20 if nested, 40 if not OR 66 and 132 (if called from resolvent) */);
 
-  Move best =
-      *m_simulator.moves(/* prune */ true, /* sort by win */ true).begin();
+  Move best = *m_simulator.moves(true, true).begin();
   simmedMoves.push_back(best);
 
   double bestbp = bogopoints(best);

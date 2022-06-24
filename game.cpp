@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <climits>
 
 #include "computerplayer.h"
 #include "datamanager.h"
@@ -252,7 +253,7 @@ const Move &GamePosition::staticBestMove() {
 }
 
 const Move &GamePosition::greedyBestMove() {
-  kibitz(9999, true);
+  kibitz(INT_MAX, true);
   return m_moves.back();
 }
 

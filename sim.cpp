@@ -137,6 +137,8 @@ void Simulator::setIncludedMoves(const MoveList &moves) {
     }
 
     if (!found)
+      // note that newly created SimmedMoves have their m_includeInSimulation
+      // set to true
       m_simmedMoves.push_back(SimmedMove(it));
   }
 }
@@ -170,7 +172,7 @@ bool Simulator::isConsideredMove(const Move &move) const {
 }
 
 void Simulator::pruneTo(double equityThreshold, int maxNumberOfMoves) {
-  MoveList equityMoves(moves(/* prune unincluded */ true));
+  MoveList equityMoves(moves(true));
   MoveList toSetIncluded;
   const double absoluteEquityThreshold =
       equityMoves[0].equity - equityThreshold;
@@ -183,6 +185,8 @@ void Simulator::pruneTo(double equityThreshold, int maxNumberOfMoves) {
       toSetIncluded.push_back(*it);
   }
 
+  // sets the moves not in 'toSetIncluded' 'm_includeInSimulation' member to
+  // false.
   setIncludedMoves(toSetIncluded);
 }
 
@@ -233,10 +237,6 @@ void Simulator::simulate(int plies, int iterations) {
 }
 
 void Simulator::simulate(int plies) {
-#ifdef DEBUG_SIM
-  UVcout << "let's simulate for " << plies << " plies" << endl;
-#endif
-
   ++m_iterations;
 
   randomizeOppoRacks();
