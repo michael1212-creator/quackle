@@ -88,6 +88,8 @@ public:
 
   // get what's in the move list
   const MoveList &moves() const;
+  // get top nmoves of moves which are in the list
+  const MoveList moves(int nmoves) const;
 
   void setMoves(const MoveList &moves);
 
@@ -481,6 +483,10 @@ inline const Player &GamePosition::playerOnTurn() const {
 inline Player &GamePosition::playerOnTurn() { return *m_playerOnTurn; }
 
 inline const MoveList &GamePosition::moves() const { return m_moves; }
+
+inline const MoveList GamePosition::moves(int nmoves) const {
+  return m_moves.top(nmoves);
+}
 
 inline void GamePosition::setMoves(const MoveList &moves) { m_moves = moves; }
 

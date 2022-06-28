@@ -68,7 +68,8 @@ protected:
     ScoreColumn = 1,
     LeaveColumn = 2,
     WinPercentageColumn = 3,
-    EquityColumn = 4
+    EquityColumn = 4,
+    ValuationColumn = EquityColumn
   };
   QTreeWidget *m_treeWidget;
   QPushButton *m_removeButton;

@@ -226,7 +226,7 @@ protected slots:
   // Birthday
   void startBirthday();
   void birthdayBash();
-  void birthdayGram(int index, bool on);
+  void birthdayGram(int index);
 
 signals:
   // emitted when views (eg board) should update based on the

@@ -1392,13 +1392,6 @@ void TopLevel::pause(bool paused) {
     // set focus to widget that should have focus
     m_brb->grabFocus();
   }
-
-  /*
-          if (paused)
-                  statusMessage(tr("Paused."));
-          else
-                  statusMessage(tr("Resuming..."));
-  */
 }
 
 void TopLevel::advanceGame() {
@@ -1683,7 +1676,7 @@ void TopLevel::createMenu() {
   m_kibitzAsActions->setEnabled(false);
   m_reportAsActions->setEnabled(false);
 
-  // Go
+  //// Go
   m_firstPositionAction = new QAction(tr("&First position"), this);
   m_firstPositionAction->setEnabled(false);
   m_firstPositionAction->setShortcut(tr("Ctrl+Home"));
@@ -2311,51 +2304,48 @@ void TopLevel::startBirthday() {
 }
 
 void TopLevel::birthdayBash() {
-  birthdayGram(m_birthdayIndex, /* off */ false);
+  birthdayGram(m_birthdayIndex);
   ++m_birthdayIndex;
   if (m_birthdayIndex >= 11)
     m_birthdayIndex = 0;
-  birthdayGram(m_birthdayIndex, /* on */ true);
+  birthdayGram(m_birthdayIndex);
 }
 
-void TopLevel::birthdayGram(int index, bool on) {
+void TopLevel::birthdayGram(int index) {
   switch (index) {
   case 0:
     setCaption(tr("HURRRRRRRRRRRRRRRRRRRRRRRRR"));
     break;
   case 1:
-    m_newAction->setIconText(on ? tr("HAPPY") : tr("New game"));
+    m_newAction->setIconText(tr("New game"));
     break;
   case 2:
-    m_generateAction->setIconText(on ? tr("BIRTHDAY")
-                                     : tr("Generate word list"));
+    m_generateAction->setIconText(tr("Generate word list"));
     break;
   case 3:
-    m_kibitzAction->setIconText(on ? tr("ONG") : tr("Generate choices"));
+    m_kibitzAction->setIconText(tr("Generate choices"));
     break;
   case 4:
-    m_nextPositionAction->setIconText(on ? tr("! ! ! ! ! ! ! ! !")
-                                         : tr("Forward"));
+    m_nextPositionAction->setIconText(tr("Forward"));
     break;
   case 5:
     m_kibitzAsActions->actions().front()->setIconText(
-        on ? tr("SUANNE") : tr("Ask Championship Player"));
+        tr("Ask Championship Player"));
     break;
   case 6:
-    m_simulateAction->setIconText(on ? tr("! ! ! ! ! ! ! ! !")
-                                     : tr("Simulate"));
+    m_simulateAction->setIconText(tr("Simulate"));
     break;
   case 7:
-    m_tabWidget->setTabText(0, on ? tr("HAVE A") : tr("Histor&y"));
+    m_tabWidget->setTabText(0, tr("Histor&y"));
     break;
   case 8:
-    m_tabWidget->setTabText(1, on ? tr("SUPERPIMP") : tr("&Choices"));
+    m_tabWidget->setTabText(1, tr("&Choices"));
     break;
   case 9:
-    m_tabWidget->setTabText(2, on ? tr("YEAR") : tr("Se&ttings"));
+    m_tabWidget->setTabText(2, tr("Se&ttings"));
     break;
   case 10:
-    statusMessage(on ? tr("you're awesome don't ever change") : tr(""));
+    statusMessage(tr(""));
     break;
   default:
     break;

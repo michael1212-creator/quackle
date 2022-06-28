@@ -120,5 +120,6 @@ Move GreedyPlayer::move() { return m_simulator.currentPosition().greedyBestMove(
 
 MoveList GreedyPlayer::moves(int nmoves) {
   m_simulator.currentPosition().kibitz(INT_MAX, true);
-  return m_simulator.currentPosition().moves();
+  auto ret = m_simulator.currentPosition().moves().top(nmoves);
+  return ret;
 }

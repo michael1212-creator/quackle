@@ -150,7 +150,7 @@ MoveList SmartBogowin::moves(int nmoves) {
     m_simulator.setIncludedMoves(lookFurther);
     m_simulator.simulate(plies, minIterations());
     Move move =
-        *m_simulator.moves(/* prune */ true, /* sort by win */ true).begin();
+        *m_simulator.moves(true, true).begin();
     double movebp = bogopoints(move);
 
     if (movebp + 1.96 * 35.0 / sqrt((double)minIterations()) > bestbp) {
