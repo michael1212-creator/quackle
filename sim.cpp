@@ -256,6 +256,7 @@ void Simulator::simulate(int plies) {
   // level one's first move is the zeroth ply (the candidate)
   constants.decimalTurns = (plies % constants.playerCount);
   // also one-indexed
+  // calculates how many cycles are gone through for the simulation
   constants.levelCount =
       (int)((plies - constants.decimalTurns) / constants.playerCount);
   constants.ignoreOppos = m_ignoreOppos;
@@ -274,6 +275,8 @@ void Simulator::simulate(int plies) {
 
   int messageCount = 0;
 
+  // m_simmedMoves is set in the ComputerPlayer's moves method using
+  // setIncludedMoves; it includes all the moves in the current position.
   for (auto &moveIt : m_simmedMoves) {
     if (!moveIt.includeInSimulation())
       continue;
@@ -291,11 +294,16 @@ void Simulator::simulate(int plies) {
     message.levels = moveIt.levels;
     message.xmlIndent = m_xmlIndent;
 
+    // there is a monitor on the m_sendQueue which gets notified each time
+    // we do a push like here. This in turn calls 'simThreadFunc' and eventually
+    // simulateOnePosition
     m_sendQueue.push(message);
     messageCount++;
   }
 
   while (messageCount-- > 0) {
+    // pop waits for monitor signal;
+    // gets results after simulateOnePosition is done
     SimmedMoveMessage message(m_receiveQueue.pop());
     incorporateMessage(message);
   }
@@ -308,6 +316,7 @@ void Simulator::simulate(int plies) {
 
 void Simulator::simulateOnePosition(SimmedMoveMessage &message,
                                     const SimmedMoveConstants &constants) {
+  // message is what gets 'returned'
   Game game = constants.game;
   double residual = 0;
 
@@ -319,15 +328,21 @@ void Simulator::simulateOnePosition(SimmedMoveMessage &message,
     const int decimal = levelNumber == constants.levelCount + 1
                             ? constants.decimalTurns
                             : constants.playerCount;
+    // i.e. if (levelNumber == constants.levelCount + 1, which can only happen
+    // on the last iteration of this loop)
+    // and (constants.decimalTurns == 0, i.e. plies is divisible
+    // by number of players)
     if (decimal == 0)
-      continue;
+      continue; // probably equivalent to break in this case
 
+    // initialize the list of scores for each level
     (*levelIt).setNumberScores(decimal);
 
     int playerNumber = 0;
     for (auto &scoresIt : (*levelIt).statistics) {
-      if (game.currentPosition().gameOver())
+      if (game.currentPosition().gameOver()) {
         break;
+      }
       ++playerNumber;
       const int playerId = game.currentPosition().currentPlayer().id();
 
@@ -341,12 +356,16 @@ void Simulator::simulateOnePosition(SimmedMoveMessage &message,
 
       Move move = Move::createNonmove();
 
-      if (playerId == constants.startPlayerId && levelNumber == 1)
+      if (playerId == constants.startPlayerId && levelNumber == 1) {
+        // initial move is the one which be kibitzed before even coming to the
+        // simulator stage
         move = message.move;
-      else if (constants.ignoreOppos && playerId != constants.startPlayerId)
+      } else if (constants.ignoreOppos && playerId != constants.startPlayerId) {
         move = Move::createPassMove();
-      else
+      } else {
+        // generate the best static move possible from this position
         move = game.currentPosition().staticBestMove();
+      }
 
       int deadwoodScore = 0;
       if (game.currentPosition().doesMoveEndGame(move)) {

@@ -1395,8 +1395,9 @@ void TopLevel::pause(bool paused) {
 }
 
 void TopLevel::advanceGame() {
-  if (isPlayerOnTurnComputer())
+  if (isPlayerOnTurnComputer()) {
     startOppoThread();
+  }
   m_game->currentPosition().appendHint(UVString("asdfasdfasfasdf\n\n"));
   showToHuman();
 }

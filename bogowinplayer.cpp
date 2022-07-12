@@ -116,7 +116,7 @@ MoveList SmartBogowin::moves(int nmoves) {
   m_simulator.setIgnoreOppos(false);
 
   MoveList staticMoves = m_simulator.moves(true, false);
-  m_simulator.moveConsideredMovesToBeginning(staticMoves);
+  m_simulator.moveConsideredMovesToBeginning(staticMoves); // doesn't seem to consider sortedness
 
   MoveList firstMove;
   MoveList simmedMoves;
