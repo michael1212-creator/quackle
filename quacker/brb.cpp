@@ -29,13 +29,13 @@
 
 BRB::BRB(WidgetFactory *widgetFactory, QWidget *parent) : View(parent) {
   m_widgetFactory = widgetFactory;
-  m_topHorizontalLayout = new QHBoxLayout;
-  Geometry::setupFramedLayout(m_topHorizontalLayout);
-  setLayout(m_topHorizontalLayout);
+  auto topHorizontalLayout = new QHBoxLayout;
+  Geometry::setupFramedLayout(topHorizontalLayout);
+  setLayout(topHorizontalLayout);
 
   QVBoxLayout *leftVerticalLayout = new QVBoxLayout;
   Geometry::setupInnerLayout(leftVerticalLayout);
-  m_topHorizontalLayout->addLayout(leftVerticalLayout);
+  topHorizontalLayout->addLayout(leftVerticalLayout);
 
   m_boardDisplay = m_widgetFactory->createBoardDisplay();
   leftVerticalLayout->addWidget(m_boardDisplay);
@@ -43,7 +43,7 @@ BRB::BRB(WidgetFactory *widgetFactory, QWidget *parent) : View(parent) {
   m_rackDisplay = m_widgetFactory->createRackDisplay();
   leftVerticalLayout->addWidget(m_rackDisplay);
 
-  m_topHorizontalLayout->setStretchFactor(leftVerticalLayout, 10);
+  topHorizontalLayout->setStretchFactor(leftVerticalLayout, 10);
 
   m_subviews.push_back(m_boardDisplay);
   m_subviews.push_back(m_rackDisplay);
@@ -54,22 +54,29 @@ BRB::~BRB() {}
 
 View *BRB::getBoardView() const { return m_boardDisplay; }
 
-void BRB::split(QSplitter *splitter) {
-  QWidget *rightSide = new QWidget;
-  QVBoxLayout *rightVerticalLayout = new QVBoxLayout(rightSide);
-  Geometry::setupInnerLayout(rightVerticalLayout);
-//  m_topHorizontalLayout->addLayout(rightVerticalLayout);
+void BRB::split(QSplitter *brbSplitter, QSplitter *bhSplitter) {
+  QWidget *topRightSide = new QWidget;
+  QVBoxLayout *topRightVerticalLayout = new QVBoxLayout(topRightSide);
+  QWidget *botRightSide = new QWidget;
+  QVBoxLayout *botRightVerticalLayout = new QVBoxLayout(botRightSide);
+
+  Geometry::setupInnerLayout(topRightVerticalLayout);
+  Geometry::setupInnerLayout(botRightVerticalLayout);
 
   m_bagDisplay = m_widgetFactory->createBagDisplay();
-  rightVerticalLayout->addWidget(m_bagDisplay);
+  topRightVerticalLayout->addWidget(m_bagDisplay);
 
   m_hintsDisplay = m_widgetFactory->createHintsDisplay();
-  rightVerticalLayout->addWidget(m_hintsDisplay);
+  botRightVerticalLayout->addWidget(m_hintsDisplay);
+
+  bhSplitter->addWidget(topRightSide);
+  bhSplitter->addWidget(botRightSide);
+
+  brbSplitter->addWidget(bhSplitter);
 
   m_subviews.push_back(m_bagDisplay);
   m_subviews.push_back(m_hintsDisplay);
   connectSubviewSignals();
-  splitter->addWidget(rightSide);
 }
 
 void BRB::grabFocus() { m_rackDisplay->grabFocus(); }

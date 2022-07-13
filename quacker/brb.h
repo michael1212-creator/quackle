@@ -42,7 +42,7 @@ public:
 	BRB(WidgetFactory *widgetFactory, QWidget *parent = 0);
 	virtual ~BRB();
 	View * getBoardView() const;
-        void split(QSplitter *splitter);
+        void split(QSplitter *brbSplitter, QSplitter *bhSplitter);
 
 public slots:
 	virtual void positionChanged(const Quackle::GamePosition &position);
@@ -53,7 +53,6 @@ private:
 	View *m_rackDisplay;
 	View *m_bagDisplay;
         View *m_hintsDisplay;
-        QHBoxLayout *m_topHorizontalLayout;
         WidgetFactory *m_widgetFactory;
 };
 

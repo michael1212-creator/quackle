@@ -1398,7 +1398,7 @@ void TopLevel::advanceGame() {
   if (isPlayerOnTurnComputer()) {
     startOppoThread();
   }
-  m_game->currentPosition().appendHint(UVString("asdfasdfasfasdf\n\n"));
+  m_game->currentPosition().appendHint(UVString("asdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdf\n\n"));
   showToHuman();
 }
 
@@ -1987,9 +1987,10 @@ void TopLevel::createWidgets() {
 
   m_splitter->addWidget(leftSide);
   auto brbSplitter = new QSplitter(Qt::Horizontal, this);
+  auto bhSplitter = new QSplitter(Qt::Vertical, this);
   m_splitter->addWidget(brbSplitter);
   brbSplitter->addWidget(m_brb);
-  m_brb->split(brbSplitter);
+  m_brb->split(brbSplitter, bhSplitter);
 
   m_splitter->setStretchFactor(1, 4);
 
