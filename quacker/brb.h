@@ -31,6 +31,7 @@ namespace Quackle
 
 class WidgetFactory;
 class QSplitter;
+class QHBoxLayout;
 
 //Board, Rack, Bag(, Hints) = BRB(H)
 class BRB : public View
@@ -52,6 +53,8 @@ private:
 	View *m_rackDisplay;
 	View *m_bagDisplay;
         View *m_hintsDisplay;
+        QHBoxLayout *m_topHorizontalLayout;
+        WidgetFactory *m_widgetFactory;
 };
 
 #endif
