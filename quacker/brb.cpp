@@ -21,63 +21,55 @@
 #include <game.h>
 
 #include "bagdisplay.h"
-#include "brb.h"
 #include "boarddisplay.h"
+#include "brb.h"
 #include "geometry.h"
 #include "rackdisplay.h"
 #include "widgetfactory.h"
 
-BRB::BRB(WidgetFactory *widgetFactory, QWidget *parent)
-	: View(parent)
-{
-	QHBoxLayout *topHorizontalLayout = new QHBoxLayout;
-	Geometry::setupFramedLayout(topHorizontalLayout);
-	setLayout(topHorizontalLayout);
+BRB::BRB(WidgetFactory *widgetFactory, QWidget *parent) : View(parent) {
+  QHBoxLayout *topHorizontalLayout = new QHBoxLayout;
+  Geometry::setupFramedLayout(topHorizontalLayout);
+  setLayout(topHorizontalLayout);
 
-	QVBoxLayout *leftVerticalLayout = new QVBoxLayout;
-	Geometry::setupInnerLayout(leftVerticalLayout);
-	topHorizontalLayout->addLayout(leftVerticalLayout);
-	QVBoxLayout *rightVerticalLayout = new QVBoxLayout;
-	Geometry::setupInnerLayout(rightVerticalLayout);
-	topHorizontalLayout->addLayout(rightVerticalLayout);
+  QVBoxLayout *leftVerticalLayout = new QVBoxLayout;
+  Geometry::setupInnerLayout(leftVerticalLayout);
+  topHorizontalLayout->addLayout(leftVerticalLayout);
+  QVBoxLayout *rightVerticalLayout = new QVBoxLayout;
+  Geometry::setupInnerLayout(rightVerticalLayout);
+  topHorizontalLayout->addLayout(rightVerticalLayout);
 
-	m_boardDisplay = widgetFactory->createBoardDisplay();
-	leftVerticalLayout->addWidget(m_boardDisplay);
+  m_boardDisplay = widgetFactory->createBoardDisplay();
+  leftVerticalLayout->addWidget(m_boardDisplay);
 
-	m_rackDisplay = widgetFactory->createRackDisplay();
-	leftVerticalLayout->addWidget(m_rackDisplay);
+  m_rackDisplay = widgetFactory->createRackDisplay();
+  leftVerticalLayout->addWidget(m_rackDisplay);
 
-	topHorizontalLayout->setStretchFactor(leftVerticalLayout, 10);
+  topHorizontalLayout->setStretchFactor(leftVerticalLayout, 10);
 
-        m_bagDisplay = widgetFactory->createBagDisplay();
-        rightVerticalLayout->addWidget(m_bagDisplay);
+  m_bagDisplay = widgetFactory->createBagDisplay();
+  rightVerticalLayout->addWidget(m_bagDisplay);
 
-        m_hintsDisplay = widgetFactory->createHintsDisplay();
-        rightVerticalLayout->addWidget(m_hintsDisplay);
+  m_hintsDisplay = widgetFactory->createHintsDisplay();
+  rightVerticalLayout->addWidget(m_hintsDisplay);
 
-	m_subviews.push_back(m_boardDisplay);
-	m_subviews.push_back(m_rackDisplay);
-        m_subviews.push_back(m_bagDisplay);
-        m_subviews.push_back(m_hintsDisplay);
-	connectSubviewSignals();
+  m_subviews.push_back(m_boardDisplay);
+  m_subviews.push_back(m_rackDisplay);
+  m_subviews.push_back(m_bagDisplay);
+  m_subviews.push_back(m_hintsDisplay);
+  connectSubviewSignals();
 }
 
-BRB::~BRB()
-{
+BRB::~BRB() {}
+
+View *BRB::getBoardView() const { return m_boardDisplay; }
+
+void BRB::split(QSplitter *splitter) {
+  splitter->addWidget(new QLabel("East"));
 }
 
-View * BRB::getBoardView() const
-{
-	return m_boardDisplay;
-}
+void BRB::grabFocus() { m_rackDisplay->grabFocus(); }
 
-void BRB::grabFocus()
-{
-	m_rackDisplay->grabFocus();
+void BRB::positionChanged(const Quackle::GamePosition &position) {
+  View::positionChanged(position);
 }
-
-void BRB::positionChanged(const Quackle::GamePosition &position)
-{
-	View::positionChanged(position);
-}
-

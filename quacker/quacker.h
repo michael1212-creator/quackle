@@ -25,6 +25,7 @@
 #include <QMap>
 
 #include "oppothread.h"
+#include "brb.h"
 #include <datamanager.h>
 #include <sim.h>
 
@@ -303,7 +304,7 @@ private:
 
   QMap<OppoThread *, OppoThreadProgressBar *> m_progressIndicators;
 
-  View *m_brb;
+  BRB *m_brb;
 
   QSplitter *m_splitter;
 

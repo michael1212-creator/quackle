@@ -20,6 +20,7 @@
 #define QUACKER_BRB_H
 
 #include <QWidget>
+#include <QLabel>
 
 #include "view.h"
 
@@ -29,7 +30,9 @@ namespace Quackle
 }
 
 class WidgetFactory;
+class QSplitter;
 
+//Board, Rack, Bag(, Hints) = BRB(H)
 class BRB : public View
 {
 Q_OBJECT
@@ -38,6 +41,7 @@ public:
 	BRB(WidgetFactory *widgetFactory, QWidget *parent = 0);
 	virtual ~BRB();
 	View * getBoardView() const;
+        void split(QSplitter *splitter);
 
 public slots:
 	virtual void positionChanged(const Quackle::GamePosition &position);

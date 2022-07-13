@@ -1986,7 +1986,10 @@ void TopLevel::createWidgets() {
   m_leftSideLayout->addWidget(m_tabWidget);
 
   m_splitter->addWidget(leftSide);
-  m_splitter->addWidget(m_brb);
+  auto brbSplitter = new QSplitter(Qt::Horizontal, this);
+  m_splitter->addWidget(brbSplitter);
+  brbSplitter->addWidget(m_brb);
+  m_brb->split(brbSplitter);
 
   m_splitter->setStretchFactor(1, 4);
 
