@@ -26,7 +26,6 @@ protected slots:
   void genHints();
 
 private:
-  QLabel *m_label;
   QCheckBox *m_genChampHints;
   QTextEdit *m_textEdit;
   QPushButton *m_genHintsBtn;

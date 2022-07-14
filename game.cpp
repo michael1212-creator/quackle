@@ -173,7 +173,6 @@ GamePosition::GamePosition(const PlayerList &players)
   setEmptyBoard();
   resetMoveMade();
   resetBag();
-  clearHints();
   m_tilesInBag = m_bag.fullBagTileCount() -
                  (QUACKLE_PARAMETERS->rackSize() * m_players.size());
 }
@@ -187,8 +186,7 @@ GamePosition::GamePosition(const GamePosition &position)
       m_gameOver(position.m_gameOver), m_tilesInBag(position.m_tilesInBag),
       m_tilesOnRack(position.m_tilesOnRack), m_board(position.m_board),
       m_bag(position.m_bag), m_drawingOrder(position.m_drawingOrder),
-      m_explanatoryNote(position.m_explanatoryNote),
-      m_playerHints(position.m_playerHints) {
+      m_explanatoryNote(position.m_explanatoryNote) {
   // reset iterator
   if (position.turnNumber() == 0) {
     m_currentPlayer = m_players.end();
@@ -233,7 +231,6 @@ GamePosition::GamePosition()
   setEmptyBoard();
   resetMoveMade();
   resetBag();
-  clearHints();
 }
 
 void GamePosition::kibitz(int nmoves, bool greedy) {
@@ -452,18 +449,6 @@ double GamePosition::calculateSharedConsideration(const Move &move) {
 
 Bag GamePosition::unseenBag() const {
   return unseenBagFromPlayerPerspective(currentPlayer());
-}
-
-LongLetterString GamePosition::playerHints() const { return m_playerHints; }
-
-void GamePosition::setHints(const Quackle::LongLetterString &hints) {
-  m_playerHints = hints;
-}
-
-void GamePosition::clearHints() { m_playerHints.clear(); }
-
-void GamePosition::appendHint(const Quackle::LongLetterString &hint) {
-  m_playerHints.append(hint);
 }
 
 Bag GamePosition::unseenBagFromPlayerPerspective(const Player &player) const {

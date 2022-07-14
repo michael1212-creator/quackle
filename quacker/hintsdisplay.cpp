@@ -17,10 +17,6 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   m_textEdit->setFontFamily("Courier");
   m_textEdit->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-  m_label = new QLabel;
-  m_label->setWordWrap(true);
-  m_label->setBuddy(m_textEdit);
-
   m_genChampHints = new QCheckBox(tr("Generate Championship Player hints?\nThis may take some time."));
   m_genChampHints->setChecked(false); //TODO mm: change this so it is saved between game sessions (e.g. see TopLevel::saveSettings or the like)
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
@@ -29,17 +25,16 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));
   connect(m_genHintsBtn, SIGNAL(clicked()), this, SLOT(genHints()));
 
-  interactiveLayout->addWidget(m_label);
   interactiveLayout->addWidget(m_genHintsBtn);
   interactiveLayout->addWidget(m_genChampHints);
-  interactiveLayout->setStretchFactor(m_label, 2);
   interactiveLayout->setStretchFactor(m_genHintsBtn, 1);
-  interactiveLayout->setStretchFactor(m_genChampHints, 4);
+  interactiveLayout->setStretchFactor(m_genChampHints, 200);
 
   layout->addWidget(interactive);
   layout->addWidget(m_textEdit);
 
-  layout->setStretchFactor(m_textEdit, 1);
+  layout->setStretchFactor(interactive, 1);
+  layout->setStretchFactor(m_textEdit, 200);
 
   showHints(Quackle::LongLetterString());
 }
@@ -58,7 +53,7 @@ void HintsDisplay::genHints() {
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
-  showHints(position.playerHints());
+  //TODO mm: clear the hints
 }
 
 void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {

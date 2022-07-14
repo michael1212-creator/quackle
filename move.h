@@ -126,28 +126,12 @@ public:
 	static Move createPassMove();
 	static Move createNonmove();
 
-        void addHint(UVString hint);
-        const vector<UVString> &hints() const;
-
 private:
 	LetterString m_tiles;
 	LetterString m_prettyTiles;
 	bool m_isChallengedPhoney = false;
 	int m_scoreAddition = 0;
-
-        // for storing all generated hints
-        vector<UVString> m_hints;
 };
-
-inline void Move::addHint(UVString hint)
-{
-        m_hints.push_back(hint);
-}
-
-inline const vector<UVString> &Move::hints() const
-{
-        return m_hints;
-}
 
 // comparison based on action, then tiles, then horizontalness, then startrow, then endcol
 bool operator<(const Quackle::Move &move1, const Quackle::Move &move2);

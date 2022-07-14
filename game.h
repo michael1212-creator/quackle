@@ -237,12 +237,6 @@ public:
   Bag unseenBag() const;
   Bag unseenBagFromPlayerPerspective(const Player &player) const;
 
-  // Dealing with hints to give to player
-  LongLetterString playerHints() const;
-  void setHints(const Quackle::LongLetterString &hints);
-  void clearHints();
-  void appendHint(const Quackle::LongLetterString &hint);
-
   // this must be called if you call makeMove with a nonvalid-for-
   // current-player move
   void ensureProperBag() const;
@@ -450,7 +444,6 @@ protected:
   bool m_gameOver;
   int m_tilesInBag;
   int m_tilesOnRack;
-  LongLetterString m_playerHints;
 
   Quackle::Board m_board;
 
