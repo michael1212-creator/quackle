@@ -30,12 +30,18 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
 
+  m_genHintsBtn = new QPushButton(tr("Generate Hints"));
+  connect(m_genHintsBtn, SIGNAL(clicked()), this, SLOT(genHints()));
+
   interactiveLayout->addWidget(m_label);
+  interactiveLayout->addWidget(m_genHintsBtn);
   interactiveLayout->addWidget(m_genChampHints);
-  interactiveLayout->addWidget(new QCheckBox(tr("test")));
+  interactiveLayout->setStretchFactor(m_label, 2);
+  interactiveLayout->setStretchFactor(m_genHintsBtn, 1);
+  interactiveLayout->setStretchFactor(m_genChampHints, 4);
+
   layout->addWidget(interactive);
   layout->addWidget(m_textEdit);
-
 
   layout->setStretchFactor(m_textEdit, 15);
 
@@ -47,6 +53,10 @@ HintsDisplay::~HintsDisplay() {}
 void HintsDisplay::genChampHintsChanged() {
   //TODO mm: enable generation of champ hints
 //  setGenChampHintsOppos(m_genChampHints->isChecked());
+}
+
+void HintsDisplay::genHints() {
+  //TODO mm: actually generate the hints
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {

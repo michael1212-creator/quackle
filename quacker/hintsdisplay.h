@@ -7,6 +7,7 @@
 class QLabel;
 class QTextEdit;
 class QCheckBox;
+class QPushButton;
 
 class HintsDisplay : public View {
   Q_OBJECT
@@ -21,11 +22,13 @@ public slots:
 protected slots:
   virtual void showHints(const Quackle::LongLetterString &tiles);
   void genChampHintsChanged();
+  void genHints();
 
 private:
   QLabel *m_label;
   QCheckBox *m_genChampHints;
   QTextEdit *m_textEdit;
+  QPushButton *m_genHintsBtn;
 };
 
 #endif // QUACKLE_QUACKER_HINTSDISPLAY_H_
