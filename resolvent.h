@@ -35,9 +35,13 @@ public:
 
   virtual bool isSlow() const;
   virtual bool isUserVisible() const;
+
+  bool isChamp() const;
 };
 
 inline bool Resolvent::isUserVisible() const { return true; }
+
+inline bool Resolvent::isChamp() const { return true; }
 
 class InferringPlayer : public Resolvent {
 public:
