@@ -1398,7 +1398,6 @@ void TopLevel::advanceGame() {
   if (isPlayerOnTurnComputer()) {
     startOppoThread();
   }
-  m_game->currentPosition().appendHint(UVString("asdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdfasdfasdfasfasdf\n\n"));
   showToHuman();
 }
 

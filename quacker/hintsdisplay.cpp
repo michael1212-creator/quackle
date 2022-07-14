@@ -1,12 +1,8 @@
-#include <math.h>
-
 #include <QtWidgets>
-
 #include <game.h>
 #include <quackleio/util.h>
 
 #include "geometry.h"
-
 #include "hintsdisplay.h"
 
 HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
@@ -43,7 +39,7 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   layout->addWidget(interactive);
   layout->addWidget(m_textEdit);
 
-  layout->setStretchFactor(m_textEdit, 15);
+  layout->setStretchFactor(m_textEdit, 1);
 
   showHints(Quackle::LongLetterString());
 }
@@ -57,6 +53,8 @@ void HintsDisplay::genChampHintsChanged() {
 
 void HintsDisplay::genHints() {
   //TODO mm: actually generate the hints
+
+  showHints(Quackle::LongLetterString());
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
@@ -65,7 +63,8 @@ void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
 
 void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {
   if (hints.empty()) {
-    m_label->setText(tr("Your hint:"));
+    m_textEdit->setPlainText("No hints to give;"
+                             "\nPress the 'Generate Hints' button for hints!");
     return;
   }
 
@@ -86,7 +85,6 @@ void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {
   if (lineWidth > maxLineWidth)
     maxLineWidth = lineWidth;
 
-  m_label->setText("Your hint:");
   m_textEdit->setPlainText(text);
 
   const int minimumMaxLineWidth = 32;

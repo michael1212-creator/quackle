@@ -3,6 +3,7 @@
 
 #include "alphabetparameters.h"
 #include "view.h"
+#include "hintsgenerator.h"
 
 class QLabel;
 class QTextEdit;
@@ -29,6 +30,7 @@ private:
   QCheckBox *m_genChampHints;
   QTextEdit *m_textEdit;
   QPushButton *m_genHintsBtn;
+  HintsGenerator *m_hintsGenerator;
 };
 
 #endif // QUACKLE_QUACKER_HINTSDISPLAY_H_
