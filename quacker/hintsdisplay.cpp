@@ -11,7 +11,10 @@
 
 HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
+  QWidget *interactive = new QWidget;
+  QHBoxLayout *interactiveLayout = new QHBoxLayout(interactive);
   Geometry::setupInnerLayout(layout);
+  Geometry::setupInnerLayout(interactiveLayout);
 
   m_textEdit = new QTextEdit;
   m_textEdit->setReadOnly(true);
@@ -21,8 +24,18 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   m_label = new QLabel;
   m_label->setWordWrap(true);
   m_label->setBuddy(m_textEdit);
-  layout->addWidget(m_label);
+
+  m_genChampHints = new QCheckBox(tr("Generate Championship Player hints?\nThis may take some time."));
+  m_genChampHints->setChecked(false); //TODO mm: change this so it is saved between game sessions (e.g. see TopLevel::saveSettings or the like)
+  connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
+          SLOT(genChampHintsChanged()));
+
+  interactiveLayout->addWidget(m_label);
+  interactiveLayout->addWidget(m_genChampHints);
+  interactiveLayout->addWidget(new QCheckBox(tr("test")));
+  layout->addWidget(interactive);
   layout->addWidget(m_textEdit);
+
 
   layout->setStretchFactor(m_textEdit, 15);
 
@@ -31,13 +44,18 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 
 HintsDisplay::~HintsDisplay() {}
 
+void HintsDisplay::genChampHintsChanged() {
+  //TODO mm: enable generation of champ hints
+//  setGenChampHintsOppos(m_genChampHints->isChecked());
+}
+
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
   showHints(position.playerHints());
 }
 
 void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {
   if (hints.empty()) {
-    m_label->setText(tr("No hints to give."));
+    m_label->setText(tr("Your hint:"));
     return;
   }
 
