@@ -1,11 +1,24 @@
 #include <QtWidgets>
+#include <computerplayer.h>
 #include <game.h>
 #include <quackleio/util.h>
+#include <resolvent.h>
+#include <vector>
 
 #include "geometry.h"
 #include "hintsdisplay.h"
 
 HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
+  // logic part
+  m_hintsGenerator = new Quackle::HintsGenerator();
+
+  // TODO mm: create a pop-up window for user to select which AIs they want to
+  // be in/excluded in hint generation?
+  m_hintsGenerator->addAIs({new Quackle::TorontoPlayer(),
+                            new Quackle::GreedyPlayer(),
+                            new Quackle::StaticPlayer()});
+
+  // visual part
   QVBoxLayout *layout = new QVBoxLayout(this);
   QWidget *interactive = new QWidget;
   QHBoxLayout *interactiveLayout = new QHBoxLayout(interactive);
@@ -17,8 +30,11 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   m_textEdit->setFontFamily("Courier");
   m_textEdit->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-  m_genChampHints = new QCheckBox(tr("Generate Championship Player hints?\nThis may take some time."));
-  m_genChampHints->setChecked(false); //TODO mm: change this so it is saved between game sessions (e.g. see TopLevel::saveSettings or the like)
+  m_genChampHints = new QCheckBox(
+      tr("Generate Championship Player hints?\nThis may take some time."));
+  m_genChampHints->setChecked(
+      false); // TODO mm: change this so it is saved between game sessions (e.g.
+              // see TopLevel::saveSettings or the like)
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
 
@@ -42,18 +58,18 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 HintsDisplay::~HintsDisplay() {}
 
 void HintsDisplay::genChampHintsChanged() {
-  //TODO mm: enable generation of champ hints
-//  setGenChampHintsOppos(m_genChampHints->isChecked());
+  // TODO mm: enable generation of champ hints
+  //  setGenChampHintsOppos(m_genChampHints->isChecked());
 }
 
 void HintsDisplay::genHints() {
-  //TODO mm: actually generate the hints
+  // TODO mm: actually generate the hints
 
   showHints(Quackle::LongLetterString());
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
-  //TODO mm: clear the hints
+  // TODO mm: clear the hints
 }
 
 void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {

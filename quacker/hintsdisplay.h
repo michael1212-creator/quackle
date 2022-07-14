@@ -9,6 +9,7 @@ class QLabel;
 class QTextEdit;
 class QCheckBox;
 class QPushButton;
+class HintsGenerator;
 
 class HintsDisplay : public View {
   Q_OBJECT
@@ -29,7 +30,7 @@ private:
   QCheckBox *m_genChampHints;
   QTextEdit *m_textEdit;
   QPushButton *m_genHintsBtn;
-  HintsGenerator *m_hintsGenerator;
+  Quackle::HintsGenerator *m_hintsGenerator;
 };
 
 #endif // QUACKLE_QUACKER_HINTSDISPLAY_H_
