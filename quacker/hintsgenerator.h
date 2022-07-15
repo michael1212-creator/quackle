@@ -24,13 +24,19 @@ public:
   LongLetterString getHints();
   void clearHints();
 
+  void genChampHintsChanged(bool shouldGenChampHints);
+
 private:
   void createAITitle(ComputerPlayer *ai);
 
-  bool m_genHints;
+  bool m_shouldGenChampHints;
   vector<ComputerPlayer *> m_ais;
   LongLetterString m_hints;
 };
+
+inline void HintsGenerator::genChampHintsChanged(bool shouldGenChampHints) {
+  m_shouldGenChampHints = shouldGenChampHints;
+}
 
 #endif // LIBQUACKLE_QUACKER_HINTSGENERATOR_H_
 } // namespace Quackle

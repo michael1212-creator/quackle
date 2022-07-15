@@ -24,12 +24,12 @@ public slots:
   virtual void positionChanged(const Quackle::GamePosition &position);
 
 protected slots:
-  virtual void showHints(const Quackle::LongLetterString &tiles);
+  virtual void showHints(const Quackle::LongLetterString &hints);
   void genChampHintsChanged();
   void genHints();
 
 private:
-  void updateAIPositions();
+  void clearHints();
 
   QCheckBox *m_genChampHints;
   QTextEdit *m_textEdit;

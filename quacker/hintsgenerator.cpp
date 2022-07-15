@@ -16,7 +16,7 @@ HintsGenerator::~HintsGenerator() {}
 void HintsGenerator::createAITitle(ComputerPlayer *ai) {
   m_hints += QString("According to %1\n")
       .arg(QuackleIO::Util::uvStringToQString(ai->name())).toStdString();
-  m_hints.append("-----------------------------");
+  m_hints += "-----------------------------\n\n";
 }
 
 void HintsGenerator::addAI(ComputerPlayer *ai) {
@@ -24,7 +24,7 @@ void HintsGenerator::addAI(ComputerPlayer *ai) {
 }
 
 void HintsGenerator::addAIs(vector<ComputerPlayer *> ais) {
-  m_ais.insert(m_ais.end(), ais.end(), ais.end());
+  m_ais.insert(m_ais.end(), ais.begin(), ais.end());
 }
 
 void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {
@@ -34,8 +34,20 @@ void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {
 }
 
 LongLetterString HintsGenerator::generateHints() {
-  //TODO mm (high): do the thing
+  for (ComputerPlayer *ai : m_ais) {
+    createAITitle(ai);
 
+    //TODO mm (high): do the thing
+    if (ai->isStatic()) {
+
+    } else if (ai->isGreedy()) {
+
+    } else if (ai->isChamp()) {
+
+    } else {
+
+    }
+  }
   return m_hints;
 }
 

@@ -60,20 +60,21 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 
 HintsDisplay::~HintsDisplay() {}
 
-void HintsDisplay::genChampHintsChanged() {
-  // TODO mm (high): enable generation of champ hints
-  //  m_hintsGenerator->genChampHintsChanged(m_genChampHints->isChecked());
-}
-
-void HintsDisplay::genHints() {
-  // TODO mm (high): actually generate the hints
-
+void HintsDisplay::clearHints() {
+  m_hintsGenerator->clearHints();
   showHints(Quackle::LongLetterString());
 }
 
-void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
-  // TODO mm (high?): clear the hints from previous turn/position
+void HintsDisplay::genChampHintsChanged() {
+  m_hintsGenerator->genChampHintsChanged(m_genChampHints->isChecked());
+}
 
+void HintsDisplay::genHints() {
+  showHints(m_hintsGenerator->generateHints());
+}
+
+void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
+  clearHints();
   m_hintsGenerator->positionChanged(position);
 }
 
