@@ -1,6 +1,8 @@
 #ifndef QUACKLE_QUACKER_HINTSDISPLAY_H_
 #define QUACKLE_QUACKER_HINTSDISPLAY_H_
 
+#include <vector>
+
 #include "alphabetparameters.h"
 #include "view.h"
 #include "hintsgenerator.h"
@@ -27,6 +29,8 @@ protected slots:
   void genHints();
 
 private:
+  void updateAIPositions();
+
   QCheckBox *m_genChampHints;
   QTextEdit *m_textEdit;
   QPushButton *m_genHintsBtn;

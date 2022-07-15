@@ -3,7 +3,6 @@
 #include <game.h>
 #include <quackleio/util.h>
 #include <resolvent.h>
-#include <vector>
 
 #include "geometry.h"
 #include "hintsdisplay.h"
@@ -12,11 +11,17 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   // logic part
   m_hintsGenerator = new Quackle::HintsGenerator();
 
+  // TODO mm: perhaps add a selection screen for user to choose which AIs to
+  // generate hints?
+  Quackle::ComputerPlayer *torontoPlayer = new Quackle::TorontoPlayer();
+  Quackle::ComputerPlayer *greedyPlayer = new Quackle::GreedyPlayer();
+  Quackle::ComputerPlayer *staticPlayer = new Quackle::StaticPlayer();
+
+  vector<Quackle::ComputerPlayer *> ais = {torontoPlayer, greedyPlayer, staticPlayer};
+
   // TODO mm: create a pop-up window for user to select which AIs they want to
   // be in/excluded in hint generation?
-  m_hintsGenerator->addAIs({new Quackle::TorontoPlayer(),
-                            new Quackle::GreedyPlayer(),
-                            new Quackle::StaticPlayer()});
+  m_hintsGenerator->addAIs(ais);
 
   // visual part
   QVBoxLayout *layout = new QVBoxLayout(this);
@@ -59,7 +64,7 @@ HintsDisplay::~HintsDisplay() {}
 
 void HintsDisplay::genChampHintsChanged() {
   // TODO mm: enable generation of champ hints
-  //  setGenChampHintsOppos(m_genChampHints->isChecked());
+  //  m_hintsGenerator->genChampHintsChanged(m_genChampHints->isChecked());
 }
 
 void HintsDisplay::genHints() {
@@ -69,12 +74,14 @@ void HintsDisplay::genHints() {
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
-  // TODO mm: clear the hints
+  // TODO mm: clear the hints from previous turn/position
+
+  m_hintsGenerator->positionChanged(position);
 }
 
 void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {
   if (hints.empty()) {
-    m_textEdit->setPlainText("No hints to give;"
+    m_textEdit->setPlainText("No hints to give."
                              "\nPress the 'Generate Hints' button for hints!");
     return;
   }

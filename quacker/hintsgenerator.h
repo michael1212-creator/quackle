@@ -18,9 +18,18 @@ public:
   void addAI(ComputerPlayer *ai);
   void addAIs(vector<ComputerPlayer *> ais);
 
+  void positionChanged(const Quackle::GamePosition &position);
+
+  LongLetterString generateHints();
+  LongLetterString getHints();
+  void clearHints();
+
 private:
+  void createAITitle(ComputerPlayer *ai);
+
   bool m_genHints;
   vector<ComputerPlayer *> m_ais;
+  LongLetterString m_hints;
 };
 
 #endif // LIBQUACKLE_QUACKER_HINTSGENERATOR_H_
