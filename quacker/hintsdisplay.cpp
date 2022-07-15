@@ -11,7 +11,7 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   // logic part
   m_hintsGenerator = new Quackle::HintsGenerator();
 
-  // TODO mm: perhaps add a selection screen for user to choose which AIs to
+  // TODO mm (medium-low): perhaps add a selection screen for user to choose which AIs to
   // generate hints?
   Quackle::ComputerPlayer *torontoPlayer = new Quackle::TorontoPlayer();
   Quackle::ComputerPlayer *greedyPlayer = new Quackle::GreedyPlayer();
@@ -19,8 +19,6 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 
   vector<Quackle::ComputerPlayer *> ais = {torontoPlayer, greedyPlayer, staticPlayer};
 
-  // TODO mm: create a pop-up window for user to select which AIs they want to
-  // be in/excluded in hint generation?
   m_hintsGenerator->addAIs(ais);
 
   // visual part
@@ -38,7 +36,7 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   m_genChampHints = new QCheckBox(
       tr("Generate Championship Player hints?\nThis may take some time."));
   m_genChampHints->setChecked(
-      false); // TODO mm: change this so it is saved between game sessions (e.g.
+      false); // TODO mm (low): change this so it is saved between game sessions (e.g.
               // see TopLevel::saveSettings or the like)
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
@@ -63,18 +61,18 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 HintsDisplay::~HintsDisplay() {}
 
 void HintsDisplay::genChampHintsChanged() {
-  // TODO mm: enable generation of champ hints
+  // TODO mm (high): enable generation of champ hints
   //  m_hintsGenerator->genChampHintsChanged(m_genChampHints->isChecked());
 }
 
 void HintsDisplay::genHints() {
-  // TODO mm: actually generate the hints
+  // TODO mm (high): actually generate the hints
 
   showHints(Quackle::LongLetterString());
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
-  // TODO mm: clear the hints from previous turn/position
+  // TODO mm (high?): clear the hints from previous turn/position
 
   m_hintsGenerator->positionChanged(position);
 }
