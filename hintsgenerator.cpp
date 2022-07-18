@@ -1,11 +1,6 @@
-//
-// Created by mihej on 14/07/22.
-//
-
-#include <QString>
-
-#include <quackleio/util.h>
 #include "hintsgenerator.h"
+#include "statichint.h"
+#include "alphabetparameters.h"
 
 using namespace Quackle;
 
@@ -14,8 +9,7 @@ HintsGenerator::HintsGenerator() {}
 HintsGenerator::~HintsGenerator() {}
 
 void HintsGenerator::createAITitle(ComputerPlayer *ai) {
-  m_hints += QString("According to %1\n")
-      .arg(QuackleIO::Util::uvStringToQString(ai->name())).toStdString();
+  m_hints += "According to " + ai->name() + "\n";
   m_hints += "-----------------------------\n\n";
 }
 

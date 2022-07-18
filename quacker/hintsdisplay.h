@@ -3,9 +3,9 @@
 
 #include <vector>
 
+#include "../hintsgenerator.h"
 #include "alphabetparameters.h"
 #include "view.h"
-#include "hintsgenerator.h"
 
 class QLabel;
 class QTextEdit;
