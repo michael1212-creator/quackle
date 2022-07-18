@@ -20,6 +20,7 @@
 #define QUACKLE_COMPUTERPLAYER_H
 
 #include "sim.h"
+#include <climits>
 
 #define QUACKLE_NULL_COMPUTER_PLAYER_ID 0
 #define QUACKLE_STATIC_COMPUTER_PLAYER_ID 1
@@ -205,7 +206,7 @@ public:
   ~GreedyPlayer();
 
   Move move();
-  MoveList moves(int nmoves);
+  MoveList moves(int nmoves = INT_MAX);
   ComputerPlayer *clone() { return new GreedyPlayer; }
 
   bool isUserVisible() const;

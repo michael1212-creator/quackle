@@ -289,8 +289,13 @@ Move Move::createChallengedPhoney(int zeroIndexedRow, int zeroIndexedColumn,
 Move Move::createExchangeMove(LetterString tilesToExchange, bool isBlind) {
   Move move;
 
-  move.action = isBlind ? Move::BlindExchange : Move::Exchange;
+  if (tilesToExchange.empty()) {
+    return createPassMove();
+  }
+
   move.setTiles(tilesToExchange);
+  move.action = isBlind ? Move::BlindExchange : Move::Exchange;
+
   move.score = 0;
 
   return move;
