@@ -187,6 +187,12 @@ void Settings::createGUI()
 	load();
 }
 
+Settings::~Settings()
+{
+        delete m_editAlphabet;
+        delete m_editTheme;
+}
+
 void Settings::load()
 {
 	m_lexiconNameCombo->setCurrentIndex(m_lexiconNameCombo->findText(QString::fromUtf8(QUACKLE_LEXICON_PARAMETERS->lexiconName().c_str())));

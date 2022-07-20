@@ -39,6 +39,7 @@ Q_OBJECT
 
 public:
 	Settings(QWidget *parent = 0);
+        ~Settings();
 
 	static Settings *self();
 

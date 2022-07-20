@@ -58,7 +58,9 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   showHints(Quackle::LongLetterString());
 }
 
-HintsDisplay::~HintsDisplay() {}
+HintsDisplay::~HintsDisplay() {
+  delete m_hintsGenerator;
+}
 
 void HintsDisplay::clearHints() {
   m_hintsGenerator->clearHints();
