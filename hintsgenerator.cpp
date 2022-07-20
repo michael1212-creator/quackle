@@ -42,34 +42,40 @@ void collectHints(LongLetterString *m_hints, ComputerPlayer *ai,
 }
 
 void staticPreLoop(LongLetterString *m_hints, ComputerPlayer *, void *) {
+  // TODO mm (high): do the thing
   *m_hints += "Static\n";
 }
 
 void staticLoopBody(LongLetterString *m_hints, ComputerPlayer *, Hint, int i, void *) {
+  // TODO mm (high): do the thing
   *m_hints += "Static Hint " + to_string(i) + "\n";
 }
 
-struct StaticArgs {};
+struct StaticArgs {/*TODO mm (medium): Is this needed?*/};
 
 void greedyPreLoop(LongLetterString *m_hints, ComputerPlayer *, void *) {
+  // TODO mm (high): do the thing
   *m_hints += "Greedy\n";
 }
 
 void greedyLoopBody(LongLetterString *m_hints, ComputerPlayer *, Hint, int i, void *) {
+  // TODO mm (high): do the thing
   *m_hints += "Greedy Hint " + to_string(i) + "\n";
 }
 
-struct GreedyArgs {};
+struct GreedyArgs {/*TODO mm (medium): Is this needed?*/};
 
 void champPreLoop(LongLetterString *m_hints, ComputerPlayer *, void *) {
+  // TODO mm (high): do the thing
   *m_hints += "Champ\n";
 }
 
 void champLoopBody(LongLetterString *m_hints, ComputerPlayer *, Hint, int i, void *) {
+  // TODO mm (high): do the thing
   *m_hints += "Champ Hint " + to_string(i) + "\n";
 }
 
-struct ChampArgs {};
+struct ChampArgs {/*TODO mm (medium): Is this needed?*/};
 
 void postLoop(LongLetterString *m_hints, ComputerPlayer *, void *) {
   *m_hints += "\n";
@@ -79,13 +85,12 @@ LongLetterString HintsGenerator::generateHints() {
   for (ComputerPlayer *ai : m_ais) {
     createAITitle(ai);
 
-    // TODO mm (high): do the thing
     if (ai->isStatic()) {
       struct StaticArgs args;
-      showHints(&m_hints, ai, staticPreLoop, staticLoopBody, postLoop, &args);
+      collectHints(&m_hints, ai, staticPreLoop, staticLoopBody, postLoop, &args);
     } else if (ai->isGreedy()) {
       struct GreedyArgs args;
-      showHints(&m_hints, ai, greedyPreLoop, greedyLoopBody, postLoop, &args);
+      collectHints(&m_hints, ai, greedyPreLoop, greedyLoopBody, postLoop, &args);
     } else if (ai->isChamp()) {
       struct ChampArgs args;
       collectHints(&m_hints, ai, champPreLoop, champLoopBody, postLoop, &args);
