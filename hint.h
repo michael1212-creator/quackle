@@ -3,10 +3,18 @@
 
 #include "alphabetparameters.h"
 
+class StaticHint;
+class GreedyHint;
+class ChampHint;
+
 class Hint {
 public:
   Hint(Quackle::LongLetterString message);
-  ~Hint();
+  virtual ~Hint() {}
+
+  virtual StaticHint *toStatic();
+  virtual GreedyHint *toGreedy();
+  virtual ChampHint *toChamp();
 
   Quackle::LongLetterString message();
 

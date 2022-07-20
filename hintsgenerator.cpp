@@ -1,5 +1,7 @@
 #include "hintsgenerator.h"
 #include "statichint.h"
+#include "greedyhint.h"
+#include "champhint.h"
 #include "alphabetparameters.h"
 
 using namespace Quackle;

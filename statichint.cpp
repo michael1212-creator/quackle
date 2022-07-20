@@ -5,4 +5,6 @@ StaticHint::StaticHint(Quackle::LongLetterString message, double equity)
   m_equity = equity;
 }
 
-StaticHint::~StaticHint() {}
+StaticHint *StaticHint::toStatic() {
+  return this;
+}
