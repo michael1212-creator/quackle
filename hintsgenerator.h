@@ -34,5 +34,6 @@ inline void HintsGenerator::genChampHintsChanged(bool shouldGenChampHints) {
   m_shouldGenChampHints = shouldGenChampHints;
 }
 
-#endif // LIBQUACKLE_QUACKER_HINTSGENERATOR_H_
 } // namespace Quackle
+
+#endif // LIBQUACKLE_QUACKER_HINTSGENERATOR_H_

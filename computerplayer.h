@@ -89,9 +89,9 @@ public:
   bool shouldAbort();
 
   // how we determine the shape of the hints
-  bool isGreedy() const;
-  bool isChamp() const;
-  bool isStatic() const;
+  virtual bool isGreedy() const;
+  virtual bool isChamp() const;
+  virtual bool isStatic() const;
 
   // if we have a dispatch, signals fractionDone on the dispatch
   void signalFractionDone(double fractionDone);
