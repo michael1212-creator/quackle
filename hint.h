@@ -2,26 +2,23 @@
 #define LIBQUACKLE_QUACKER_HINT_H_
 
 #include "alphabetparameters.h"
-
-class StaticHint;
-class GreedyHint;
-class ChampHint;
+#include "move.h"
 
 class Hint {
 public:
-  Hint(Quackle::LongLetterString message);
-  virtual ~Hint() {}
-
-  virtual StaticHint *toStatic();
-  virtual GreedyHint *toGreedy();
-  virtual ChampHint *toChamp();
+  Hint(Quackle::LongLetterString message, Quackle::Move move);
+  ~Hint() {}
 
   Quackle::LongLetterString message();
+  Quackle::Move move();
 
 private:
   Quackle::LongLetterString m_message;
+  Quackle::Move m_move;
 };
 
 inline Quackle::LongLetterString Hint::message() { return m_message; }
+
+inline Quackle::Move Hint::move() { return m_move; }
 
 #endif // LIBQUACKLE_QUACKER_HINT_H_

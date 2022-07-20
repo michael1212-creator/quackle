@@ -22,7 +22,6 @@
 #include "sim.h"
 #include <climits>
 #include "hint.h"
-#include "statichint.h"
 
 #define QUACKLE_NULL_COMPUTER_PLAYER_ID 0
 #define QUACKLE_STATIC_COMPUTER_PLAYER_ID 1
