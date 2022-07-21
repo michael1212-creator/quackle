@@ -4,26 +4,21 @@
 #include <vector>
 
 #include "alphabetparameters.h"
-#include "move.h"
 
 class Hint {
 public:
-  Hint(Quackle::Move move);
+  Hint() {}
   ~Hint() {}
 
-  Quackle::LongLetterString message() const;
-  Quackle::Move move() const;
+  Quackle::LongLetterString hint() const;
 
   void addMsg(Quackle::LongLetterString msg);
   void addMessage(Quackle::LongLetterString message);
 
 private:
-  Quackle::LongLetterString m_message;
+  Quackle::LongLetterString m_hint;
   vector<Quackle::LongLetterString> m_messages;
-  Quackle::Move m_move;
 };
-
-inline Quackle::Move Hint::move() const { return m_move; }
 
 inline void Hint::addMsg(Quackle::LongLetterString msg) { m_messages.push_back(msg); }
 

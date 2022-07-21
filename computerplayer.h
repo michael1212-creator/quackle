@@ -132,9 +132,6 @@ public:
   // sets dispatch for this player and its simulator
   virtual void setDispatch(ComputerDispatch *dispatch);
 
-  vector<Hint> hints();
-  void insertHint(Hint hint);
-
 protected:
   // a max function for convenience
   static double max(double v1, double v2);
@@ -145,19 +142,10 @@ protected:
   int m_id;
   ComputerParameters m_parameters;
   ComputerDispatch *m_dispatch;
-  vector<Hint> m_hints;
 };
 
 inline GamePosition &ComputerPlayer::currentPosition() {
   return m_simulator.currentPosition();
-}
-
-inline void ComputerPlayer::insertHint(Hint hint) {
-  m_hints.push_back(hint);
-}
-
-inline vector<Hint> ComputerPlayer::hints() {
-  return m_hints;
 }
 
 inline const GamePosition &ComputerPlayer::currentPosition() const {

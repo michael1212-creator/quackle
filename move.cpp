@@ -24,6 +24,16 @@
 
 using namespace Quackle;
 
+Move::Move(bool isHinting) {
+  if (isHinting) {
+    m_hint = new Hint();
+  }
+}
+
+Move::~Move() {
+  delete m_hint;
+}
+
 bool operator==(const Move &move1, const Move &move2) {
   bool ret = false;
 

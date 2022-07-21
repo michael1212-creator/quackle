@@ -22,11 +22,11 @@
 #include <vector>
 
 #include "alphabetparameters.h"
+#include "hint.h"
 
 using namespace std;
 
-namespace Quackle
-{
+namespace Quackle {
 
 // A move represents one of a Place, Exchange, Pass, Unused Tile Bonus,
 // Time Penalty, Score Addition, or a lack of a move.
@@ -40,191 +40,186 @@ namespace Quackle
 // A Nonmove represents absence of a choice of move and has extremely
 // negative score and equity (so it is sorted below other moves)
 
-class Move
-{
+class Move {
 public:
-	enum Action { Place = 0, PlaceError, Exchange, BlindExchange, Pass, UnusedTilesBonus, UnusedTilesBonusError, TimePenalty, Nonmove };
+  enum Action {
+    Place = 0,
+    PlaceError,
+    Exchange,
+    BlindExchange,
+    Pass,
+    UnusedTilesBonus,
+    UnusedTilesBonusError,
+    TimePenalty,
+    Nonmove
+  };
 
-	int score = 0;
-	bool isBingo = false;
+  Move(bool isHinting = false);
+  ~Move();
 
-	// 0 if this is a challenged phoney; score field otherwise
-	int effectiveScore() const;
+  int score = 0;
+  bool isBingo = false;
 
-	double equity = 0.;
-	double win = 0.;  // between 0 and 1 inclusive
-	double possibleWin = 0.;
+  // 0 if this is a challenged phoney; score field otherwise
+  int effectiveScore() const;
 
-	Action action = Move::Pass;
+  double equity = 0.;
+  double win = 0.; // between 0 and 1 inclusive
+  double possibleWin = 0.;
 
-	bool horizontal = false;
-	int startrow = 0;
-	int startcol = 0;
+  Action action = Move::Pass;
 
-	// returns whether this is not a Nonmove
-	bool isAMove() const;
+  bool horizontal = false;
+  int startrow = 0;
+  int startcol = 0;
 
-	// tiles like .ANELINg
-	void setTiles(const LetterString &tiles);
+  // returns whether this is not a Nonmove
+  bool isAMove() const;
 
-	// tiles like (P)ANELINg
-	void setPrettyTiles(const LetterString &prettyTiles);
+  // tiles like .ANELINg
+  void setTiles(const LetterString &tiles);
 
-	// returns tiles like (P)ANELINg
-	const LetterString &prettyTiles() const;
+  // tiles like (P)ANELINg
+  void setPrettyTiles(const LetterString &prettyTiles);
 
-	// Returns tiles like .ANELIN?.
-	// QUACKLE_PLAYED_THRU_MARK will take place of a letter already on the board
-	// and blanks are special -- so use isAlreadyOnBoard and
-	// AlphabetParameters->isBlankLetter well.
-	// Returns an empty string if this is a challenged phoney.
-	LetterString usedTiles() const;
+  // returns tiles like (P)ANELINg
+  const LetterString &prettyTiles() const;
 
-	// Returns tiles like PANELING (pretty tiles, nonblank,
-	// without playthru markings)
-	LetterString wordTiles() const;
+  // Returns tiles like .ANELIN?.
+  // QUACKLE_PLAYED_THRU_MARK will take place of a letter already on the board
+  // and blanks are special -- so use isAlreadyOnBoard and
+  // AlphabetParameters->isBlankLetter well.
+  // Returns an empty string if this is a challenged phoney.
+  LetterString usedTiles() const;
 
-	// Returns tiles like ANELING (pretty tiles, nonblank,
-	// without playthru markings or played thru letters)
-	LetterString wordTilesWithNoPlayThru() const;
+  // Returns tiles like PANELING (pretty tiles, nonblank,
+  // without playthru markings)
+  LetterString wordTiles() const;
 
-	// returns tiles like .ANELINg
-	const LetterString &tiles() const;
+  // Returns tiles like ANELING (pretty tiles, nonblank,
+  // without playthru markings or played thru letters)
+  LetterString wordTilesWithNoPlayThru() const;
 
-	bool isChallengedPhoney() const;
-	void setIsChallengedPhoney(bool isChallengedPhoney);
+  // returns tiles like .ANELINg
+  const LetterString &tiles() const;
 
-	int scoreAddition() const;
-	void setScoreAddition(int scoreAddition);
+  bool isChallengedPhoney() const;
+  void setIsChallengedPhoney(bool isChallengedPhoney);
 
-	// tests for equality to played-thru mark
-	static bool isAlreadyOnBoard(Letter letter);
+  int scoreAddition() const;
+  void setScoreAddition(int scoreAddition);
 
-	UVString xml() const;
+  // tests for equality to played-thru mark
+  static bool isAlreadyOnBoard(Letter letter);
 
-	// returns a unique identifier for this move (does not specify
-	// whether move is challenged off)
-	UVString toString() const;
+  UVString xml() const;
 
-	// returns string with all information (including score and equity)
-	UVString debugString() const;
+  // returns a unique identifier for this move (does not specify
+  // whether move is challenged off)
+  UVString toString() const;
 
-	// for a place move, a position like 8H
-	UVString positionString() const;
-	
-	// eg place("8h", ".EaTY"); word is like setTiles(), and no
-	// pretty tiles are set.
-	static Move createPlaceMove(UVString placeString, LetterString word);
-	static Move createPlaceMove(int zeroIndexedRow, int zeroIndexedColumn, bool horizontal, LetterString word);
+  // returns string with all information (including score and equity)
+  UVString debugString() const;
 
-	static Move createChallengedPhoney(UVString placeString, LetterString word);
-	static Move createChallengedPhoney(int zeroIndexedRow, int zeroIndexedColumn, bool horizontal, LetterString word);
+  // for a place move, a position like 8H
+  UVString positionString() const;
 
-	static Move createExchangeMove(LetterString tilesToExchange, bool isBlind);
-	static Move createUnusedTilesBonus(LetterString unusedTiles, int bonus);
-	static Move createTimePenalty(int penalty);
-	static Move createPassMove();
-	static Move createNonmove();
+  // eg place("8h", ".EaTY"); word is like setTiles(), and no
+  // pretty tiles are set.
+  static Move createPlaceMove(UVString placeString, LetterString word);
+  static Move createPlaceMove(int zeroIndexedRow, int zeroIndexedColumn,
+                              bool horizontal, LetterString word);
+
+  static Move createChallengedPhoney(UVString placeString, LetterString word);
+  static Move createChallengedPhoney(int zeroIndexedRow, int zeroIndexedColumn,
+                                     bool horizontal, LetterString word);
+
+  static Move createExchangeMove(LetterString tilesToExchange, bool isBlind);
+  static Move createUnusedTilesBonus(LetterString unusedTiles, int bonus);
+  static Move createTimePenalty(int penalty);
+  static Move createPassMove();
+  static Move createNonmove();
+
+  Hint *hint() const;
 
 private:
-	LetterString m_tiles;
-	LetterString m_prettyTiles;
-	bool m_isChallengedPhoney = false;
-	int m_scoreAddition = 0;
+  LetterString m_tiles;
+  LetterString m_prettyTiles;
+  bool m_isChallengedPhoney = false;
+  int m_scoreAddition = 0;
+  Hint *m_hint = 0;
 };
 
-// comparison based on action, then tiles, then horizontalness, then startrow, then endcol
+inline Hint *Move::hint() const { return m_hint; }
+
+// comparison based on action, then tiles, then horizontalness, then startrow,
+// then endcol
 bool operator<(const Quackle::Move &move1, const Quackle::Move &move2);
 
-class MoveList : public vector<Move>
-{
+class MoveList : public vector<Move> {
 public:
-	enum SortType { Equity, Valuation=Equity, Score, Alphabetical, Win};
+  enum SortType { Equity, Valuation = Equity, Score, Alphabetical, Win };
 
-	// perform stable sort
-	static void sort(MoveList &list, SortType type = Equity);
+  // perform stable sort
+  static void sort(MoveList &list, SortType type = Equity);
 
-	// sort in opposite direction
-	static void sortNonReverse(MoveList &list, SortType type = Equity);
+  // sort in opposite direction
+  static void sortNonReverse(MoveList &list, SortType type = Equity);
 
-        // return the top nmoves moves only
-        const MoveList top(int nmoves) const;
+  // return the top nmoves moves only
+  const MoveList top(int nmoves) const;
 
-	static bool winComparator(const Move &move1, const Move &move2);
-	static bool equityComparator(const Move &move1, const Move &move2);
-	static bool scoreComparator(const Move &move1, const Move &move2);
-	static bool alphabeticalComparator(const Move &move1, const Move &move2);
-	static bool wordPosComparator(const Move &move1, const Move &move2);
+  static bool winComparator(const Move &move1, const Move &move2);
+  static bool equityComparator(const Move &move1, const Move &move2);
+  static bool scoreComparator(const Move &move1, const Move &move2);
+  static bool alphabeticalComparator(const Move &move1, const Move &move2);
+  static bool wordPosComparator(const Move &move1, const Move &move2);
 
-	bool contains(const Move &move) const;
-	
+  bool contains(const Move &move) const;
+
 private:
-	static SortType m_sortType;
-
+  static SortType m_sortType;
 };
 
-inline bool Move::isAMove() const
-{
-	return action != Nonmove;
+inline bool Move::isAMove() const { return action != Nonmove; }
+
+inline int Move::effectiveScore() const {
+  return m_isChallengedPhoney ? 0 : (score + m_scoreAddition);
 }
 
-inline int Move::effectiveScore() const
-{
-	return m_isChallengedPhoney? 0 : (score + m_scoreAddition);
+inline void Move::setTiles(const LetterString &tiles) { m_tiles = tiles; }
+
+inline void Move::setPrettyTiles(const LetterString &prettyTiles) {
+  m_prettyTiles = prettyTiles;
 }
 
-inline void Move::setTiles(const LetterString &tiles)
-{
-	m_tiles = tiles;
+inline const LetterString &Move::prettyTiles() const { return m_prettyTiles; }
+
+inline const LetterString &Move::tiles() const { return m_tiles; }
+
+inline bool Move::isChallengedPhoney() const { return m_isChallengedPhoney; }
+
+inline void Move::setIsChallengedPhoney(bool isChallengedPhoney) {
+  m_isChallengedPhoney = isChallengedPhoney;
 }
 
-inline void Move::setPrettyTiles(const LetterString &prettyTiles)
-{
-	m_prettyTiles = prettyTiles;
+inline int Move::scoreAddition() const { return m_scoreAddition; }
+
+inline void Move::setScoreAddition(int scoreAddition) {
+  m_scoreAddition = scoreAddition;
 }
 
-inline const LetterString &Move::prettyTiles() const
-{
-	return m_prettyTiles;
+inline bool Move::isAlreadyOnBoard(Letter letter) {
+  return letter == QUACKLE_PLAYED_THRU_MARK;
 }
 
-inline const LetterString &Move::tiles() const
-{
-	return m_tiles;
-}
+} // namespace Quackle
 
-inline bool Move::isChallengedPhoney() const
-{
-	return m_isChallengedPhoney;
-}
-
-inline void Move::setIsChallengedPhoney(bool isChallengedPhoney)
-{
-	m_isChallengedPhoney = isChallengedPhoney;
-}
-
-inline int Move::scoreAddition() const
-{
-	return m_scoreAddition;
-}
-
-inline void Move::setScoreAddition(int scoreAddition)
-{
-	m_scoreAddition = scoreAddition;
-}
-
-inline bool Move::isAlreadyOnBoard(Letter letter)
-{
-	return letter == QUACKLE_PLAYED_THRU_MARK;
-}
-
-}
-
-// we gotta overload so plays with diff equity 
+// we gotta overload so plays with diff equity
 // are equal
 bool operator==(const Quackle::Move &move1, const Quackle::Move &move2);
 
-UVOStream& operator<<(UVOStream& o, const Quackle::Move& m);
-UVOStream& operator<<(UVOStream& o, const Quackle::MoveList& moves);
+UVOStream &operator<<(UVOStream &o, const Quackle::Move &m);
+UVOStream &operator<<(UVOStream &o, const Quackle::MoveList &moves);
 
 #endif
