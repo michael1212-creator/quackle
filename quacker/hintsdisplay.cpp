@@ -43,6 +43,7 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));
   connect(m_genHintsBtn, SIGNAL(clicked()), this, SLOT(genHints()));
+  genChampHintsChanged();
 
   interactiveLayout->addWidget(m_genHintsBtn);
   interactiveLayout->addWidget(m_genChampHints);
