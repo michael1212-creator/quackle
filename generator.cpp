@@ -29,8 +29,6 @@
 #include "generator.h"
 #include "lexiconparameters.h"
 
-// #define DEBUG_GENERATOR
-
 using namespace std;
 using namespace Quackle;
 
