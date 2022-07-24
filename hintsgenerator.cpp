@@ -6,7 +6,12 @@ using namespace Quackle;
 
 HintsGenerator::HintsGenerator() {}
 
-HintsGenerator::~HintsGenerator() {}
+HintsGenerator::~HintsGenerator() {
+  for (int i = 0; i < m_ais.size(); i++) {
+    delete m_ais.back();
+    m_ais.pop_back();
+  }
+}
 
 void HintsGenerator::createAITitle(ComputerPlayer *ai) {
   m_hints += "According to " + ai->name() + "\n";
