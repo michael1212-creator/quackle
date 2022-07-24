@@ -28,6 +28,11 @@ private:
   bool m_shouldGenChampHints;
   vector<ComputerPlayer *> m_ais;
   LongLetterString m_hints;
+
+  //AIs which have been disabled from generating hints
+  vector<ComputerPlayer *> blacklistedAIs() const;
+
+  vector<ComputerPlayer *> whitelistedAIs() const;
 };
 
 inline void HintsGenerator::genChampHintsChanged(bool shouldGenChampHints) {

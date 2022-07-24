@@ -1,13 +1,13 @@
 #include "hint.h"
 
-Quackle::LongLetterString Hint::hint() const {
-  //TODO mm (high): will need to collect all messages into this one big message
-  if (!m_hint.empty()) {
-    return m_hint;
+Quackle::LongLetterString Hint::hint(Quackle::LongLetterString indentation,
+                                     Quackle::LongLetterString eol) {
+  if (m_hint.empty()) {
+    for (auto it : m_messages) {
+      m_hint += indentation + it + eol;
+    }
   }
-
+  return m_hint;
 }
 
-Quackle::LongLetterString Hint::toString() {
-  return hint();
-}
+Quackle::LongLetterString Hint::toString() { return hint(); }
