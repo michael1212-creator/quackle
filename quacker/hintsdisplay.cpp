@@ -17,7 +17,7 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   Quackle::ComputerPlayer *staticPlayer = new Quackle::StaticPlayer();
   Quackle::ComputerPlayer *greedyPlayer = new Quackle::GreedyPlayer();
 
-  vector<Quackle::ComputerPlayer *> ais = {torontoPlayer, greedyPlayer, staticPlayer};
+  vector<Quackle::ComputerPlayer *> ais = {torontoPlayer, staticPlayer, greedyPlayer};
 
   m_hintsGenerator->addAIs(ais);
 
@@ -78,8 +78,12 @@ void HintsDisplay::genHints() {
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
-  clearHints();
-  m_hintsGenerator->positionChanged(position);
+  if (position.unseenBag().tiles() != m_unseenTiles) {
+    clearHints();
+    m_hintsGenerator->positionChanged(position);
+  }
+
+  m_unseenTiles = position.unseenBag().tiles();
 }
 
 void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {
