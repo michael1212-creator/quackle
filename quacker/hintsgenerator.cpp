@@ -1,6 +1,8 @@
-#include "hintsgenerator.h"
+#include <quackleio/util.h>
+
 #include "alphabetparameters.h"
 #include "hint.h"
+#include "hintsgenerator.h"
 
 using namespace Quackle;
 
@@ -13,9 +15,12 @@ HintsGenerator::~HintsGenerator() {
   }
 }
 
-void HintsGenerator::createAITitle(ComputerPlayer *ai) {
-  m_hints += "According to " + ai->name() + "\n";
-  m_hints += "-----------------------------\n";
+void HintsGenerator::createAITitle(ComputerPlayer *ai, LongLetterString *appendTo) {
+  if (!appendTo) {
+    appendTo = &m_hints;
+  }
+  (*appendTo) += "According to " + ai->name() + "\n";
+  (*appendTo) += "-----------------------------\n";
 }
 
 void HintsGenerator::addAI(ComputerPlayer *ai) {
@@ -47,7 +52,7 @@ struct GenericArgs {
 
 void collectHints(struct AIArgs *args) {
   int i = 0;
-  struct GenericArgs customArgs = *((GenericArgs *) (args->customArgs));
+  struct GenericArgs customArgs = *((GenericArgs *)(args->customArgs));
   customArgs.preLoop(args);
   for (Move move : args->ai->moves(customArgs.numMoves)) {
     customArgs.loopBody(args, move, i);
@@ -76,8 +81,8 @@ struct StaticArgs {
 
 void staticPreLoop(struct AIArgs *args) {
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
-  *(args->m_hints) +=
-      "The top " + to_string(customArgs->genericArgs.numMoves) + " moves are:\n";
+  *(args->m_hints) += "The top " + to_string(customArgs->genericArgs.numMoves) +
+                      " moves are:\n";
 }
 
 void staticLoopBody(struct AIArgs *args, Move move, int i) {
@@ -122,8 +127,13 @@ void greedyPreLoop(struct AIArgs *args) {
 void greedyLoopBody(struct AIArgs *args, Move move, int i) {
   // TODO mm (high): do the thing
   struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
-  Hint *hint = move.hint();
-  *(args->m_hints) += to_string(i + 1) + "\n";
+  int moveScore = move.score;
+  LongLetterString moveAsStr =
+      QuackleIO::Util::moveToDetailedString(move).toStdString();
+  *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr +
+                      ", with a score of " + to_string(moveScore) + ".\n";
+  *(args->m_hints) += "   This move is ranked as ... by Quackle, ... by Maven, "
+                      "and ... by Static.\n";
 }
 
 void greedyPostLoop(struct AIArgs *args) {
@@ -167,10 +177,15 @@ void champPostLoop(struct AIArgs *args) {
 }
 
 LongLetterString HintsGenerator::generateHints() {
-  for (ComputerPlayer *ai : m_ais) {
-    createAITitle(ai);
+  LongLetterString appendLater;
+  LongLetterString appendNow;
+  bool shouldAppendNow;
 
-    struct AIArgs args = {&m_hints, ai, 0};
+  for (ComputerPlayer *ai : m_ais) {
+    shouldAppendNow = true;
+    createAITitle(ai, &appendNow);
+
+    struct AIArgs args = {&appendNow, ai, 0};
     if (ai->isStatic()) {
       struct StaticArgs StaticArgs;
       args.customArgs = &StaticArgs;
@@ -184,10 +199,20 @@ LongLetterString HintsGenerator::generateHints() {
       args.customArgs = &ChampArgs;
       collectHints(&args);
     } else {
-      m_hints += "Hints for " + ai->name() + " have been disabled.\n";
+      shouldAppendNow = false;
+      appendNow += "Hints for " + ai->name() + " have been disabled.\n";
     }
-    m_hints += "\n\n";
+    appendNow += "\n\n";
+
+    if (shouldAppendNow) {
+      m_hints += appendNow;
+    } else {
+      appendLater += appendNow;
+    }
+    appendNow.clear();
   }
+
+  m_hints += appendLater;
   return m_hints;
 }
 

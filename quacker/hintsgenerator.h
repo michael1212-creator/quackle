@@ -1,7 +1,7 @@
 #ifndef LIBQUACKLE_QUACKER_HINTSGENERATOR_H_
 #define LIBQUACKLE_QUACKER_HINTSGENERATOR_H_
 
-#include <computerplayer.h>
+#include "computerplayer.h"
 #include <vector>
 
 namespace Quackle {
@@ -23,7 +23,7 @@ public:
   void genChampHintsChanged(bool shouldGenChampHints);
 
 private:
-  void createAITitle(ComputerPlayer *ai);
+  void createAITitle(ComputerPlayer *ai, LongLetterString *appendTo = 0);
 
   bool m_shouldGenChampHints;
   vector<ComputerPlayer *> m_ais;

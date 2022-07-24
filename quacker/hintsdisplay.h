@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "../hintsgenerator.h"
 #include "alphabetparameters.h"
+#include "hintsgenerator.h"
 #include "view.h"
 
 class QLabel;

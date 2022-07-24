@@ -13,9 +13,9 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 
   // TODO mm (medium-low): perhaps add a selection screen for user to choose which AIs to
   // generate hints?
+  Quackle::ComputerPlayer *torontoPlayer = new Quackle::TorontoPlayer();
   Quackle::ComputerPlayer *staticPlayer = new Quackle::StaticPlayer();
   Quackle::ComputerPlayer *greedyPlayer = new Quackle::GreedyPlayer();
-  Quackle::ComputerPlayer *torontoPlayer = new Quackle::TorontoPlayer();
 
   vector<Quackle::ComputerPlayer *> ais = {torontoPlayer, greedyPlayer, staticPlayer};
 
