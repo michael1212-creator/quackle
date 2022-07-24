@@ -15,6 +15,8 @@ public:
   void addMsg(Quackle::LongLetterString msg);
   void addMessage(Quackle::LongLetterString message);
 
+  Quackle::LongLetterString toString();
+
 private:
   Quackle::LongLetterString m_hint;
   vector<Quackle::LongLetterString> m_messages;

@@ -2,5 +2,12 @@
 
 Quackle::LongLetterString Hint::hint() const {
   //TODO mm (high): will need to collect all messages into this one big message
-  return m_hint;
+  if (!m_hint.empty()) {
+    return m_hint;
+  }
+
+}
+
+Quackle::LongLetterString Hint::toString() {
+  return hint();
 }

@@ -123,7 +123,7 @@ void greedyLoopBody(struct AIArgs *args, Move move, int i) {
   // TODO mm (high): do the thing
   struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
   Hint *hint = move.hint();
-  *(args->m_hints) += "Greedy Hint " + to_string(i + 1) + "\n";
+  *(args->m_hints) += to_string(i + 1) + "\n";
 }
 
 void greedyPostLoop(struct AIArgs *args) {
@@ -193,4 +193,4 @@ LongLetterString HintsGenerator::generateHints() {
 
 LongLetterString HintsGenerator::getHints() { return m_hints; }
 
-void HintsGenerator::clearHints() { m_hints = ""; }
+void HintsGenerator::clearHints() { m_hints.clear(); }
