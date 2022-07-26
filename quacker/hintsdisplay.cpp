@@ -11,13 +11,14 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   // logic part
   m_hintsGenerator = new Quackle::HintsGenerator();
 
-  // TODO mm (medium-low): perhaps add a selection screen for user to choose which AIs to
-  // generate hints?
+  // TODO mm (medium-low): perhaps add a selection screen for user to choose
+  // which AIs to generate hints?
   Quackle::ComputerPlayer *torontoPlayer = new Quackle::TorontoPlayer();
   Quackle::ComputerPlayer *staticPlayer = new Quackle::StaticPlayer();
   Quackle::ComputerPlayer *greedyPlayer = new Quackle::GreedyPlayer();
 
-  vector<Quackle::ComputerPlayer *> ais = {torontoPlayer, staticPlayer, greedyPlayer};
+  vector<Quackle::ComputerPlayer *> ais = {torontoPlayer, staticPlayer,
+                                           greedyPlayer};
 
   m_hintsGenerator->addAIs(ais);
 
@@ -36,10 +37,16 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   m_genChampHints = new QCheckBox(
       tr("Generate Championship Player hints?\nThis may take some time."));
   m_genChampHints->setChecked(
-      false); // TODO mm (low): change this so it is saved between game sessions (e.g.
-              // see TopLevel::saveSettings or the like)
+      false); // TODO mm (low): change this so it is saved between game sessions
+              // (e.g. see TopLevel::saveSettings or the like)
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
+
+  m_forceMovesUpdate = new QCheckBox(
+      tr("Force move recalculation?"));
+  m_forceMovesUpdate->setChecked(
+      false); // TODO mm (low): change this so it is saved between game sessions
+              // (e.g. see TopLevel::saveSettings or the like)
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));
   connect(m_genHintsBtn, SIGNAL(clicked()), this, SLOT(genHints()));
@@ -47,8 +54,10 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 
   interactiveLayout->addWidget(m_genHintsBtn);
   interactiveLayout->addWidget(m_genChampHints);
+  interactiveLayout->addWidget(m_forceMovesUpdate);
   interactiveLayout->setStretchFactor(m_genHintsBtn, 1);
-  interactiveLayout->setStretchFactor(m_genChampHints, 200);
+  interactiveLayout->setStretchFactor(m_genChampHints, 2);
+  interactiveLayout->setStretchFactor(m_forceMovesUpdate, 2);
 
   layout->addWidget(interactive);
   layout->addWidget(m_textEdit);
@@ -59,9 +68,7 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   showHints(Quackle::LongLetterString());
 }
 
-HintsDisplay::~HintsDisplay() {
-  delete m_hintsGenerator;
-}
+HintsDisplay::~HintsDisplay() { delete m_hintsGenerator; }
 
 void HintsDisplay::clearHints() {
   m_hintsGenerator->clearHints();
@@ -74,7 +81,7 @@ void HintsDisplay::genChampHintsChanged() {
 
 void HintsDisplay::genHints() {
   clearHints();
-  showHints(m_hintsGenerator->generateHints());
+  showHints(m_hintsGenerator->generateHints(m_forceMovesUpdate->isChecked()));
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {

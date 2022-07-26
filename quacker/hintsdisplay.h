@@ -32,6 +32,7 @@ private:
   void clearHints();
 
   QCheckBox *m_genChampHints;
+  QCheckBox *m_forceMovesUpdate;
   QTextEdit *m_textEdit;
   QPushButton *m_genHintsBtn;
   Quackle::HintsGenerator *m_hintsGenerator;

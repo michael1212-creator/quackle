@@ -7,6 +7,7 @@
 namespace Quackle {
 
 class HintsGenerator {
+
 public:
   HintsGenerator();
   ~HintsGenerator();
@@ -16,7 +17,7 @@ public:
 
   void positionChanged(const Quackle::GamePosition &position);
 
-  LongLetterString generateHints();
+  LongLetterString generateHints(bool forceUpdateMoves = false);
   LongLetterString getHints();
   void clearHints();
 

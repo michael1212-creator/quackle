@@ -35,6 +35,7 @@ void HintsGenerator::addAIs(vector<ComputerPlayer *> ais) {
 void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {
   for (auto ai : m_ais) {
     ai->setPosition(position);
+    ai->cachedMoves().clear();
   }
 }
 
@@ -45,7 +46,7 @@ struct AIArgs {
   vector<ComputerPlayer *> whitelistedAIs;
 };
 
-#define NUM_MOVES_TO_GEN 20
+#define MIN_NUM_MOVES_TO_GEN 20
 
 struct GenericArgs {
   void (*preLoop)(struct AIArgs *);
@@ -234,13 +235,15 @@ vector<ComputerPlayer *> HintsGenerator::whitelistedAIs() const {
   return whitelist;
 }
 
-LongLetterString HintsGenerator::generateHints() {
+LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
   LongLetterString appendLater;
   LongLetterString appendNow;
   bool shouldAppendNow;
 
   for (ComputerPlayer *ai : whitelistedAIs()) {
-    ai->moves(NUM_MOVES_TO_GEN);
+    if (forceUpdateMoves || ai->cachedMoves().empty()) {
+      ai->moves(MIN_NUM_MOVES_TO_GEN);
+    }
   }
 
   for (ComputerPlayer *ai : m_ais) {
