@@ -60,6 +60,7 @@ void ComputerPlayer::setConsideredMoves(const MoveList &moves) {
 MoveList ComputerPlayer::moves(int nmoves) {
   MoveList ret;
   ret.push_back(move());
+  m_cachedMoves = ret;
   return ret;
 }
 
@@ -77,8 +78,10 @@ Move StaticPlayer::move() {
 }
 
 MoveList StaticPlayer::moves(int nmoves) {
-  m_simulator.currentPosition().kibitz(nmoves);
-  return m_simulator.currentPosition().moves();
+  m_simulator.currentPosition().kibitz(INT_MAX);
+  m_cachedMoves = m_simulator.currentPosition().moves();
+  return m_cachedMoves.top(nmoves);
+  return m_simulator.currentPosition().moves().top(nmoves);
 }
 
 ScalingDispatch::ScalingDispatch(ComputerDispatch *shadow, double scale,
@@ -132,6 +135,18 @@ MoveList GreedyPlayer::moves(int nmoves) {
     auto exchMove = Move::createExchangeMove(toExchange, false);
     movesList.push_back(exchMove);
   }
+  m_cachedMoves = movesList;
   auto topMoves = movesList.top(nmoves);
   return topMoves;
+}
+
+int ComputerPlayer::rankMove(Move &move) {
+  int i = 1;
+  for (auto it : m_cachedMoves) {
+    if (it == move) {
+      return i;
+    }
+    i++;
+  }
+  return -m_cachedMoves.size();
 }

@@ -45,31 +45,38 @@ struct AIArgs {
   vector<ComputerPlayer *> whitelistedAIs;
 };
 
+#define NUM_MOVES_TO_GEN 20
+
 struct GenericArgs {
   void (*preLoop)(struct AIArgs *);
   void (*loopBody)(struct AIArgs *, Move &, int);
   void (*postLoop)(struct AIArgs *);
-  int numMoves;
+  int numMovesToShow;
 };
 
-void otherAIsRankingsOfMove(struct AIArgs *args, Move &move) {
-
+void otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
+                            LongLetterString indent = " - ") {
   // TODO mm (high): do the thing
-  *(args->m_hints) += "   This move is ranked as ... by Quackle, ... by Maven, "
-                      "and ... by Static.\n";
-
-
   for (auto it : args->whitelistedAIs) {
-    *(args->m_hints) += it->name() + "\n";
+    int moveRank = it->rankMove(move);
+    *(args->m_hints) += indent + it->name() + " ";
+    if (moveRank < 0) {
+      *(args->m_hints) += "only has top " + to_string(-moveRank) +
+                          " moves, and this move is not among them";
+    } else if (moveRank > 0) {
+      *(args->m_hints) += "ranks this as number " + to_string(moveRank);
+    } else {
+      *(args->m_hints) += "moves have not been generated yet";
+    }
+    *(args->m_hints) += ".\n";
   }
 }
 
 void collectHints(struct AIArgs *args) {
-  int i = 0;
   struct GenericArgs customArgs = *((GenericArgs *)(args->customArgs));
 
-  //Remove this AI from the whitelist - it should only contain other
-  // non-blacklisted AIs
+  // Remove this AI from the whitelist - it should only contain other
+  //  non-blacklisted AIs
   int j = 0;
   for (auto it : args->whitelistedAIs) {
     if (it == args->ai) {
@@ -80,10 +87,15 @@ void collectHints(struct AIArgs *args) {
   args->whitelistedAIs.erase(args->whitelistedAIs.begin() + j);
 
   customArgs.preLoop(args);
-  for (Move &move : args->ai->moves(customArgs.numMoves)) {
+
+  int i = 0;
+  for (Move &move : args->ai->cachedMoves()) {
     customArgs.loopBody(args, move, i);
     otherAIsRankingsOfMove(args, move);
     i++;
+    if (i >= customArgs.numMovesToShow) {
+      break;
+    }
   }
   customArgs.postLoop(args);
 }
@@ -108,7 +120,8 @@ struct StaticArgs {
 
 void staticPreLoop(struct AIArgs *args) {
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
-  *(args->m_hints) += "The top " + to_string(customArgs->genericArgs.numMoves) +
+  *(args->m_hints) += "The top " +
+                      to_string(customArgs->genericArgs.numMovesToShow) +
                       " moves are:\n";
 }
 
@@ -147,12 +160,12 @@ struct GreedyArgs {
 
 void greedyPreLoop(struct AIArgs *args) {
   struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
-  *(args->m_hints) += "The top " + to_string(customArgs->genericArgs.numMoves) +
+  *(args->m_hints) += "The top " +
+                      to_string(customArgs->genericArgs.numMovesToShow) +
                       " highest scoring moves are:\n";
 }
 
 void greedyLoopBody(struct AIArgs *args, Move &move, int i) {
-  struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
   int moveScore = move.score;
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
@@ -183,7 +196,8 @@ struct ChampArgs {
 
 void champPreLoop(struct AIArgs *args) {
   struct ChampArgs *customArgs = (struct ChampArgs *)args->customArgs;
-  *(args->m_hints) += "The top " + to_string(customArgs->genericArgs.numMoves) +
+  *(args->m_hints) += "The top " +
+                      to_string(customArgs->genericArgs.numMovesToShow) +
                       " moves with highest win% are:\n";
 }
 
@@ -224,6 +238,10 @@ LongLetterString HintsGenerator::generateHints() {
   LongLetterString appendLater;
   LongLetterString appendNow;
   bool shouldAppendNow;
+
+  for (ComputerPlayer *ai : whitelistedAIs()) {
+    ai->moves(NUM_MOVES_TO_GEN);
+  }
 
   for (ComputerPlayer *ai : m_ais) {
     shouldAppendNow = true;

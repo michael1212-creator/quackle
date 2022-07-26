@@ -41,36 +41,28 @@ Move EndgamePlayer::move()
 
 MoveList EndgamePlayer::moves(int nmoves)
 {
-	if (currentPosition().bag().size() > 0)
-	{
-#ifdef DEBUG_ENDGAME
-		UVcout << "EndgamePlayer returning statically evaluated play." << endl;
-#endif
-		m_simulator.currentPosition().kibitz(nmoves);
-#ifdef DEBUG_ENDGAME
-		UVcout << "EndgamePlayer returns " << m_simulator.currentPosition().moves() << endl;
-#endif
-		return m_simulator.currentPosition().moves();
-	}
+    if (currentPosition().bag().size() > 0)
+    {
+        m_simulator.currentPosition().kibitz(nmoves);
+        m_cachedMoves = m_simulator.currentPosition().moves();
+        return m_cachedMoves;
+    }
 
-	m_endgame.setPosition(currentPosition());
-	
-    if (nmoves > 1) return m_endgame.moves(nmoves);
+    m_endgame.setPosition(currentPosition());
 
-#ifdef DEBUG_ENDGAME
-	UVcout << "EndgamePlayer solving endgame from position:" << endl;
-	UVcout << currentPosition() << endl;
-#endif
+    if (nmoves > 1)
+    {
+        m_cachedMoves = m_endgame.moves(nmoves);
+        return m_cachedMoves;
+    }
 
-	MoveList ret;
-	Move solution = m_endgame.solve(currentPosition().nestedness());
+    MoveList ret;
+    Move solution = m_endgame.solve(currentPosition().nestedness());
 
-	ret.push_back(solution);
-#ifdef DEBUG_ENDGAME
-	UVcout << "EndgamePlayer returns solved endgame:" << ret << endl;
-#endif
+    ret.push_back(solution);
 
-	return ret;
+    m_cachedMoves = ret;
+    return ret;
 }
 
 void EndgamePlayer::setDispatch(ComputerDispatch *dispatch)

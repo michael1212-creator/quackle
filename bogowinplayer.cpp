@@ -88,7 +88,8 @@ MoveList SmartBogowin::moves(int nmoves) {
     signalFractionDone(0);
     EndgamePlayer endgame;
     endgame.setPosition(currentPosition());
-    return endgame.moves(nmoves);
+    m_cachedMoves = endgame.moves(nmoves);
+    return m_cachedMoves;
   }
 
   const int zerothPrune = 33;
@@ -183,5 +184,6 @@ sort_and_return:
       ret.push_back(*simmedIt);
   }
 
+  m_cachedMoves = ret;
   return ret;
 }

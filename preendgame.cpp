@@ -110,6 +110,7 @@ MoveList Preendgame::moves(int nmoves)
 	if (currentPosition().bag().empty() || currentPosition().bag().size() > maximumTilesInBagToEngage())
 	{
 		UVcout << "Preendgame used in improper location." << endl;
+                m_cachedMoves = ret;
 		return ret;
 	}
 
@@ -227,5 +228,6 @@ MoveList Preendgame::moves(int nmoves)
 		}
 	}
 
+        m_cachedMoves = ret;
 	return ret;
 }

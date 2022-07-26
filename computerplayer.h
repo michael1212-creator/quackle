@@ -132,6 +132,9 @@ public:
   // sets dispatch for this player and its simulator
   virtual void setDispatch(ComputerDispatch *dispatch);
 
+  int rankMove(Move &move);
+  MoveList cachedMoves();
+
 protected:
   // a max function for convenience
   static double max(double v1, double v2);
@@ -142,6 +145,11 @@ protected:
   int m_id;
   ComputerParameters m_parameters;
   ComputerDispatch *m_dispatch;
+  MoveList m_cachedMoves;
+};
+
+inline MoveList ComputerPlayer::cachedMoves() {
+    return m_cachedMoves;
 };
 
 inline GamePosition &ComputerPlayer::currentPosition() {

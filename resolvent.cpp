@@ -55,6 +55,7 @@ MoveList Resolvent::moves(int nmoves) {
   MoveList moves = delegatee->moves(nmoves);
   delete delegatee;
 
+  m_cachedMoves = moves;
   return moves;
 }
 
