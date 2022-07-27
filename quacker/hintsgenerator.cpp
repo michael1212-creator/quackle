@@ -60,13 +60,16 @@ struct GenericArgs {
 
 void otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
                             LongLetterString indent = " - ") {
-  // TODO mm (high): do the thing
   for (auto it : args->whitelistedAIs) {
     int moveRank = it->rankMove(move);
     *(args->m_hints) += indent + it->name() + " ";
     if (moveRank < 0) {
-      *(args->m_hints) += "only has top " + to_string(-moveRank) +
-                          " moves, and this move is not among them";
+      if (it->isGreedy() && move.action == Move::Pass) {
+        *(args->m_hints) += "Does not generate exchange moves";
+      } else {
+        *(args->m_hints) += "only has top " + to_string(-moveRank) +
+                            " moves, and this move is not among them";
+      }
     } else if (moveRank > 0) {
       *(args->m_hints) += "ranks this as number " + to_string(moveRank);
     } else {

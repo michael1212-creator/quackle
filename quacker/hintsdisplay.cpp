@@ -84,6 +84,8 @@ void HintsDisplay::genChampHintsChanged() {
 }
 
 void HintsDisplay::genHints() {
+  // TODO mm (medium): before a new game is started, this button should be
+  //  disabled
   clearHints();
   showHints(m_hintsGenerator->generateHints(m_forceMovesUpdate->isChecked()));
 }

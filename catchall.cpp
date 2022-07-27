@@ -25,7 +25,7 @@
 using namespace Quackle;
 
 double CatchallEvaluator::equity(const GamePosition &position,
-                                 Move &move) const {
+                                 const Move &move) const {
   Hint *hint = move.hint();
   char buf[16];
   if (position.board().isEmpty()) { // starting player
