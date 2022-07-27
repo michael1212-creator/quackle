@@ -1,5 +1,9 @@
 #include "hint.h"
 
+Hint::Hint() {}
+
+Hint::~Hint() {}
+
 Quackle::LongLetterString Hint::hint(Quackle::LongLetterString indentation,
                                      Quackle::LongLetterString eol) {
   if (m_hint.empty()) {

@@ -25,7 +25,7 @@
 using namespace Quackle;
 
 double CatchallEvaluator::equity(const GamePosition &position,
-                                 const Move &move) const {
+                                 Move &move) const {
   if (position.board().isEmpty()) { // starting player
     double adjustment = 0;
 
@@ -58,16 +58,15 @@ double CatchallEvaluator::equity(const GamePosition &position,
       adjustment =
           QUACKLE_STRATEGY_PARAMETERS->vcPlace(start, length, consbits);
     } else {
-      //'favour' exchange (ass opposed to word placement) on initial turn
+      //'favour' exchange (as opposed to word placement) on initial turn
       // weighted by 3.5
       adjustment = 3.5;
     }
 
+    move.hint()->addMsg(to_string(adjustment));
     // Finally, use other equity evaluator to determine rest of equity
     return ScorePlusLeaveEvaluator::equity(position, move) + adjustment;
-  }
-
-  else if (position.bag().size() > 0) {
+  } else if (position.bag().size() > 0) {
     // if there are still tiles in the bag (i.e. we are not in an endgame
     // situation)
     int leftInBagPlusSeven =
@@ -78,15 +77,18 @@ double CatchallEvaluator::equity(const GamePosition &position,
     if (leftInBagPlusSeven <= 12) {
       timingHeuristic = heuristicArray[leftInBagPlusSeven - 1];
     }
+    move.hint()->addMsg(to_string(timingHeuristic));
     return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
   } else {
     // When there are no more tiles in the bag; endgame situation
+    move.hint()->addMsg(to_string(move.score));
     return endgameResult(position, move) + move.score;
   }
 }
 
 double CatchallEvaluator::endgameResult(const GamePosition &position,
                                         const Move &move) const {
+  Hint *hint = move.hint();
   Rack leave = position.currentPlayer().rack() - move;
 
   if (leave.empty()) {
@@ -97,7 +99,9 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
     for (PlayerList::const_iterator it = position.players().begin();
          it != position.players().end(); ++it) {
       if (!(*it == position.currentPlayer())) {
-        deadwood += it->rack().score();
+        double toAdd = it->rack().score();
+        ADD_HINT("2*" + to_string(toAdd));
+        deadwood += toAdd;
       }
     }
 
@@ -108,5 +112,7 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   // ending the game, which can increase their score by a significant enough
   // amount, dependent on our rack.
   // The constant is there because we like ending the game (?)
+  ADD_HINT(to_string(-8.00));
+  ADD_HINT("-2.61*" + to_string(leave.score()));
   return -8.00 - 2.61 * leave.score();
 }

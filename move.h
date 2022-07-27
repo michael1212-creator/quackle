@@ -54,8 +54,10 @@ public:
     Nonmove
   };
 
-  Move(bool isHinting = false);
+  Move(bool isHinting = true);
   ~Move();
+
+//  const Move &operator=(const Move &move);
 
   int score = 0;
   bool isBingo = false;
@@ -147,10 +149,10 @@ private:
   LetterString m_prettyTiles;
   bool m_isChallengedPhoney = false;
   int m_scoreAddition = 0;
-  Hint *m_hint = 0;
+  Hint m_hint;
 };
 
-inline Hint *Move::hint() const { return m_hint; }
+inline Hint *Move::hint() const { return (Hint *)&m_hint; }
 
 // comparison based on action, then tiles, then horizontalness, then startrow,
 // then endcol

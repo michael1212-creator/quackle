@@ -24,7 +24,7 @@ public:
   void genChampHintsChanged(bool shouldGenChampHints);
 
 private:
-  void createAITitle(ComputerPlayer *ai, LongLetterString *appendTo = 0);
+  void createAITitle(ComputerPlayer *ai, LongLetterString *appendTo = NULL);
 
   bool m_shouldGenChampHints;
   vector<ComputerPlayer *> m_ais;

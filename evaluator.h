@@ -20,6 +20,7 @@
 #define QUACKLE_EVALUATOR_H
 
 #include "alphabetparameters.h"
+#include "hint.h"
 
 namespace Quackle
 {
@@ -56,7 +57,7 @@ public:
 	virtual double playerConsideration(const GamePosition &position, const Move &move) const;
 	virtual double sharedConsideration(const GamePosition &position, const Move &move) const;
 
-	virtual double leaveValue(const LetterString &leave) const;
+	virtual double leaveValue(const LetterString &leave, Hint *hint = 0) const;
 };
 
 }

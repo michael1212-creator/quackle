@@ -133,7 +133,8 @@ public:
   virtual void setDispatch(ComputerDispatch *dispatch);
 
   int rankMove(Move &move);
-  MoveList cachedMoves();
+  MoveList &cachedMoves();
+  void clearCachedMoves();
 
 protected:
   // a max function for convenience
@@ -148,9 +149,13 @@ protected:
   MoveList m_cachedMoves;
 };
 
-inline MoveList ComputerPlayer::cachedMoves() {
-    return m_cachedMoves;
-};
+inline MoveList &ComputerPlayer::cachedMoves() {
+  return m_cachedMoves;
+}
+
+inline void ComputerPlayer::clearCachedMoves() {
+  m_cachedMoves.clear();
+}
 
 inline GamePosition &ComputerPlayer::currentPosition() {
   return m_simulator.currentPosition();

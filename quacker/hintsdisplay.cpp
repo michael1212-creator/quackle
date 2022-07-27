@@ -13,6 +13,8 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
 
   // TODO mm (medium-low): perhaps add a selection screen for user to choose
   // which AIs to generate hints?
+  // TODO mm (low): instead of creating new AIs here, can we use the existing
+  // ones from ComputerPlayerCollection::fullCollection() ?
   Quackle::ComputerPlayer *torontoPlayer = new Quackle::TorontoPlayer();
   Quackle::ComputerPlayer *staticPlayer = new Quackle::StaticPlayer();
   Quackle::ComputerPlayer *greedyPlayer = new Quackle::GreedyPlayer();
@@ -42,8 +44,7 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
 
-  m_forceMovesUpdate = new QCheckBox(
-      tr("Force move recalculation?"));
+  m_forceMovesUpdate = new QCheckBox(tr("Force move recalculation?"));
   m_forceMovesUpdate->setChecked(
       false); // TODO mm (low): change this so it is saved between game sessions
               // (e.g. see TopLevel::saveSettings or the like)
@@ -68,7 +69,10 @@ HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
   showHints(Quackle::LongLetterString());
 }
 
-HintsDisplay::~HintsDisplay() { delete m_hintsGenerator; }
+HintsDisplay::~HintsDisplay() {
+  delete m_hintsGenerator;
+  m_hintsGenerator = NULL;
+}
 
 void HintsDisplay::clearHints() {
   m_hintsGenerator->clearHints();

@@ -34,8 +34,10 @@ void HintsGenerator::addAIs(vector<ComputerPlayer *> ais) {
 
 void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {
   for (auto ai : m_ais) {
+    // TODO mm (medium): rate player's move which they just made (just show its
+    //  ranking in various AI's cached lists)
     ai->setPosition(position);
-    ai->cachedMoves().clear();
+    ai->clearCachedMoves();
   }
 }
 
@@ -91,6 +93,8 @@ void collectHints(struct AIArgs *args) {
 
   int i = 0;
   for (Move &move : args->ai->cachedMoves()) {
+    // TODO mm (medium-low): can we make moves clickable, like in the choices
+    // window?
     customArgs.loopBody(args, move, i);
     otherAIsRankingsOfMove(args, move);
     i++;
@@ -130,7 +134,9 @@ void staticLoopBody(struct AIArgs *args, Move &move, int i) {
   // TODO mm (high): do the thing
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
   Hint *hint = move.hint();
-  *(args->m_hints) += "Static Hint " + to_string(i + 1) + "\n";
+  *(args->m_hints) += "Static Hint " + to_string(i + 1) + " has equity " +
+                      to_string(move.equity) + "\n";
+  *(args->m_hints) += move.hint()->hint();
 }
 
 void staticPostLoop(struct AIArgs *args) {
@@ -242,6 +248,8 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
 
   for (ComputerPlayer *ai : whitelistedAIs()) {
     if (forceUpdateMoves || ai->cachedMoves().empty()) {
+      //TODO mm (medium-high): can we make this non-blocking?
+      // check out TopLeve::kibitz(int, ComputerPlayer *) for inspiration.
       ai->moves(MIN_NUM_MOVES_TO_GEN);
     }
   }

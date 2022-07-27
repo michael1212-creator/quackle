@@ -7,8 +7,8 @@
 
 class Hint {
 public:
-  Hint() {}
-  ~Hint() {}
+  Hint();
+  ~Hint();
 
   Quackle::LongLetterString hint(Quackle::LongLetterString indentation = "",
                                  Quackle::LongLetterString eol = "\n");
