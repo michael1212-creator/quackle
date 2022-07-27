@@ -3,6 +3,7 @@
 #include "alphabetparameters.h"
 #include "hint.h"
 #include "hintsgenerator.h"
+#include <catchall.h>
 
 using namespace Quackle;
 
@@ -133,18 +134,24 @@ void staticPreLoop(struct AIArgs *args) {
 void staticLoopBody(struct AIArgs *args, Move &move, int i) {
   // TODO mm (high): do the thing
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
-  Hint *hint = move.hint();
+
+  char buf[16];
+  TWO_DP(move.equity);
   *(args->m_hints) += "Static Hint " + to_string(i + 1) + " has equity " +
-                      to_string(move.equity) + "\n";
+                      buf + "\n";
   *(args->m_hints) += move.hint()->hint();
 }
 
 void staticPostLoop(struct AIArgs *args) {
+  char buf[16];
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
+  TWO_DP(customArgs->lowestValuation);
   *(args->m_hints) += "\nReally bad moves can have a valuation of " +
-                      to_string(customArgs->lowestValuation) +
-                      ", whereas really good moves can have a valuation of " +
-                      to_string(customArgs->highValuation) + "\n";
+                      (string)buf;
+
+  TWO_DP(customArgs->highValuation);
+  *(args->m_hints) += ", whereas really good moves can have a valuation of " +
+                      (string)buf + "\n";
 }
 
 void greedyPreLoop(struct AIArgs *args);

@@ -53,9 +53,11 @@ double Evaluator::leaveValue(const LetterString &leave) const {
 
 double ScorePlusLeaveEvaluator::equity(const GamePosition &position,
                                        const Move &move) const {
-  move.hint()->addMsg(to_string(move.effectiveScore()));
+  Hint *hint = move.hint();
+  auto toAdd = move.effectiveScore();
+  ADD_HINT(to_string(toAdd));
   return playerConsideration(position, move) +
-         sharedConsideration(position, move) /*= 0*/ + move.effectiveScore();
+         sharedConsideration(position, move) /*= 0*/ + toAdd;
 }
 
 double
@@ -75,6 +77,7 @@ ScorePlusLeaveEvaluator::sharedConsideration(const GamePosition &position,
 
 double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
                                            Hint *hint) const {
+  char buf[16];
   LetterString alphabetized = String::alphabetize(leave);
 
   // Uncomment 3 lines for the calculations after it
@@ -95,7 +98,8 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
     if (QUACKLE_STRATEGY_PARAMETERS->hasWorths()) {
       for (const auto &leaveIt : leave) {
         double toAdd = QUACKLE_STRATEGY_PARAMETERS->tileWorth(leaveIt);
-        ADD_HINT(to_string(toAdd));
+        TWO_DP(toAdd);
+        ADD_HINT(buf);
         value += toAdd;
       }
     }
@@ -106,7 +110,8 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
         if (alphabetized[i] == alphabetized[i + 1]) {
           double toAdd = QUACKLE_STRATEGY_PARAMETERS->syn2(alphabetized[i],
                                                            alphabetized[i]);
-          ADD_HINT(to_string(toAdd));
+          TWO_DP(toAdd);
+          ADD_HINT(buf);
           value += toAdd;
         }
       }
@@ -124,8 +129,10 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
     if (uniqleave.length() >= 2 && QUACKLE_STRATEGY_PARAMETERS->hasSyn2()) {
       for (unsigned int i = 0; i < uniqleave.length() - 1; ++i) {
         for (unsigned int j = i + 1; j < uniqleave.length(); ++j) {
-          double toAdd = QUACKLE_STRATEGY_PARAMETERS->syn2(uniqleave[i], uniqleave[j]);
-          ADD_HINT(to_string(toAdd));
+          double toAdd =
+              QUACKLE_STRATEGY_PARAMETERS->syn2(uniqleave[i], uniqleave[j]);
+          TWO_DP(toAdd);
+          ADD_HINT(buf);
           synergy += toAdd;
         }
       }
@@ -142,8 +149,9 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
       // if there is no bad letter and the pairs of letters we have are good
       //  (synergise well), then add extra value to the leave rack
       if ((synergy > 3.0) && !holding_bad_tile) {
-        double toAdd =  1.5 * (synergy - 3.0);
-        ADD_HINT(to_string(toAdd));
+        double toAdd = 1.5 * (synergy - 3.0);
+        TWO_DP(toAdd);
+        ADD_HINT(buf);
         synergy += toAdd;
       }
 
@@ -177,7 +185,8 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
   };
 
   double toAdd = vcvalues[vowels][cons];
-  ADD_HINT(to_string(toAdd));
+  TWO_DP(toAdd);
+  ADD_HINT(buf);
   value += toAdd;
 
   if (value < -40) {

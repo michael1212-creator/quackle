@@ -26,6 +26,8 @@ using namespace Quackle;
 
 double CatchallEvaluator::equity(const GamePosition &position,
                                  Move &move) const {
+  Hint *hint = move.hint();
+  char buf[16];
   if (position.board().isEmpty()) { // starting player
     double adjustment = 0;
 
@@ -63,7 +65,8 @@ double CatchallEvaluator::equity(const GamePosition &position,
       adjustment = 3.5;
     }
 
-    move.hint()->addMsg(to_string(adjustment));
+    TWO_DP(adjustment);
+    ADD_HINT(buf);
     // Finally, use other equity evaluator to determine rest of equity
     return ScorePlusLeaveEvaluator::equity(position, move) + adjustment;
   } else if (position.bag().size() > 0) {
@@ -77,17 +80,19 @@ double CatchallEvaluator::equity(const GamePosition &position,
     if (leftInBagPlusSeven <= 12) {
       timingHeuristic = heuristicArray[leftInBagPlusSeven - 1];
     }
-    move.hint()->addMsg(to_string(timingHeuristic));
+    TWO_DP(timingHeuristic);
+    ADD_HINT(buf);
     return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
   } else {
     // When there are no more tiles in the bag; endgame situation
-    move.hint()->addMsg(to_string(move.score));
+    ADD_HINT(to_string(move.score));
     return endgameResult(position, move) + move.score;
   }
 }
 
 double CatchallEvaluator::endgameResult(const GamePosition &position,
                                         const Move &move) const {
+  char buf[16];
   Hint *hint = move.hint();
   Rack leave = position.currentPlayer().rack() - move;
 
@@ -100,7 +105,8 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
          it != position.players().end(); ++it) {
       if (!(*it == position.currentPlayer())) {
         double toAdd = it->rack().score();
-        ADD_HINT("2*" + to_string(toAdd));
+        TWO_DP(toAdd);
+        ADD_HINT("2*" + (string)buf);
         deadwood += toAdd;
       }
     }
@@ -112,7 +118,8 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   // ending the game, which can increase their score by a significant enough
   // amount, dependent on our rack.
   // The constant is there because we like ending the game (?)
-  ADD_HINT(to_string(-8.00));
+  TWO_DP(-8.00);
+  ADD_HINT(buf);
   ADD_HINT("-2.61*" + to_string(leave.score()));
   return -8.00 - 2.61 * leave.score();
 }
