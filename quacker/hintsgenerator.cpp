@@ -141,16 +141,16 @@ void staticLoopBody(struct AIArgs *args, Move &move, int i) {
   char buf[16];
   TWO_DP(move.equity);
   *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr + ", has valuation " +
-                      buf + " coming from:\n";
-  *(args->m_hints) += move.hint()->hint();
+                      buf + ", coming from:\n";
+  *(args->m_hints) += move.hint()->hint("  ");
 }
 
 void staticPostLoop(struct AIArgs *args) {
   char buf[16];
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
   TWO_DP(customArgs->lowestValuation);
-  *(args->m_hints) += "\nReally bad moves can have a valuation of " +
-                      (string)buf;
+  *(args->m_hints) +=
+      "\nReally bad moves can have a valuation of " + (string)buf;
 
   TWO_DP(customArgs->highValuation);
   *(args->m_hints) += ", whereas really good moves can have a valuation of " +
@@ -220,9 +220,14 @@ void champPreLoop(struct AIArgs *args) {
 
 void champLoopBody(struct AIArgs *args, Move &move, int i) {
   // TODO mm (high): do the thing
-  struct ChampArgs *customArgs = (struct ChampArgs *)args->customArgs;
+  LongLetterString moveAsStr =
+      QuackleIO::Util::moveToDetailedString(move).toStdString();
   Hint *hint = move.hint();
-  *(args->m_hints) += "Champ Hint " + to_string(i + 1) + "\n";
+  char buf[16];
+  TWO_DP(100*move.win);
+  *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr +
+                      ", has win% chance of " + buf + "%, coming from:\n";
+  *(args->m_hints) += move.hint()->hint("  ");
 }
 
 void champPostLoop(struct AIArgs *args) {
@@ -258,8 +263,8 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
 
   for (ComputerPlayer *ai : whitelistedAIs()) {
     if (forceUpdateMoves || ai->cachedMoves().empty()) {
-      //TODO mm (medium-high): can we make this non-blocking?
-      // check out TopLeve::kibitz(int, ComputerPlayer *) for inspiration.
+      // TODO mm (medium-high): can we make this non-blocking?
+      //  check out TopLeve::kibitz(int, ComputerPlayer *) for inspiration.
       ai->moves(MIN_NUM_MOVES_TO_GEN);
     }
   }
