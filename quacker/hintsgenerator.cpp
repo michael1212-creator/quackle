@@ -136,12 +136,12 @@ void staticPreLoop(struct AIArgs *args) {
 
 void staticLoopBody(struct AIArgs *args, Move &move, int i) {
   // TODO mm (high): do the thing
-  struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
-
+  LongLetterString moveAsStr =
+      QuackleIO::Util::moveToDetailedString(move).toStdString();
   char buf[16];
   TWO_DP(move.equity);
-  *(args->m_hints) += "Static Hint " + to_string(i + 1) + " has equity " +
-                      buf + "\n";
+  *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr + ", has valuation " +
+                      buf + " coming from:\n";
   *(args->m_hints) += move.hint()->hint();
 }
 
