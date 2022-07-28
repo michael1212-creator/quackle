@@ -29,6 +29,7 @@ double CatchallEvaluator::equity(const GamePosition &position,
   Hint *hint = move.hint();
   char buf[16];
   if (position.board().isEmpty()) { // starting player
+    ADD_HINT("Because the board is currently empty:");
     double adjustment = 0;
 
     if (move.action == Move::Place) {
@@ -59,14 +60,22 @@ double CatchallEvaluator::equity(const GamePosition &position,
       // conjunction with its location and length
       adjustment =
           QUACKLE_STRATEGY_PARAMETERS->vcPlace(start, length, consbits);
+      TWO_DP(adjustment);
+      // TODO mm (medium-high): can we improve this msg?
+      ADD_HINT("  " + LongLetterString(buf) +
+               ": for the location and length of word, along with where the "
+               "consonants are in the word.");
     } else {
       //'favour' exchange (as opposed to word placement) on initial turn
       // weighted by 3.5
+
       adjustment = 3.5;
+      TWO_DP(adjustment);
+      ADD_HINT("  " + LongLetterString(buf) +
+               ": exchange moves get this as an extra by default "
+               "on first placement.");
     }
 
-    TWO_DP(adjustment);
-    ADD_HINT(buf);
     // Finally, use other equity evaluator to determine rest of equity
     return ScorePlusLeaveEvaluator::equity(position, move) + adjustment;
   } else if (position.bag().size() > 0) {
@@ -74,18 +83,25 @@ double CatchallEvaluator::equity(const GamePosition &position,
     // situation)
     int leftInBagPlusSeven =
         position.bag().size() - move.usedTiles().length() + 7;
+    // index-6 represents how many tiles would be left in the bag after move
     double heuristicArray[12] = {-8.0, 0.0,  -0.5, -2.0, -3.5, -2.0,
                                  2.0,  10.0, 7.0,  4.0,  -1.0, -2.0};
     double timingHeuristic = 0.0;
     if (leftInBagPlusSeven <= 12) {
       timingHeuristic = heuristicArray[leftInBagPlusSeven - 1];
+      TWO_DP(timingHeuristic);
+      // TODO mm (medium-high): can we improve this msg by shortening it?
+      ADD_HINT((string)buf +
+               ": since there would be 5 or less tiles left in the bag after "
+               "this move, but the move doesn't finish the game. We want to be "
+               "able to keep our options open, and having more tiles is what "
+               "allows this. It also decreases the possibility of the opponent "
+               "closing the game. Has range [-8, 10].");
     }
-    TWO_DP(timingHeuristic);
-    ADD_HINT(buf);
     return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
   } else {
     // When there are no more tiles in the bag; endgame situation
-    ADD_HINT(to_string(move.score));
+    ADD_HINT(to_string(move.score) + ": for the score the move gives us.");
     return endgameResult(position, move) + move.score;
   }
 }
@@ -96,8 +112,10 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   Hint *hint = move.hint();
   Rack leave = position.currentPlayer().rack() - move;
 
+  ADD_HINT("We know the exact rack of the opponent:");
   if (leave.empty()) {
     // the move ends the game
+    ADD_HINT("  Because the this move would end the game:");
 
     // add opposing player's sum of tiles score to deadwood
     double deadwood = 0;
@@ -106,11 +124,14 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
       if (!(*it == position.currentPlayer())) {
         double toAdd = it->rack().score();
         TWO_DP(toAdd);
-        ADD_HINT("2*" + (string)buf);
+        ADD_HINT("  2*" + LongLetterString(buf) + ": for " + it->name() +
+                 "'s rack score.");
         deadwood += toAdd;
       }
     }
 
+    ADD_HINT("  (Doubled as we prefer to end the game ourselves due to the "
+             "score bonus)");
     return deadwood * 2;
   }
 
@@ -119,7 +140,9 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   // amount, dependent on our rack.
   // The constant is there because we like ending the game (?)
   TWO_DP(-8.00);
-  ADD_HINT(buf);
-  ADD_HINT("-2.61*" + to_string(leave.score()));
+  ADD_HINT("  " + LongLetterString(buf) + "-2.61*" + to_string(leave.score()) +
+           ": This move would not end the game, meaning the opponent might "
+           "have a chance to do so. This can increase their score "
+           "proportionally to our remaining rack score.");
   return -8.00 - 2.61 * leave.score();
 }

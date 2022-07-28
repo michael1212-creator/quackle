@@ -10,7 +10,7 @@ using namespace Quackle;
 HintsGenerator::HintsGenerator() {}
 
 HintsGenerator::~HintsGenerator() {
-  for (int i = 0; i < m_ais.size(); i++) {
+  for (long unsigned int i = 0; i < m_ais.size(); i++) {
     delete m_ais.back();
     m_ais.pop_back();
   }
@@ -59,23 +59,28 @@ struct GenericArgs {
 };
 
 void otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
-                            LongLetterString indent = " - ") {
+                            LongLetterString indent = "- ") {
+  *(args->m_hints) += "\n";
   for (auto it : args->whitelistedAIs) {
     int moveRank = it->rankMove(move);
     *(args->m_hints) += indent + it->name() + " ";
     if (moveRank < 0) {
-      if (it->isGreedy() && move.action == Move::Pass) {
+      if (it->isGreedy() && move.action == Move::Exchange) {
         *(args->m_hints) += "Does not generate exchange moves";
       } else {
         *(args->m_hints) += "only has top " + to_string(-moveRank) +
                             " moves, and this move is not among them";
       }
     } else if (moveRank > 0) {
-      *(args->m_hints) += "ranks this as number " + to_string(moveRank);
+      *(args->m_hints) += "ranks this move as number " + to_string(moveRank);
     } else {
       *(args->m_hints) += "moves have not been generated yet";
     }
     *(args->m_hints) += ".\n";
+  }
+  *(args->m_hints) += "\n";
+  if (args->whitelistedAIs.size() > 0) {
+    *(args->m_hints) += "\n";
   }
 }
 
@@ -150,11 +155,11 @@ void staticPostLoop(struct AIArgs *args) {
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
   TWO_DP(customArgs->lowestValuation);
   *(args->m_hints) +=
-      "\nReally bad moves can have a valuation of " + (string)buf;
+      "\nReally bad moves can have a valuation of " + LongLetterString(buf);
 
   TWO_DP(customArgs->highValuation);
   *(args->m_hints) += ", whereas really good moves can have a valuation of " +
-                      (string)buf + "\n";
+                      LongLetterString(buf) + "\n";
 }
 
 void greedyPreLoop(struct AIArgs *args);
