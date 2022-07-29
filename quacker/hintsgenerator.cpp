@@ -118,6 +118,9 @@ void staticPreLoop(struct AIArgs *args);
 void staticLoopBody(struct AIArgs *args, Move &move, int i);
 void staticPostLoop(struct AIArgs *args);
 
+#define THEORETICAL_MAX_SCORE 1778
+#define HIGHEST_SCORE 365
+
 struct StaticArgs {
   struct GenericArgs genericArgs = {staticPreLoop, staticLoopBody,
                                     staticPostLoop, 3};
@@ -127,7 +130,7 @@ struct StaticArgs {
     double lowestEquity;
   };
   union {
-    double highValuation;
+    double highValuation = THEORETICAL_MAX_SCORE;
     double highEquity;
   };
 };
@@ -140,7 +143,6 @@ void staticPreLoop(struct AIArgs *args) {
 }
 
 void staticLoopBody(struct AIArgs *args, Move &move, int i) {
-  // TODO mm (high): do the thing
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   char buf[16];
@@ -158,8 +160,11 @@ void staticPostLoop(struct AIArgs *args) {
       "\nReally bad moves can have a valuation of " + LongLetterString(buf);
 
   TWO_DP(customArgs->highValuation);
-  *(args->m_hints) += ", whereas really good moves can have a valuation of " +
-                      LongLetterString(buf) + "\n";
+  *(args->m_hints) +=
+      ", whereas really good moves can have a valuation of its own score, "
+      "which is theoretically up to" +
+      LongLetterString(buf) +
+      ". However, most very good moves will be within the 50 to 100 range.\n";
 }
 
 void greedyPreLoop(struct AIArgs *args);
@@ -170,11 +175,11 @@ struct GreedyArgs {
   struct GenericArgs genericArgs = {greedyPreLoop, greedyLoopBody,
                                     greedyPostLoop, 5};
 
-  const int highestScore = 365;
+  const int highestScore = HIGHEST_SCORE;
   const LongLetterString highestScoringWord = "QUIXOTRY";
 
   const LongLetterString highestScoringTheoreticalWord = "OXYPHENBUTAZONE";
-  const int theoreticalMaxScore = 1778;
+  const int theoreticalMaxScore = THEORETICAL_MAX_SCORE;
 
   const LongLetterString source =
       "https://bestlifeonline.com/highest-scoring-scrabble-move/ 2022/06/28";
@@ -224,12 +229,12 @@ void champPreLoop(struct AIArgs *args) {
 }
 
 void champLoopBody(struct AIArgs *args, Move &move, int i) {
-  // TODO mm (high): do the thing
+  // TODO mm (low-medium): do the thing
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   Hint *hint = move.hint();
   char buf[16];
-  TWO_DP(100*move.win);
+  TWO_DP(100 * move.win);
   *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr +
                       ", has win% chance of " + buf + "%, coming from:\n";
   *(args->m_hints) += move.hint()->hint("  ");
