@@ -12,12 +12,13 @@ class QTextEdit;
 class QCheckBox;
 class QPushButton;
 class HintsGenerator;
+class TopLevel;
 
 class HintsDisplay : public View {
   Q_OBJECT
 
 public:
-  HintsDisplay(QWidget *parent = 0);
+  HintsDisplay(TopLevel *toplevel = 0, QWidget *parent = 0);
   virtual ~HintsDisplay();
 
 public slots:

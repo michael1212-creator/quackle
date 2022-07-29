@@ -27,7 +27,8 @@
 #include "rackdisplay.h"
 #include "widgetfactory.h"
 
-BRB::BRB(WidgetFactory *widgetFactory, QWidget *parent) : View(parent) {
+BRB::BRB(WidgetFactory *widgetFactory, QWidget *parent)
+    : View(parent) {
   m_widgetFactory = widgetFactory;
   auto topHorizontalLayout = new QHBoxLayout;
   Geometry::setupFramedLayout(topHorizontalLayout);
@@ -54,7 +55,7 @@ BRB::~BRB() {}
 
 View *BRB::getBoardView() const { return m_boardDisplay; }
 
-void BRB::split(QSplitter *brbSplitter, QSplitter *bhSplitter) {
+void BRB::split(QSplitter *brbSplitter, QSplitter *bhSplitter, TopLevel *toplevel) {
   QWidget *topRightSide = new QWidget;
   QVBoxLayout *topRightVerticalLayout = new QVBoxLayout(topRightSide);
   QWidget *botRightSide = new QWidget;
@@ -66,7 +67,7 @@ void BRB::split(QSplitter *brbSplitter, QSplitter *bhSplitter) {
   m_bagDisplay = m_widgetFactory->createBagDisplay();
   topRightVerticalLayout->addWidget(m_bagDisplay);
 
-  m_hintsDisplay = m_widgetFactory->createHintsDisplay();
+  m_hintsDisplay = m_widgetFactory->createHintsDisplay(toplevel);
   botRightVerticalLayout->addWidget(m_hintsDisplay);
 
   bhSplitter->addWidget(topRightSide);

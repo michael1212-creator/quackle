@@ -19,41 +19,41 @@
 #ifndef QUACKER_BRB_H
 #define QUACKER_BRB_H
 
-#include <QWidget>
 #include <QLabel>
+#include <QWidget>
 
 #include "view.h"
 
-namespace Quackle
-{
-	class GamePosition;
+namespace Quackle {
+class GamePosition;
 }
 
 class WidgetFactory;
 class QSplitter;
 class QHBoxLayout;
+class TopLevel;
 
-//Board, Rack, Bag(, Hints) = BRB(H)
-class BRB : public View
-{
-Q_OBJECT
+// Board, Rack, Bag(, Hints) = BRB(H)
+class BRB : public View {
+  Q_OBJECT
 
 public:
-	BRB(WidgetFactory *widgetFactory, QWidget *parent = 0);
-	virtual ~BRB();
-	View * getBoardView() const;
-        void split(QSplitter *brbSplitter, QSplitter *bhSplitter);
+  BRB(WidgetFactory *widgetFactory, QWidget *parent = 0);
+  virtual ~BRB();
+  View *getBoardView() const;
+  void split(QSplitter *brbSplitter, QSplitter *bhSplitter,
+             TopLevel *toplevel = NULL);
 
 public slots:
-	virtual void positionChanged(const Quackle::GamePosition &position);
-	virtual void grabFocus();
+  virtual void positionChanged(const Quackle::GamePosition &position);
+  virtual void grabFocus();
 
 private:
-	View *m_boardDisplay;
-	View *m_rackDisplay;
-	View *m_bagDisplay;
-        View *m_hintsDisplay;
-        WidgetFactory *m_widgetFactory;
+  View *m_boardDisplay;
+  View *m_rackDisplay;
+  View *m_bagDisplay;
+  View *m_hintsDisplay;
+  WidgetFactory *m_widgetFactory;
 };
 
 #endif

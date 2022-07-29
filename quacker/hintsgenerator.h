@@ -3,13 +3,16 @@
 
 #include "computerplayer.h"
 #include <vector>
+#include <QObject>
+#include "quacker.h"
 
 namespace Quackle {
 
-class HintsGenerator {
+class HintsGenerator : public QObject {
+  Q_OBJECT
 
 public:
-  HintsGenerator();
+  HintsGenerator(TopLevel *toplevel);
   ~HintsGenerator();
 
   void addAI(ComputerPlayer *ai);
@@ -23,6 +26,9 @@ public:
 
   void genChampHintsChanged(bool shouldGenChampHints);
 
+signals:
+  void kibitzAs(Quackle::ComputerPlayer *computerPlayer);
+
 private:
   void createAITitle(ComputerPlayer *ai, LongLetterString *appendTo = NULL);
 
@@ -34,6 +40,8 @@ private:
   vector<ComputerPlayer *> blacklistedAIs() const;
 
   vector<ComputerPlayer *> whitelistedAIs() const;
+
+  void movesAs(ComputerPlayer *ai);
 };
 
 inline void HintsGenerator::genChampHintsChanged(bool shouldGenChampHints) {

@@ -7,9 +7,9 @@
 #include "geometry.h"
 #include "hintsdisplay.h"
 
-HintsDisplay::HintsDisplay(QWidget *parent) : View(parent) {
+HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
   // logic part
-  m_hintsGenerator = new Quackle::HintsGenerator();
+  m_hintsGenerator = new Quackle::HintsGenerator(toplevel);
 
   // TODO mm (medium-low): perhaps add a selection screen for user to choose
   // which AIs to generate hints?

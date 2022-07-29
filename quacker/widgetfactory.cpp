@@ -39,9 +39,9 @@ View *TextFactory::createBagDisplay()
 	return new BagDisplay;
 }
 
-View *TextFactory::createHintsDisplay()
+View *TextFactory::createHintsDisplay(TopLevel *toplevel)
 {
-	return new HintsDisplay;
+	return new HintsDisplay(toplevel);
 }
 
 View *GraphicalFactory::createBoardDisplay()
@@ -59,9 +59,9 @@ View *GraphicalFactory::createBagDisplay()
 	return new BagDisplay;
 }
 
-View *GraphicalFactory::createHintsDisplay()
+View *GraphicalFactory::createHintsDisplay(TopLevel *toplevel)
 {
-	return new HintsDisplay;
+	return new HintsDisplay(toplevel);
 }
 
 View *BoardSetupFactory::createBoardDisplay()
@@ -79,7 +79,7 @@ View *BoardSetupFactory::createBagDisplay()
         return new View;
 }
 
-View *BoardSetupFactory::createHintsDisplay()
+View *BoardSetupFactory::createHintsDisplay(TopLevel *)
 {
         return new View;
 }

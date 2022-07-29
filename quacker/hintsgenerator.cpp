@@ -7,7 +7,16 @@
 
 using namespace Quackle;
 
-HintsGenerator::HintsGenerator() {}
+HintsGenerator::HintsGenerator(TopLevel *toplevel) {
+  if (toplevel) {
+    connect(this, SIGNAL(kibitzAs(Quackle::ComputerPlayer *)),
+            toplevel, SLOT(kibitzAs(Quackle::ComputerPlayer *)));
+  }
+}
+
+void HintsGenerator::movesAs(ComputerPlayer *ai) {
+  emit kibitzAs(ai);
+}
 
 HintsGenerator::~HintsGenerator() {
   for (long unsigned int i = 0; i < m_ais.size(); i++) {
@@ -162,7 +171,7 @@ void staticPostLoop(struct AIArgs *args) {
   TWO_DP(customArgs->highValuation);
   *(args->m_hints) +=
       ", whereas really good moves can have a valuation of its own score, "
-      "which is theoretically up to" +
+      "which is theoretically up to " +
       LongLetterString(buf) +
       ". However, most very good moves will be within the 50 to 100 range.\n";
 }
@@ -274,11 +283,15 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
   for (ComputerPlayer *ai : whitelistedAIs()) {
     if (forceUpdateMoves || ai->cachedMoves().empty()) {
       // TODO mm (medium-high): can we make this non-blocking?
-      //  check out TopLeve::kibitz(int, ComputerPlayer *) for inspiration.
-      ai->moves(MIN_NUM_MOVES_TO_GEN);
+      //  check out TopLevel::kibitz(int, ComputerPlayer *) for inspiration.
+      movesAs(ai);
+//      ai->moves(MIN_NUM_MOVES_TO_GEN);
     }
   }
 
+  // TODO mm (medium-high): if a hint is not shown, mention ir as a way we could
+  //  have potentially increased the valuation of a move. Also, hide 0 score
+  //  valuations with this method
   for (ComputerPlayer *ai : m_ais) {
     shouldAppendNow = true;
     createAITitle(ai, &appendNow);

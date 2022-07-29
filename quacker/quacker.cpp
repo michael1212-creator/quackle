@@ -904,19 +904,11 @@ void TopLevel::letterbox() {
 }
 
 void TopLevel::kibitz() {
-  if (!m_game->hasPositions())
+  if (!m_game->hasPositions()) {
     return;
-
-  const bool confuseUser = false;
-
-  if (confuseUser) {
-    const size_t currentlyKibitzed = m_game->currentPosition().moves().size();
-    kibitz(currentlyKibitzed < kExtraPlaysToKibitz
-               ? kExtraPlaysToKibitz
-               : (int)currentlyKibitzed + kExtraPlaysToKibitz);
-  } else {
-    kibitz(kExtraPlaysToKibitz);
   }
+
+  kibitz(kExtraPlaysToKibitz);
 }
 
 void TopLevel::kibitz(int numberOfPlays,
@@ -1989,7 +1981,7 @@ void TopLevel::createWidgets() {
   auto bhSplitter = new QSplitter(Qt::Vertical, this);
   m_splitter->addWidget(brbSplitter);
   brbSplitter->addWidget(m_brb);
-  m_brb->split(brbSplitter, bhSplitter);
+  m_brb->split(brbSplitter, bhSplitter, this);
 
   m_splitter->setStretchFactor(1, 4);
 
