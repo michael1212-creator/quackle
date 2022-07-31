@@ -27,7 +27,7 @@ public:
   void genChampHintsChanged(bool shouldGenChampHints);
 
 signals:
-  void kibitzAs(Quackle::ComputerPlayer *computerPlayer);
+  void kibitzAs(Quackle::ComputerPlayer *computerPlayer, bool shouldClone);
 
 private:
   void createAITitle(ComputerPlayer *ai, LongLetterString *appendTo = NULL);
@@ -41,7 +41,7 @@ private:
 
   vector<ComputerPlayer *> whitelistedAIs() const;
 
-  void movesAs(ComputerPlayer *ai);
+  void movesAs(ComputerPlayer *ai, bool shouldClone = false);
 };
 
 inline void HintsGenerator::genChampHintsChanged(bool shouldGenChampHints) {

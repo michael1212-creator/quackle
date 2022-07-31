@@ -99,10 +99,12 @@ public slots:
   void letterbox();
 
   void kibitz();
-  void kibitz(int numberOfPlays, Quackle::ComputerPlayer *computerPlayer = 0);
+  void kibitz(int numberOfPlays, Quackle::ComputerPlayer *computerPlayer = 0,
+              bool shouldClone = true);
   void kibitzFifty();
   void kibitzAll();
-  void kibitzAs(Quackle::ComputerPlayer *computerPlayer);
+  void kibitzAs(Quackle::ComputerPlayer *computerPlayer,
+                bool shouldClone = true);
 
   void firstPosition();
   void nextPosition();
@@ -151,7 +153,7 @@ protected slots:
   void computerPlayerDone();
 
   // called by player thread when it's done
-  void kibitzThreadFinished();
+  void kibitzThreadFinished(bool isCloned = true);
 
   // called by a oppo/player thread when it has a status update
   void playerFractionDone(double fraction, OppoThread *thread);

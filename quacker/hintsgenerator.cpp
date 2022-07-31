@@ -9,13 +9,13 @@ using namespace Quackle;
 
 HintsGenerator::HintsGenerator(TopLevel *toplevel) {
   if (toplevel) {
-    connect(this, SIGNAL(kibitzAs(Quackle::ComputerPlayer *)),
-            toplevel, SLOT(kibitzAs(Quackle::ComputerPlayer *)));
+    connect(this, SIGNAL(kibitzAs(Quackle::ComputerPlayer *, bool)),
+            toplevel, SLOT(kibitzAs(Quackle::ComputerPlayer *, bool)));
   }
 }
 
-void HintsGenerator::movesAs(ComputerPlayer *ai) {
-  emit kibitzAs(ai);
+void HintsGenerator::movesAs(ComputerPlayer *ai, bool shouldClone) {
+  emit kibitzAs(ai, shouldClone);
 }
 
 HintsGenerator::~HintsGenerator() {
@@ -268,7 +268,7 @@ vector<ComputerPlayer *> HintsGenerator::blacklistedAIs() const {
 vector<ComputerPlayer *> HintsGenerator::whitelistedAIs() const {
   vector<ComputerPlayer *> whitelist;
   for (auto ai : m_ais) {
-    if (!ai->isChamp() || m_shouldGenChampHints) {
+    if (!(ai->isChamp()) || (ai->isChamp() && m_shouldGenChampHints)) {
       whitelist.push_back(ai);
     }
   }

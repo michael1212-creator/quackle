@@ -50,7 +50,7 @@ class OppoThread : public QThread
 Q_OBJECT
 
 public:
-	OppoThread(QObject *parent = 0);
+	OppoThread(QObject *parent = 0, bool isCloned = true);
 	~OppoThread();
 
 	void setPosition(const Quackle::GamePosition &position);
@@ -66,14 +66,18 @@ public:
 
 	const Quackle::MoveList &moves() const;
 
+        void setCloned(bool isCloned);
+
 protected:
 	void run();
 
 signals:
 	void fractionDone(double fraction, OppoThread *thread);
+        void signalCustomFinished(bool isCloned = true);
 
 private slots:
 	void signalFractionDone(double fractionDone);
+        void customFinished();
 
 private:
 	Quackle::GamePosition m_position;
@@ -84,7 +88,14 @@ private:
 	QuackerDispatch *m_dispatch;
 
 	QMutex m_mutex;
+
+        bool m_isCloned;
 };
+
+inline void OppoThread::setCloned(bool isCloned)
+{
+  m_isCloned = isCloned;
+}
 
 inline const Quackle::GamePosition &OppoThread::position() const
 {

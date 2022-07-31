@@ -912,19 +912,26 @@ void TopLevel::kibitz() {
 }
 
 void TopLevel::kibitz(int numberOfPlays,
-                      Quackle::ComputerPlayer *computerPlayer) {
+                      Quackle::ComputerPlayer *computerPlayer,
+                      bool shouldClone) {
   if (!m_game->hasPositions())
     return;
 
   if (computerPlayer) {
     OppoThread *thread = new OppoThread;
     m_otherOppoThreads.push_back(thread);
-    connect(thread, SIGNAL(finished()), this, SLOT(kibitzThreadFinished()));
+    connect(thread, SIGNAL(signalCustomFinished(bool)), this,
+            SLOT(kibitzThreadFinished(bool)));
     connect(thread, SIGNAL(fractionDone(double, OppoThread *)), this,
             SLOT(playerFractionDone(double, OppoThread *)));
     thread->setPosition(m_game->currentPosition());
 
-    thread->setPlayer(computerPlayer->clone());
+    if (shouldClone) {
+      thread->setPlayer(computerPlayer->clone());
+    } else {
+      thread->setPlayer(computerPlayer);
+      thread->setCloned(false);
+    }
     thread->findBestMoves(numberOfPlays);
     statusMessage(
         tr("Asked %1 for her choices. Please allow her time to think.")
@@ -935,7 +942,7 @@ void TopLevel::kibitz(int numberOfPlays,
   }
 }
 
-void TopLevel::kibitzThreadFinished() {
+void TopLevel::kibitzThreadFinished(bool isCloned) {
   if (m_otherOppoThreads.begin() == m_otherOppoThreads.end())
     return;
   QString name;
@@ -950,8 +957,9 @@ void TopLevel::kibitzThreadFinished() {
       rack = QuackleIO::Util::letterStringToQString(
           (*it)->position().currentPlayer().rack().tiles());
 
-      // player is a clone
-      delete (*it)->player();
+      if (isCloned) {
+        delete (*it)->player();
+      }
 
       delete (*it);
       it = m_otherOppoThreads.erase(it);
@@ -976,8 +984,9 @@ void TopLevel::kibitzFifty() { kibitz(50); }
 
 void TopLevel::kibitzAll() { kibitz(INT_MAX); }
 
-void TopLevel::kibitzAs(Quackle::ComputerPlayer *computerPlayer) {
-  kibitz(kExtraPlaysToKibitz, computerPlayer);
+void TopLevel::kibitzAs(Quackle::ComputerPlayer *computerPlayer,
+                        bool shouldClone) {
+  kibitz(kExtraPlaysToKibitz, computerPlayer, shouldClone);
 }
 
 void TopLevel::firstPosition() {
@@ -1396,7 +1405,8 @@ void TopLevel::advanceGame() {
 void TopLevel::startOppoThread() {
   OppoThread *thread = new OppoThread;
   m_oppoThreads.push_back(thread);
-  connect(thread, SIGNAL(finished()), this, SLOT(computerPlayerDone()));
+  connect(thread, SIGNAL(signalCustomFinished(bool)), this,
+          SLOT(computerPlayerDone()));
   connect(thread, SIGNAL(fractionDone(double, OppoThread *)), this,
           SLOT(playerFractionDone(double, OppoThread *)));
   thread->setPosition(m_game->currentPosition());

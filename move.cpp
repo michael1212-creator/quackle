@@ -24,11 +24,7 @@
 
 using namespace Quackle;
 
-Move::Move(bool isHinting) {
-  if (isHinting) {
-    m_hint = Hint();
-  }
-}
+Move::Move() {}
 
 Move::~Move() {}
 

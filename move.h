@@ -54,7 +54,7 @@ public:
     Nonmove
   };
 
-  Move(bool isHinting = true);
+  Move();
   ~Move();
 
 //  const Move &operator=(const Move &move);
