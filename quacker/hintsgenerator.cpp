@@ -5,7 +5,6 @@
 #include "hintsgenerator.h"
 
 #include <algorithm>
-#include <cstring>
 #include <catchall.h>
 
 using namespace Quackle;
@@ -185,13 +184,11 @@ struct GreedyArgs {
   struct GenericArgs genericArgs = {greedyPreLoop, greedyLoopBody,
                                     greedyPostLoop, 5};
 
-  const int highestScore = HIGHEST_SCORE;
-  const LongLetterString highestScoringWord = "QUIXOTRY";
-
-  const LongLetterString highestScoringTheoreticalWord = "OXYPHENBUTAZONE";
-  const int theoreticalMaxScore = THEORETICAL_MAX_SCORE;
-
-  const LongLetterString source =
+  int highestScore = HIGHEST_SCORE;
+  int theoreticalMaxScore = THEORETICAL_MAX_SCORE;
+  char highestScoringWord[9] = "QUIXOTRY";
+  char highestScoringTheoreticalWord[16] = "OXYPHENBUTAZONE";
+  char source[69] =
       "https://bestlifeonline.com/highest-scoring-scrabble-move/ 2022/06/28";
 };
 
@@ -214,7 +211,7 @@ void greedyPostLoop(struct AIArgs *args) {
   struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
   *(args->m_hints) +=
       "\nThe highest scoring word ever recorded in Scrabble is " +
-      customArgs->highestScoringWord + " for " +
+      LongLetterString(customArgs->highestScoringWord) + " for " +
       to_string(customArgs->highestScore) + " points.\n" +
       "The theoretical maximum is " +
       to_string(customArgs->theoreticalMaxScore) + " points for " +
@@ -309,28 +306,22 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
     union CustomArgs customArgs;
     if (ai->isStatic()) {
       struct StaticArgs staticArgs;
-      std::memcpy(&customArgs, &staticArgs, sizeof(StaticArgs));
-
-      args.customArgs = &customArgs;
-      collectHints(&args);
+      *((struct StaticArgs *)(&customArgs)) = staticArgs;
     } else if (ai->isGreedy()) {
       struct GreedyArgs greedyArgs;
-      std::memcpy(&customArgs, &greedyArgs, sizeof(GreedyArgs));
-
-      args.customArgs = &customArgs;
-      collectHints(&args);
+      *((struct GreedyArgs *)(&customArgs)) = greedyArgs;
     } else if (ai->isChamp() && m_shouldGenChampHints) {
       struct ChampArgs champArgs;
-      std::memcpy(&customArgs, &champArgs, sizeof(ChampArgs));
-
-      args.customArgs = &customArgs;
-      collectHints(&args);
+      *((struct ChampArgs *)(&customArgs)) = champArgs;
     } else {
       shouldAppendNow = false;
+      skipCollection = true;
       appendNow += "Hints for " + ai->name() + " have been disabled.\n";
     }
 
     if (!skipCollection) {
+      args.customArgs = &customArgs;
+      collectHints(&args);
     }
 
     appendNow += "\n\n";
