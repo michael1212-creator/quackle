@@ -1,11 +1,12 @@
 #include <quackleio/util.h>
 
 #include "alphabetparameters.h"
-#include "hint.h"
 #include "hintsgenerator.h"
 
-#include <algorithm>
+#include <message.h>
+#include <hint.h>
 #include <catchall.h>
+#include <algorithm>
 
 using namespace Quackle;
 

@@ -55,7 +55,8 @@ double ScorePlusLeaveEvaluator::equity(const GamePosition &position,
                                        const Move &move) const {
   Hint *hint = move.hint();
   auto toAdd = move.effectiveScore();
-  ADD_HINT(to_string(toAdd) + ": for the score the move gives us.");
+//  ADD_HINT(to_string(toAdd) + ": for the score the move gives us.");
+  ADD_HINT(toAdd, ": for the score the move gives us.");
   return playerConsideration(position, move) +
          sharedConsideration(position, move) /*= 0*/ + toAdd;
 }
@@ -80,7 +81,6 @@ ScorePlusLeaveEvaluator::sharedConsideration(const GamePosition &position,
 
 double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
                                            Hint *hint) const {
-  char buf[16];
   LetterString alphabetized = String::alphabetize(leave);
 
   // Uncomment 3 lines for the calculations after it
@@ -100,13 +100,16 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
     LetterString uniqleave;
 
     // each letter is assigned a value for how good it is; add it to value
-    ADD_HINT("  Each letter is assigned a value for how 'good' it is:");
+    ADD_HINT("Each letter is assigned a value for how 'good' it is:", "  ");
     if (QUACKLE_STRATEGY_PARAMETERS->hasWorths()) {
       for (const auto &leaveIt : leave) {
         double toAdd = QUACKLE_STRATEGY_PARAMETERS->tileWorth(leaveIt);
-        TWO_DP(toAdd);
-        ADD_HINT("    " + LongLetterString(buf) + ": " +
-                 QUACKLE_ALPHABET_PARAMETERS->userVisible(leaveIt));
+        //        TWO_DP(toAdd);
+        //        ADD_HINT("    " + LongLetterString(buf) + ": " +
+        //                 QUACKLE_ALPHABET_PARAMETERS->userVisible(leaveIt));
+        ADD_HINT(toAdd,
+                 ": " + QUACKLE_ALPHABET_PARAMETERS->userVisible(leaveIt),
+                 "    ");
         value += toAdd;
       }
     }
@@ -119,16 +122,22 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
         if (alphabetized[i] == alphabetized[i + 1]) {
           if (!hintPrinted) {
             ADD_HINT(
-                "  Duplicate letters have values for how 'good' they are:");
+                "Duplicate letters have values for how 'good' they are:", "  ");
             hintPrinted = true;
           }
           double toAdd = QUACKLE_STRATEGY_PARAMETERS->syn2(alphabetized[i],
                                                            alphabetized[i]);
-          TWO_DP(toAdd);
-
-          ADD_HINT("    " + LongLetterString(buf) + ": " +
-                   QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i]) +
-                   QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i]));
+          //          TWO_DP(toAdd);
+          //
+          //          ADD_HINT("    " + LongLetterString(buf) + ": " +
+          //                   QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i])
+          //                   +
+          //                   QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i]));
+          ADD_HINT(
+              toAdd,
+              ": " + QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i]) +
+                  QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i]),
+              "    ");
           value += toAdd;
         }
       }
@@ -145,20 +154,32 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
     if (uniqleave.length() >= 2 && QUACKLE_STRATEGY_PARAMETERS->hasSyn2()) {
 
       // consider the value add of each pair of unique letters
-      ADD_HINT("  Double letter synergies:");
+      int numberOfSynergies = 0;
+      ADD_HINT("Double letter synergies:", "  ");
       for (unsigned int i = 0; i < uniqleave.length() - 1; ++i) {
         for (unsigned int j = i + 1; j < uniqleave.length(); ++j) {
           double toAdd =
               QUACKLE_STRATEGY_PARAMETERS->syn2(uniqleave[i], uniqleave[j]);
-          TWO_DP(toAdd);
-          ADD_HINT("    " + LongLetterString(buf) + ": " +
-                   QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[i]) +
-                   QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[j]));
+          //          TWO_DP(toAdd);
+          //          ADD_HINT("    " + LongLetterString(buf) + ": " +
+          //                   QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[i])
+          //                   +
+          //                   QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[j]));
+          ADD_HINT(toAdd,
+                   ": " +
+                       QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[i]) +
+                       QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[j]),
+                   "    ");
           synergy += toAdd;
+          numberOfSynergies++;
         }
       }
-      TWO_DP(synergy);
-      ADD_HINT("  Total synergy = " + LongLetterString(buf));
+
+      if (numberOfSynergies > 1) {
+        //        TWO_DP(synergy);
+        //        ADD_HINT("  Total synergy = " + LongLetterString(buf));
+        ADD_HINT(synergy, "", "  Total synergy = ");
+      }
 
       // letters with a worth <-5.5 are considered bad; does the player hold
       // any?
@@ -169,16 +190,17 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
         }
       }
 
-      ADD_HINT("  If we have no letters which are very bad (-5.5 or "
+      ADD_HINT("If we have no letters which are very bad (-5.5 or "
                "less), and good synergy (3 or more) of non-duplicate letters, "
-               "we can get a bonus.");
+               "we can get a bonus.", "  ");
       // if there is no bad letter and the pairs of letters we have are good
       //  (synergise well), then add extra value to the leave rack
       if ((synergy > 3.0) && !holding_bad_tile) {
         double toAdd = 1.5 * (synergy - 3.0);
-        TWO_DP(toAdd);
-        ADD_HINT("    " + LongLetterString(buf) +
-                 " = 1.5*(synergy-3): our bonus valuation.");
+        //        TWO_DP(toAdd);
+        //        ADD_HINT("    " + LongLetterString(buf) +
+        //                 " = 1.5*(synergy-3): our bonus valuation.");
+        ADD_HINT(toAdd, " = 1.5*(synergy-3): our bonus valuation.", "    ");
         synergy += toAdd;
       }
 
@@ -212,12 +234,19 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
   };
 
   double toAdd = vcvalues[vowels][cons];
-  TWO_DP(toAdd);
-  ADD_HINT("  " + LongLetterString(buf) +
-           ": vowel-consonant (v:c) balance of " + to_string(vowels) +
-           "v:" + to_string(cons) +
-           "c. Has range [-23.5, 2.5], with mostly negative values, and most "
-           "positive values at 1-3v:2-3c.");
+  //  TWO_DP(toAdd);
+  //  ADD_HINT("  " + LongLetterString(buf) +
+  //           ": vowel-consonant (v:c) balance of " + to_string(vowels) +
+  //           "v:" + to_string(cons) +
+  //           "c. Has range [-23.5, 2.5], with mostly negative values, and most
+  //           " "positive values at 1-3v:2-3c.");
+  ADD_HINT(
+      toAdd,
+      ": vowel-consonant (v:c) balance of " + to_string(vowels) +
+          "v:" + to_string(cons) +
+          "c. Has range [-23.5, 2.5], with mostly negative values, and most "
+          "positive values at 1-3v:2-3c.",
+      "  ");
   value += toAdd;
 
   if (value < -40) {

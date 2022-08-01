@@ -69,7 +69,7 @@ set(LIBQUACKLE_HEADERS
 	sim.h
 	strategyparameters.h
 	uv.h
-)
+        message.cpp message.h)
 
 add_library(libquackle
 	${LIBQUACKLE_SOURCES} ${LIBQUACKLE_HEADERS}

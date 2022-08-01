@@ -25,8 +25,6 @@
   if (hint)                                                                    \
   hint->addMsg(msg)
 
-#define TWO_DP(num) std::snprintf(buf, 16, "%.2f", num)
-
 namespace Quackle
 {
 

@@ -11,10 +11,10 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
   // logic part
   m_hintsGenerator = new Quackle::HintsGenerator(toplevel);
 
-  // TODO mm (medium-low): perhaps add a selection screen for user to choose
-  // which AIs to generate hints?
-  // TODO mm (low): instead of creating new AIs here, can we use the existing
-  // ones from ComputerPlayerCollection::fullCollection() ?
+  // TODO mm (low): perhaps add a selection screen for user to choose
+  //  which AIs to generate hints?
+  // TODO mm (low-medium): instead of creating new AIs here, can we use the existing
+  //  ones from ComputerPlayerCollection::fullCollection() ?
   Quackle::ComputerPlayer *torontoPlayer = new Quackle::TorontoPlayer();
   Quackle::ComputerPlayer *staticPlayer = new Quackle::StaticPlayer();
   Quackle::ComputerPlayer *greedyPlayer = new Quackle::GreedyPlayer();
@@ -44,15 +44,13 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
   m_genChampHints = new QCheckBox(
       tr("Generate Championship Player hints?\nThis may take some time."));
   m_genChampHints->setChecked(
-      false); // TODO mm (low): change this so it is saved between game sessions
-              // (e.g. see TopLevel::saveSettings or the like)
+      false);
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
 
   m_forceMovesUpdate = new QCheckBox(tr("Force move recalculation?"));
   m_forceMovesUpdate->setChecked(
-      false); // TODO mm (low): change this so it is saved between game sessions
-              // (e.g. see TopLevel::saveSettings or the like)
+      false);
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));
   m_genHintsBtn->setEnabled(false);
