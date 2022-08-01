@@ -3,14 +3,17 @@
 #include "alphabetparameters.h"
 #include "hint.h"
 #include "hintsgenerator.h"
+
+#include <algorithm>
+#include <cstring>
 #include <catchall.h>
 
 using namespace Quackle;
 
 HintsGenerator::HintsGenerator(TopLevel *toplevel) {
   if (toplevel) {
-    connect(this, SIGNAL(kibitzAs(Quackle::ComputerPlayer *, bool, bool)), toplevel,
-            SLOT(kibitzAs(Quackle::ComputerPlayer *, bool, bool)));
+    connect(this, SIGNAL(kibitzAs(Quackle::ComputerPlayer *, bool, bool)),
+            toplevel, SLOT(kibitzAs(Quackle::ComputerPlayer *, bool, bool)));
   }
 }
 
@@ -89,9 +92,6 @@ void otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
     *(args->m_hints) += ".\n";
   }
   *(args->m_hints) += "\n";
-  if (args->whitelistedAIs.size() > 0) {
-    *(args->m_hints) += "\n";
-  }
 }
 
 void collectHints(struct AIArgs *args) {
@@ -113,7 +113,7 @@ void collectHints(struct AIArgs *args) {
   int i = 0;
   for (Move &move : args->ai->cachedMoves()) {
     // TODO mm (medium-low): can we make moves clickable, like in the choices
-    // window?
+    //  window?
     customArgs.loopBody(args, move, i);
     otherAIsRankingsOfMove(args, move);
     i++;
@@ -207,7 +207,7 @@ void greedyLoopBody(struct AIArgs *args, Move &move, int i) {
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr +
-                      ", with a score of " + to_string(moveScore) + ".\n";
+                      ", with a score of " + to_string(moveScore) + ".";
 }
 
 void greedyPostLoop(struct AIArgs *args) {
@@ -276,6 +276,14 @@ vector<ComputerPlayer *> HintsGenerator::whitelistedAIs() const {
   return whitelist;
 }
 
+#define MAX_ARG_SIZE                                                           \
+  std::max({sizeof(struct StaticArgs), sizeof(struct GreedyArgs),              \
+            sizeof(struct ChampArgs)})
+
+union CustomArgs {
+  unsigned char buf[MAX_ARG_SIZE];
+};
+
 LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
   LongLetterString appendLater;
   LongLetterString appendNow;
@@ -286,7 +294,6 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
       // TODO mm (medium-high): can we make this non-blocking?
       //  check out TopLevel::kibitz(int, ComputerPlayer *) for inspiration.
       movesAs(ai);
-      //      ai->moves(MIN_NUM_MOVES_TO_GEN);
     }
   }
 
@@ -295,25 +302,37 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
   //  valuations with this method
   for (ComputerPlayer *ai : m_ais) {
     shouldAppendNow = true;
+    bool skipCollection = false;
     createAITitle(ai, &appendNow);
 
-    struct AIArgs args = {&appendNow, ai, 0, whitelistedAIs()};
+    struct AIArgs args = {&appendNow, ai, NULL, whitelistedAIs()};
+    union CustomArgs customArgs;
     if (ai->isStatic()) {
-      struct StaticArgs StaticArgs;
-      args.customArgs = &StaticArgs;
+      struct StaticArgs staticArgs;
+      std::memcpy(&customArgs, &staticArgs, sizeof(StaticArgs));
+
+      args.customArgs = &customArgs;
       collectHints(&args);
     } else if (ai->isGreedy()) {
-      struct GreedyArgs GreedyArgs;
-      args.customArgs = &GreedyArgs;
+      struct GreedyArgs greedyArgs;
+      std::memcpy(&customArgs, &greedyArgs, sizeof(GreedyArgs));
+
+      args.customArgs = &customArgs;
       collectHints(&args);
     } else if (ai->isChamp() && m_shouldGenChampHints) {
-      struct ChampArgs ChampArgs;
-      args.customArgs = &ChampArgs;
+      struct ChampArgs champArgs;
+      std::memcpy(&customArgs, &champArgs, sizeof(ChampArgs));
+
+      args.customArgs = &customArgs;
       collectHints(&args);
     } else {
       shouldAppendNow = false;
       appendNow += "Hints for " + ai->name() + " have been disabled.\n";
     }
+
+    if (!skipCollection) {
+    }
+
     appendNow += "\n\n";
 
     if (shouldAppendNow) {
