@@ -2185,35 +2185,67 @@ void TopLevel::about() {
     fclose(file);
     aboutText += "</ul>";
   }
-  QMessageBox::about(this, tr("About Quackle 1.0.4"), dialogText(aboutText));
+  QMessageBox msg(this);
+  msg.setWindowTitle(tr("About Quackle 1.0.4"));
+  msg.setText(dialogText(aboutText));
+  msg.setStyleSheet("QLabel{min-width: 800px;}");
+  msg.exec();
+//  QMessageBox::about(this, tr("About Quackle 1.0.4"), dialogText(aboutText));
 }
 
 void TopLevel::hints() {
-  QMessageBox::information(
-      this, tr("Helpful Hints - Quackle"),
-      dialogText(tr(
-          "<ul>"
-          "<li>Press Shift-Enter after typing your word on the board to enter "
-          "and commit your move quickly.</li>"
-          "<li>Double-click at any time during a game on any item in the "
-          "History table to analyze that position. If you then commit a play, "
-          "you will restart the game from that point and future plays will be "
-          "lost.</li>"
-          "<li>To analyze a real-life game, start a two-player game with two "
-          "\"Human With Unknown Rack\" players. For one player, for each turn "
-          "set the rack to the rack you had in the game and then analyze the "
-          "position and commit the play that you made in real life. For the "
-          "other player, commit your oppo's real-life plays.</li>"
-          "<li>Stop simulations by unchecking \"Simulate\" in the Move menu. "
-          "Sims can be stopped and restarted without losing their state, and "
-          "sims of different plies can be combined. Check out the sim details "
-          "during a simulation by choosing \"Show simulation details\" from "
-          "the Move menu!</li>"
-          "</ul>"
-          "<p>Have fun using Quackle. We'd love your help developing it, "
-          "especially if you can code, but we like suggestions too! Please "
-          "join the Quackle Yahoo! group at</p>"
-          "<p><tt>http://games.groups.yahoo.com/group/quackle/</tt></p>")));
+  QMessageBox msg(this);
+  msg.setWindowTitle(tr("Helpful Hints - Quackle"));
+  msg.setText(tr(
+      "<ul>"
+      "<li>Press Shift-Enter after typing your word on the board to enter "
+      "and commit your move quickly.</li>"
+      "<li>Double-click at any time during a game on any item in the "
+      "History table to analyze that position. If you then commit a play, "
+      "you will restart the game from that point and future plays will be "
+      "lost.</li>"
+      "<li>To analyze a real-life game, start a two-player game with two "
+      "\"Human With Unknown Rack\" players. For one player, for each turn "
+      "set the rack to the rack you had in the game and then analyze the "
+      "position and commit the play that you made in real life. For the "
+      "other player, commit your oppo's real-life plays.</li>"
+      "<li>Stop simulations by unchecking \"Simulate\" in the Move menu. "
+      "Sims can be stopped and restarted without losing their state, and "
+      "sims of different plies can be combined. Check out the sim details "
+      "during a simulation by choosing \"Show simulation details\" from "
+      "the Move menu!</li>"
+      "</ul>"
+      "<hr>"
+      "About the generated hints and what the AI players are:"
+      "<ul>"
+      "<li>Greedy Player: this AI always plays the highest scoring word."
+      " If it cannot form a word, it will pass its turn. It does not think"
+      " ahead.</li>"
+      "<li>Static Player: As this AI generates moves, it gives each move a"
+      "'valuation' or 'equity' score. The higher, the better, and it can be"
+      "negative. This score comes from multiple factors, but the main two "
+      "are"
+      " the number of points the move itself gives us, and how 'good' the"
+      " rack leave (i.e. the letter tiles we have left after the play) is. "
+      "It does not think ahead.</li>"
+      "<li>Championship Player: This AI is build on top of the Static"
+      " Player AI. Firstly, it generates moves the same way "
+      "Static does. Afterwards, it takes a set number of the top moves "
+      "as ranked by Static, and runs hundreds of simulations to determine"
+      " which play has the highest chance (win%) to leave us in a situation"
+      " where our score is higher than the opponent's (after "
+      "their next move, i.e. 2 ply simulations).</li>"
+      "</ul>"
+      "<hr>"
+      "<p>Have fun using Quackle. We'd love your help developing it, "
+      "especially if you can code, but we like suggestions too! Please "
+      "join the Quackle Yahoo! group at</p>"
+      "<p><tt><a "
+      "href=\"http://games.groups.yahoo.com/group/quackle/\">http://"
+      "games.groups.yahoo.com/group/quackle/</a></tt></p>"));
+  msg.setStyleSheet("QLabel{min-width: 800px;}");
+
+  msg.exec();
 }
 
 void TopLevel::showConfigDialog() {
