@@ -282,10 +282,6 @@ union CustomArgs {
 };
 
 LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
-  LongLetterString appendLater;
-  LongLetterString appendNow;
-  bool shouldAppendNow;
-
   for (ComputerPlayer *ai : whitelistedAIs()) {
     if (forceUpdateMoves || ai->cachedMoves().empty()) {
       // TODO mm (medium-high): can we make this non-blocking?
@@ -294,6 +290,9 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
     }
   }
 
+  LongLetterString appendLater;
+  LongLetterString appendNow;
+  bool shouldAppendNow;
   // TODO mm (medium-high): if a hint is not shown, mention ir as a way we could
   //  have potentially increased the valuation of a move. Also, hide 0 score
   //  valuations with this method

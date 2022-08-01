@@ -50,6 +50,7 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
               // (e.g. see TopLevel::saveSettings or the like)
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));
+  m_genHintsBtn->setEnabled(false);
   connect(m_genHintsBtn, SIGNAL(clicked()), this, SLOT(genHints()));
   genChampHintsChanged();
 
@@ -84,14 +85,13 @@ void HintsDisplay::genChampHintsChanged() {
 }
 
 void HintsDisplay::genHints() {
-  // TODO mm (medium): before a new game is started, this button should be
-  //  disabled
   clearHints();
   showHints(m_hintsGenerator->generateHints(m_forceMovesUpdate->isChecked()));
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
   if (position.unseenBag().tiles() != m_unseenTiles) {
+    m_genHintsBtn->setEnabled(true);
     clearHints();
     m_hintsGenerator->positionChanged(position);
   }
