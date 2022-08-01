@@ -9,13 +9,14 @@ using namespace Quackle;
 
 HintsGenerator::HintsGenerator(TopLevel *toplevel) {
   if (toplevel) {
-    connect(this, SIGNAL(kibitzAs(Quackle::ComputerPlayer *, bool)),
-            toplevel, SLOT(kibitzAs(Quackle::ComputerPlayer *, bool)));
+    connect(this, SIGNAL(kibitzAs(Quackle::ComputerPlayer *, bool, bool)), toplevel,
+            SLOT(kibitzAs(Quackle::ComputerPlayer *, bool, bool)));
   }
 }
 
-void HintsGenerator::movesAs(ComputerPlayer *ai, bool shouldClone) {
-  emit kibitzAs(ai, shouldClone);
+void HintsGenerator::movesAs(ComputerPlayer *ai, bool shouldClone,
+                             bool updateGameMoves) {
+  emit kibitzAs(ai, shouldClone, updateGameMoves);
 }
 
 HintsGenerator::~HintsGenerator() {
@@ -285,7 +286,7 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
       // TODO mm (medium-high): can we make this non-blocking?
       //  check out TopLevel::kibitz(int, ComputerPlayer *) for inspiration.
       movesAs(ai);
-//      ai->moves(MIN_NUM_MOVES_TO_GEN);
+      //      ai->moves(MIN_NUM_MOVES_TO_GEN);
     }
   }
 

@@ -2,9 +2,9 @@
 #define LIBQUACKLE_QUACKER_HINTSGENERATOR_H_
 
 #include "computerplayer.h"
-#include <vector>
-#include <QObject>
 #include "quacker.h"
+#include <QObject>
+#include <vector>
 
 namespace Quackle {
 
@@ -27,7 +27,8 @@ public:
   void genChampHintsChanged(bool shouldGenChampHints);
 
 signals:
-  void kibitzAs(Quackle::ComputerPlayer *computerPlayer, bool shouldClone);
+  void kibitzAs(Quackle::ComputerPlayer *computerPlayer, bool shouldClone,
+                bool updateGameMoves);
 
 private:
   void createAITitle(ComputerPlayer *ai, LongLetterString *appendTo = NULL);
@@ -36,12 +37,13 @@ private:
   vector<ComputerPlayer *> m_ais;
   LongLetterString m_hints;
 
-  //AIs which have been disabled from generating hints
+  // AIs which have been disabled from generating hints
   vector<ComputerPlayer *> blacklistedAIs() const;
 
   vector<ComputerPlayer *> whitelistedAIs() const;
 
-  void movesAs(ComputerPlayer *ai, bool shouldClone = false);
+  void movesAs(ComputerPlayer *ai, bool shouldClone = false,
+               bool updateGameMoves = false);
 };
 
 inline void HintsGenerator::genChampHintsChanged(bool shouldGenChampHints) {

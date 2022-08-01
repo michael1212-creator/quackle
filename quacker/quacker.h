@@ -24,8 +24,8 @@
 #include <QMainWindow>
 #include <QMap>
 
-#include "oppothread.h"
 #include "brb.h"
+#include "oppothread.h"
 #include <datamanager.h>
 #include <sim.h>
 
@@ -100,11 +100,11 @@ public slots:
 
   void kibitz();
   void kibitz(int numberOfPlays, Quackle::ComputerPlayer *computerPlayer = 0,
-              bool shouldClone = true);
+              bool shouldClone = true, bool updateGameMoves = true);
   void kibitzFifty();
   void kibitzAll();
   void kibitzAs(Quackle::ComputerPlayer *computerPlayer,
-                bool shouldClone = true);
+                bool shouldClone = true, bool updateGameMoves = true);
 
   void firstPosition();
   void nextPosition();
@@ -153,7 +153,7 @@ protected slots:
   void computerPlayerDone();
 
   // called by player thread when it's done
-  void kibitzThreadFinished(bool isCloned = true);
+  void kibitzThreadFinished(bool updateGameMoves = true);
 
   // called by a oppo/player thread when it has a status update
   void playerFractionDone(double fraction, OppoThread *thread);
@@ -285,7 +285,7 @@ private:
   // Returns true if the validization was successful.
   bool validifyMove(Quackle::Move &move);
 
-  void kibitzFinished();
+  void kibitzFinished(bool updateGameMoves = true);
 
   OppoThreadProgressBar *createProgressBarForThread(OppoThread *thread);
   void removeProgressIndicators();

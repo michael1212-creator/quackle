@@ -912,16 +912,18 @@ void TopLevel::kibitz() {
 }
 
 void TopLevel::kibitz(int numberOfPlays,
-                      Quackle::ComputerPlayer *computerPlayer,
-                      bool shouldClone) {
+                      Quackle::ComputerPlayer *computerPlayer, bool shouldClone,
+                      bool updateGameMoves) {
   if (!m_game->hasPositions())
     return;
 
   if (computerPlayer) {
-    OppoThread *thread = new OppoThread;
+    OppoThread *thread = new OppoThread(0, shouldClone);
     m_otherOppoThreads.push_back(thread);
-    connect(thread, SIGNAL(signalCustomFinished(bool)), this,
-            SLOT(kibitzThreadFinished(bool)));
+    connect(thread, &OppoThread::finished, this,
+            [updateGameMoves, this]() {
+              this->kibitzThreadFinished(updateGameMoves);
+            });
     connect(thread, SIGNAL(fractionDone(double, OppoThread *)), this,
             SLOT(playerFractionDone(double, OppoThread *)));
     thread->setPosition(m_game->currentPosition());
@@ -930,7 +932,6 @@ void TopLevel::kibitz(int numberOfPlays,
       thread->setPlayer(computerPlayer->clone());
     } else {
       thread->setPlayer(computerPlayer);
-      thread->setCloned(false);
     }
     thread->findBestMoves(numberOfPlays);
     statusMessage(
@@ -938,26 +939,28 @@ void TopLevel::kibitz(int numberOfPlays,
             .arg(QuackleIO::Util::uvStringToQString(computerPlayer->name())));
   } else {
     m_game->currentPosition().kibitz(numberOfPlays);
-    kibitzFinished();
+    kibitzFinished(updateGameMoves);
   }
 }
 
-void TopLevel::kibitzThreadFinished(bool isCloned) {
-  if (m_otherOppoThreads.begin() == m_otherOppoThreads.end())
+void TopLevel::kibitzThreadFinished(bool updateGameMoves) {
+  if (m_otherOppoThreads.begin() == m_otherOppoThreads.end()) {
     return;
+  }
   QString name;
   QString rack;
   for (QList<OppoThread *>::iterator it = m_otherOppoThreads.begin();
        it != m_otherOppoThreads.end();) {
     if ((*it)->isFinished()) {
       removeProgressIndicator(*it);
-
-      m_game->currentPosition().setMoves((*it)->moves());
+      if (updateGameMoves) {
+        m_game->currentPosition().setMoves((*it)->moves());
+      }
       name = QuackleIO::Util::uvStringToQString((*it)->player()->name());
       rack = QuackleIO::Util::letterStringToQString(
           (*it)->position().currentPlayer().rack().tiles());
 
-      if (isCloned) {
+      if ((*it)->isCloned()) {
         delete (*it)->player();
       }
 
@@ -968,16 +971,18 @@ void TopLevel::kibitzThreadFinished(bool isCloned) {
     }
   }
 
-  kibitzFinished();
+  kibitzFinished(updateGameMoves);
 
   statusMessage(tr("Showing %1's choices from %2.").arg(name).arg(rack));
 }
 
-void TopLevel::kibitzFinished() {
+void TopLevel::kibitzFinished(bool updateGameMoves) {
   updatePositionViews();
   ensureUpToDateSimulatorMoveList();
 
-  switchToTab(ChoicesTabIndex);
+  if (updateGameMoves) {
+    switchToTab(ChoicesTabIndex);
+  }
 }
 
 void TopLevel::kibitzFifty() { kibitz(50); }
@@ -985,8 +990,8 @@ void TopLevel::kibitzFifty() { kibitz(50); }
 void TopLevel::kibitzAll() { kibitz(INT_MAX); }
 
 void TopLevel::kibitzAs(Quackle::ComputerPlayer *computerPlayer,
-                        bool shouldClone) {
-  kibitz(kExtraPlaysToKibitz, computerPlayer, shouldClone);
+                        bool shouldClone, bool updateGameMoves) {
+  kibitz(kExtraPlaysToKibitz, computerPlayer, shouldClone, updateGameMoves);
 }
 
 void TopLevel::firstPosition() {
@@ -1405,7 +1410,7 @@ void TopLevel::advanceGame() {
 void TopLevel::startOppoThread() {
   OppoThread *thread = new OppoThread;
   m_oppoThreads.push_back(thread);
-  connect(thread, SIGNAL(signalCustomFinished(bool)), this,
+  connect(thread, SIGNAL(finished()), this,
           SLOT(computerPlayerDone()));
   connect(thread, SIGNAL(fractionDone(double, OppoThread *)), this,
           SLOT(playerFractionDone(double, OppoThread *)));
@@ -2190,59 +2195,58 @@ void TopLevel::about() {
   msg.setText(dialogText(aboutText));
   msg.setStyleSheet("QLabel{min-width: 800px;}");
   msg.exec();
-//  QMessageBox::about(this, tr("About Quackle 1.0.4"), dialogText(aboutText));
 }
 
 void TopLevel::hints() {
   QMessageBox msg(this);
   msg.setWindowTitle(tr("Helpful Hints - Quackle"));
-  msg.setText(tr(
-      "<ul>"
-      "<li>Press Shift-Enter after typing your word on the board to enter "
-      "and commit your move quickly.</li>"
-      "<li>Double-click at any time during a game on any item in the "
-      "History table to analyze that position. If you then commit a play, "
-      "you will restart the game from that point and future plays will be "
-      "lost.</li>"
-      "<li>To analyze a real-life game, start a two-player game with two "
-      "\"Human With Unknown Rack\" players. For one player, for each turn "
-      "set the rack to the rack you had in the game and then analyze the "
-      "position and commit the play that you made in real life. For the "
-      "other player, commit your oppo's real-life plays.</li>"
-      "<li>Stop simulations by unchecking \"Simulate\" in the Move menu. "
-      "Sims can be stopped and restarted without losing their state, and "
-      "sims of different plies can be combined. Check out the sim details "
-      "during a simulation by choosing \"Show simulation details\" from "
-      "the Move menu!</li>"
-      "</ul>"
-      "<hr>"
-      "About the generated hints and what the AI players are:"
-      "<ul>"
-      "<li>Greedy Player: this AI always plays the highest scoring word."
-      " If it cannot form a word, it will pass its turn. It does not think"
-      " ahead.</li>"
-      "<li>Static Player: As this AI generates moves, it gives each move a"
-      "'valuation' or 'equity' score. The higher, the better, and it can be"
-      "negative. This score comes from multiple factors, but the main two "
-      "are"
-      " the number of points the move itself gives us, and how 'good' the"
-      " rack leave (i.e. the letter tiles we have left after the play) is. "
-      "It does not think ahead.</li>"
-      "<li>Championship Player: This AI is build on top of the Static"
-      " Player AI. Firstly, it generates moves the same way "
-      "Static does. Afterwards, it takes a set number of the top moves "
-      "as ranked by Static, and runs hundreds of simulations to determine"
-      " which play has the highest chance (win%) to leave us in a situation"
-      " where our score is higher than the opponent's (after "
-      "their next move, i.e. 2 ply simulations).</li>"
-      "</ul>"
-      "<hr>"
-      "<p>Have fun using Quackle. We'd love your help developing it, "
-      "especially if you can code, but we like suggestions too! Please "
-      "join the Quackle Yahoo! group at</p>"
-      "<p><tt><a "
-      "href=\"http://games.groups.yahoo.com/group/quackle/\">http://"
-      "games.groups.yahoo.com/group/quackle/</a></tt></p>"));
+  msg.setText(
+      tr("<ul>"
+         "<li>Press Shift-Enter after typing your word on the board to enter "
+         "and commit your move quickly.</li>"
+         "<li>Double-click at any time during a game on any item in the "
+         "History table to analyze that position. If you then commit a play, "
+         "you will restart the game from that point and future plays will be "
+         "lost.</li>"
+         "<li>To analyze a real-life game, start a two-player game with two "
+         "\"Human With Unknown Rack\" players. For one player, for each turn "
+         "set the rack to the rack you had in the game and then analyze the "
+         "position and commit the play that you made in real life. For the "
+         "other player, commit your oppo's real-life plays.</li>"
+         "<li>Stop simulations by unchecking \"Simulate\" in the Move menu. "
+         "Sims can be stopped and restarted without losing their state, and "
+         "sims of different plies can be combined. Check out the sim details "
+         "during a simulation by choosing \"Show simulation details\" from "
+         "the Move menu!</li>"
+         "</ul>"
+         "<hr>"
+         "About the generated hints and what the AI players are:"
+         "<ul>"
+         "<li>Greedy Player: this AI always plays the highest scoring word."
+         " If it cannot form a word, it will pass its turn. It does not think"
+         " ahead.</li>"
+         "<li>Static Player: As this AI generates moves, it gives each move a"
+         "'valuation' or 'equity' score. The higher, the better, and it can be"
+         "negative. This score comes from multiple factors, but the main two "
+         "are"
+         " the number of points the move itself gives us, and how 'good' the"
+         " rack leave (i.e. the letter tiles we have left after the play) is. "
+         "It does not think ahead.</li>"
+         "<li>Championship Player: This AI is build on top of the Static"
+         " Player AI. Firstly, it generates moves the same way "
+         "Static does. Afterwards, it takes a set number of the top moves "
+         "as ranked by Static, and runs hundreds of simulations to determine"
+         " which play has the highest chance (win%) to leave us in a situation"
+         " where our score is higher than the opponent's (after "
+         "their next move, i.e. 2 ply simulations).</li>"
+         "</ul>"
+         "<hr>"
+         "<p>Have fun using Quackle. We'd love your help developing it, "
+         "especially if you can code, but we like suggestions too! Please "
+         "join the Quackle Yahoo! group at</p>"
+         "<p><tt><a "
+         "href=\"http://games.groups.yahoo.com/group/quackle/\">http://"
+         "games.groups.yahoo.com/group/quackle/</a></tt></p>"));
   msg.setStyleSheet("QLabel{min-width: 800px;}");
 
   msg.exec();

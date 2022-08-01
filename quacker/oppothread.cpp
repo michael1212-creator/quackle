@@ -37,16 +37,11 @@ void QuackerDispatch::signalFractionDone(double fraction)
 	emit fractionDone(fraction);
 }
 
-void OppoThread::customFinished() {
-  emit signalCustomFinished(m_isCloned);
-}
-
-OppoThread::OppoThread(QObject *parent, bool isCloned)
-	: QThread(parent), m_player(0), m_isCloned(isCloned)
+OppoThread::OppoThread(QObject *parent, bool isPlayerCloned)
+	: QThread(parent), m_player(0), m_isPlayerCloned(isPlayerCloned)
 {
 	m_dispatch = new QuackerDispatch(this);
 	connect(m_dispatch, SIGNAL(fractionDone(double)), this, SLOT(signalFractionDone(double)));
-        connect(this, SIGNAL(finished()), this, SLOT(customFinished()));
 }
 
 OppoThread::~OppoThread()
