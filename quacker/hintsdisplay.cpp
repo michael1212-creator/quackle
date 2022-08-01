@@ -35,6 +35,8 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
   m_textEdit->setReadOnly(true);
   m_textEdit->setFontFamily("Courier");
   m_textEdit->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+  m_textEdit->setPlainText("No hints to give."
+                           "\nStart a game to be able to generate hints!");
 
   m_genChampHints = new QCheckBox(
       tr("Generate Championship Player hints?\nThis may take some time."));
@@ -66,8 +68,6 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
 
   layout->setStretchFactor(interactive, 1);
   layout->setStretchFactor(m_textEdit, 200);
-
-  showHints(Quackle::LongLetterString());
 }
 
 HintsDisplay::~HintsDisplay() {
