@@ -912,6 +912,7 @@ void TopLevel::kibitz() {
 }
 
 void TopLevel::kibitz(int numberOfPlays,
+                      Quackle::HintsGenerator *hintsGenerator,
                       Quackle::ComputerPlayer *computerPlayer, bool shouldClone,
                       bool updateGameMoves) {
   if (!m_game->hasPositions())
@@ -920,10 +921,13 @@ void TopLevel::kibitz(int numberOfPlays,
   if (computerPlayer) {
     OppoThread *thread = new OppoThread(0, shouldClone);
     m_otherOppoThreads.push_back(thread);
-    connect(thread, &OppoThread::finished, this,
-            [updateGameMoves, this]() {
-              this->kibitzThreadFinished(updateGameMoves);
-            });
+    connect(thread, &OppoThread::finished, this, [updateGameMoves, this]() {
+      this->kibitzThreadFinished(updateGameMoves);
+    });
+    if (hintsGenerator) {
+      connect(thread, &OppoThread::finished, hintsGenerator,
+              &Quackle::HintsGenerator::threadFinishedGeneratingMoves);
+    }
     connect(thread, SIGNAL(fractionDone(double, OppoThread *)), this,
             SLOT(playerFractionDone(double, OppoThread *)));
     thread->setPosition(m_game->currentPosition());
@@ -990,8 +994,10 @@ void TopLevel::kibitzFifty() { kibitz(50); }
 void TopLevel::kibitzAll() { kibitz(INT_MAX); }
 
 void TopLevel::kibitzAs(Quackle::ComputerPlayer *computerPlayer,
+                        Quackle::HintsGenerator *hintsGenerator,
                         bool shouldClone, bool updateGameMoves) {
-  kibitz(kExtraPlaysToKibitz, computerPlayer, shouldClone, updateGameMoves);
+  kibitz(kExtraPlaysToKibitz, hintsGenerator, computerPlayer, shouldClone,
+         updateGameMoves);
 }
 
 void TopLevel::firstPosition() {
@@ -1410,8 +1416,7 @@ void TopLevel::advanceGame() {
 void TopLevel::startOppoThread() {
   OppoThread *thread = new OppoThread;
   m_oppoThreads.push_back(thread);
-  connect(thread, SIGNAL(finished()), this,
-          SLOT(computerPlayerDone()));
+  connect(thread, SIGNAL(finished()), this, SLOT(computerPlayerDone()));
   connect(thread, SIGNAL(fractionDone(double, OppoThread *)), this,
           SLOT(playerFractionDone(double, OppoThread *)));
   thread->setPosition(m_game->currentPosition());

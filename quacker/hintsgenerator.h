@@ -28,8 +28,8 @@ public:
 
 signals:
   void hintsUpdated();
-  void kibitzAs(Quackle::ComputerPlayer *computerPlayer, bool shouldClone,
-                bool updateGameMoves);
+  void kibitzAs(Quackle::ComputerPlayer *computerPlayer, HintsGenerator *,
+                bool shouldClone, bool updateGameMoves);
 
 public slots:
   void threadFinishedGeneratingMoves();

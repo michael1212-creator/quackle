@@ -25,6 +25,7 @@
 #include <QMap>
 
 #include "brb.h"
+#include "hintsgenerator.h"
 #include "oppothread.h"
 #include <datamanager.h>
 #include <sim.h>
@@ -47,6 +48,7 @@ class QVBoxLayout;
 class OppoThreadProgressBar;
 
 namespace Quackle {
+class HintsGenerator;
 class ComputerPlayer;
 class Game;
 class GamePosition;
@@ -99,11 +101,13 @@ public slots:
   void letterbox();
 
   void kibitz();
-  void kibitz(int numberOfPlays, Quackle::ComputerPlayer *computerPlayer = 0,
+  void kibitz(int numberOfPlays, Quackle::HintsGenerator *hintsGenerator = 0,
+              Quackle::ComputerPlayer *computerPlayer = 0,
               bool shouldClone = true, bool updateGameMoves = true);
   void kibitzFifty();
   void kibitzAll();
   void kibitzAs(Quackle::ComputerPlayer *computerPlayer,
+                Quackle::HintsGenerator *hintsGenerator = 0,
                 bool shouldClone = true, bool updateGameMoves = true);
 
   void firstPosition();

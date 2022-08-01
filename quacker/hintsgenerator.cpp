@@ -11,14 +11,13 @@ using namespace Quackle;
 
 HintsGenerator::HintsGenerator(TopLevel *toplevel) {
   if (toplevel) {
-    connect(this, SIGNAL(kibitzAs(Quackle::ComputerPlayer *, bool, bool)),
-            toplevel, SLOT(kibitzAs(Quackle::ComputerPlayer *, bool, bool)));
+    connect(this, &HintsGenerator::kibitzAs, toplevel, &TopLevel::kibitzAs);
   }
 }
 
 void HintsGenerator::movesAs(ComputerPlayer *ai, bool shouldClone,
                              bool updateGameMoves) {
-  emit kibitzAs(ai, shouldClone, updateGameMoves);
+  emit kibitzAs(ai, this, shouldClone, updateGameMoves);
 }
 
 HintsGenerator::~HintsGenerator() {
@@ -71,7 +70,7 @@ struct GenericArgs {
 };
 
 LongLetterString otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
-                            LongLetterString indent = "- ") {
+                                        LongLetterString indent = "- ") {
   LongLetterString ret = "";
   ret += "\n";
   for (auto it : args->whitelistedAIs) {
@@ -82,7 +81,7 @@ LongLetterString otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
         ret += "Does not generate exchange moves";
       } else {
         ret += "only has top " + to_string(-moveRank) +
-                            " moves, and this move is not among them";
+               " moves, and this move is not among them";
       }
     } else if (moveRank > 0) {
       ret += "ranks this move as number " + to_string(moveRank);
@@ -99,6 +98,7 @@ LongLetterString otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
 LongLetterString collectHints(struct AIArgs *args) {
   LongLetterString ret = "";
   if (args->ai->cachedMoves().empty()) {
+    ret += "This AI is still thinking. Please check back in a few moments.";
     return ret;
   }
 
@@ -157,9 +157,8 @@ struct StaticArgs {
 LongLetterString staticPreLoop(struct AIArgs *args) {
   LongLetterString ret = "";
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
-  ret += "The top " +
-                      to_string(customArgs->genericArgs.numMovesToShow) +
-                      " moves are:\n";
+  ret += "The top " + to_string(customArgs->genericArgs.numMovesToShow) +
+         " moves are:\n";
   return ret;
 }
 
@@ -169,8 +168,8 @@ LongLetterString staticLoopBody(struct AIArgs *args, Move &move, int i) {
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   char buf[16];
   TWO_DP(move.equity);
-  ret += to_string(i + 1) + ": " + moveAsStr + ", has valuation " +
-                      buf + ", coming from:\n";
+  ret += to_string(i + 1) + ": " + moveAsStr + ", has valuation " + buf +
+         ", coming from:\n";
   ret += move.hint()->hint("  ");
 
   return ret;
@@ -181,8 +180,7 @@ LongLetterString staticPostLoop(struct AIArgs *args) {
   char buf[16];
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
   TWO_DP(customArgs->lowestValuation);
-  ret +=
-      "\nReally bad moves can have a valuation of " + LongLetterString(buf);
+  ret += "\nReally bad moves can have a valuation of " + LongLetterString(buf);
 
   TWO_DP(customArgs->highValuation);
   ret +=
@@ -214,7 +212,7 @@ LongLetterString greedyPreLoop(struct AIArgs *args) {
   LongLetterString ret = "";
   struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
   ret += "The top " + to_string(customArgs->genericArgs.numMovesToShow) +
-                      " highest scoring moves are:\n";
+         " highest scoring moves are:\n";
 
   return ret;
 }
@@ -224,8 +222,8 @@ LongLetterString greedyLoopBody(struct AIArgs *args, Move &move, int i) {
   int moveScore = move.score;
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
-  ret += to_string(i + 1) + ": " + moveAsStr +
-                      ", with a score of " + to_string(moveScore) + ".";
+  ret += to_string(i + 1) + ": " + moveAsStr + ", with a score of " +
+         to_string(moveScore) + ".";
 
   return ret;
 }
@@ -234,12 +232,12 @@ LongLetterString greedyPostLoop(struct AIArgs *args) {
   LongLetterString ret = "";
   struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
   ret += "\nThe highest scoring word ever recorded in Scrabble is " +
-      LongLetterString(customArgs->highestScoringWord) + " for " +
-      to_string(customArgs->highestScore) + " points.\n" +
-      "The theoretical maximum is " +
-      to_string(customArgs->theoreticalMaxScore) + " points for " +
-      customArgs->highestScoringTheoreticalWord + " (" + customArgs->source +
-      ").\n";
+         LongLetterString(customArgs->highestScoringWord) + " for " +
+         to_string(customArgs->highestScore) + " points.\n" +
+         "The theoretical maximum is " +
+         to_string(customArgs->theoreticalMaxScore) + " points for " +
+         customArgs->highestScoringTheoreticalWord + " (" + customArgs->source +
+         ").\n";
 
   return ret;
 }
@@ -256,9 +254,8 @@ struct ChampArgs {
 LongLetterString champPreLoop(struct AIArgs *args) {
   LongLetterString ret = "";
   struct ChampArgs *customArgs = (struct ChampArgs *)args->customArgs;
-  ret += "The top " +
-                      to_string(customArgs->genericArgs.numMovesToShow) +
-                      " moves with highest win% are:\n";
+  ret += "The top " + to_string(customArgs->genericArgs.numMovesToShow) +
+         " moves with highest win% are:\n";
 
   return ret;
 }
@@ -271,8 +268,8 @@ LongLetterString champLoopBody(struct AIArgs *args, Move &move, int i) {
   Hint *hint = move.hint();
   char buf[16];
   TWO_DP(100 * move.win);
-  ret += to_string(i + 1) + ": " + moveAsStr +
-                      ", has win% chance of " + buf + "%, coming from:\n";
+  ret += to_string(i + 1) + ": " + moveAsStr + ", has win% chance of " + buf +
+         "%, coming from:\n";
   ret += move.hint()->hint("  ");
 
   return ret;
@@ -280,9 +277,8 @@ LongLetterString champLoopBody(struct AIArgs *args, Move &move, int i) {
 
 LongLetterString champPostLoop(struct AIArgs *args) {
   LongLetterString ret = "";
-  ret +=
-      "\nHigher win% (starting at 0%, up to 100%) means that the "
-      "AI is more confident of a win using this move.\n";
+  ret += "\nHigher win% (starting at 0%, up to 100%) means that the "
+         "AI is more confident of a win using this move.\n";
 
   return ret;
 }
@@ -318,8 +314,6 @@ union CustomArgs {
 void HintsGenerator::generateHints(bool forceUpdateMoves) {
   for (ComputerPlayer *ai : whitelistedAIs()) {
     if (forceUpdateMoves || ai->cachedMoves().empty()) {
-      // TODO mm (medium-high): can we make this non-blocking?
-      //  check out TopLevel::kibitz(int, ComputerPlayer *) for inspiration.
       movesAs(ai);
     }
   }
@@ -331,7 +325,7 @@ void HintsGenerator::threadFinishedGeneratingMoves() {
   bool shouldAppendNow;
 
   clearHints();
-  // TODO mm (medium-high): if a hint is not shown, mention ir as a way we could
+  // TODO mm (medium-high): if a hint is not shown, mention it as a way we could
   //  have potentially increased the valuation of a move. Also, hide 0 score
   //  valuations with this method
   for (ComputerPlayer *ai : m_ais) {
