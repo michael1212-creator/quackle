@@ -20,18 +20,22 @@ public:
 
   void positionChanged(const Quackle::GamePosition &position);
 
-  LongLetterString generateHints(bool forceUpdateMoves = false);
+  void generateHints(bool forceUpdateMoves = false);
   LongLetterString getHints();
   void clearHints();
 
   void genChampHintsChanged(bool shouldGenChampHints);
 
 signals:
+  void hintsUpdated();
   void kibitzAs(Quackle::ComputerPlayer *computerPlayer, bool shouldClone,
                 bool updateGameMoves);
 
+public slots:
+  void threadFinishedGeneratingMoves();
+
 private:
-  void createAITitle(ComputerPlayer *ai, LongLetterString *appendTo = NULL);
+  LongLetterString createAITitle(ComputerPlayer *ai);
 
   bool m_shouldGenChampHints;
   vector<ComputerPlayer *> m_ais;

@@ -24,6 +24,9 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
 
   m_hintsGenerator->addAIs(ais);
 
+  connect(m_hintsGenerator, &Quackle::HintsGenerator::hintsUpdated, this,
+          &HintsDisplay::hintsUpdated);
+
   // visual part
   QVBoxLayout *layout = new QVBoxLayout(this);
   QWidget *interactive = new QWidget;
@@ -75,10 +78,7 @@ HintsDisplay::~HintsDisplay() {
   m_hintsGenerator = NULL;
 }
 
-void HintsDisplay::clearHints() {
-  m_hintsGenerator->clearHints();
-  showHints(Quackle::LongLetterString());
-}
+void HintsDisplay::clearHints() { showHints(Quackle::LongLetterString()); }
 
 void HintsDisplay::genChampHintsChanged() {
   m_hintsGenerator->genChampHintsChanged(m_genChampHints->isChecked());
@@ -86,7 +86,8 @@ void HintsDisplay::genChampHintsChanged() {
 
 void HintsDisplay::genHints() {
   clearHints();
-  showHints(m_hintsGenerator->generateHints(m_forceMovesUpdate->isChecked()));
+  m_hintsGenerator->generateHints(m_forceMovesUpdate->isChecked());
+  showHints(m_hintsGenerator->getHints());
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
@@ -97,6 +98,11 @@ void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
   }
 
   m_unseenTiles = position.unseenBag().tiles();
+}
+
+void HintsDisplay::hintsUpdated() {
+  clearHints();
+  showHints(m_hintsGenerator->getHints());
 }
 
 void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {

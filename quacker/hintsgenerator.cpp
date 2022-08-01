@@ -28,13 +28,13 @@ HintsGenerator::~HintsGenerator() {
   }
 }
 
-void HintsGenerator::createAITitle(ComputerPlayer *ai,
-                                   LongLetterString *appendTo) {
-  if (!appendTo) {
-    appendTo = &m_hints;
-  }
-  (*appendTo) += "According to " + ai->name() + "\n";
-  (*appendTo) += "-----------------------------\n";
+LongLetterString HintsGenerator::createAITitle(ComputerPlayer *ai) {
+  LongLetterString ret = "";
+
+  ret += "According to " + ai->name() + "\n";
+  ret += "-----------------------------\n";
+
+  return ret;
 }
 
 void HintsGenerator::addAI(ComputerPlayer *ai) {
@@ -49,13 +49,13 @@ void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {
   for (auto ai : m_ais) {
     // TODO mm (medium): rate player's move which they just made (just show its
     //  ranking in various AI's cached lists)
+    clearHints();
     ai->setPosition(position);
     ai->clearCachedMoves();
   }
 }
 
 struct AIArgs {
-  LongLetterString *m_hints;
   ComputerPlayer *ai;
   void *customArgs;
   vector<ComputerPlayer *> whitelistedAIs;
@@ -64,36 +64,44 @@ struct AIArgs {
 #define MIN_NUM_MOVES_TO_GEN 20
 
 struct GenericArgs {
-  void (*preLoop)(struct AIArgs *);
-  void (*loopBody)(struct AIArgs *, Move &, int);
-  void (*postLoop)(struct AIArgs *);
+  LongLetterString (*preLoop)(struct AIArgs *);
+  LongLetterString (*loopBody)(struct AIArgs *, Move &, int);
+  LongLetterString (*postLoop)(struct AIArgs *);
   int numMovesToShow;
 };
 
-void otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
+LongLetterString otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
                             LongLetterString indent = "- ") {
-  *(args->m_hints) += "\n";
+  LongLetterString ret = "";
+  ret += "\n";
   for (auto it : args->whitelistedAIs) {
     int moveRank = it->rankMove(move);
-    *(args->m_hints) += indent + it->name() + " ";
+    ret += indent + it->name() + " ";
     if (moveRank < 0) {
       if (it->isGreedy() && move.action == Move::Exchange) {
-        *(args->m_hints) += "Does not generate exchange moves";
+        ret += "Does not generate exchange moves";
       } else {
-        *(args->m_hints) += "only has top " + to_string(-moveRank) +
+        ret += "only has top " + to_string(-moveRank) +
                             " moves, and this move is not among them";
       }
     } else if (moveRank > 0) {
-      *(args->m_hints) += "ranks this move as number " + to_string(moveRank);
+      ret += "ranks this move as number " + to_string(moveRank);
     } else {
-      *(args->m_hints) += "moves have not been generated yet";
+      ret += "moves have not been generated yet";
     }
-    *(args->m_hints) += ".\n";
+    ret += ".\n";
   }
-  *(args->m_hints) += "\n";
+  ret += "\n";
+
+  return ret;
 }
 
-void collectHints(struct AIArgs *args) {
+LongLetterString collectHints(struct AIArgs *args) {
+  LongLetterString ret = "";
+  if (args->ai->cachedMoves().empty()) {
+    return ret;
+  }
+
   struct GenericArgs customArgs = *((GenericArgs *)(args->customArgs));
 
   // Remove this AI from the whitelist - it should only contain other
@@ -107,25 +115,27 @@ void collectHints(struct AIArgs *args) {
   }
   args->whitelistedAIs.erase(args->whitelistedAIs.begin() + j);
 
-  customArgs.preLoop(args);
+  ret += customArgs.preLoop(args);
 
   int i = 0;
   for (Move &move : args->ai->cachedMoves()) {
     // TODO mm (medium-low): can we make moves clickable, like in the choices
     //  window?
-    customArgs.loopBody(args, move, i);
-    otherAIsRankingsOfMove(args, move);
+    ret += customArgs.loopBody(args, move, i);
+    ret += otherAIsRankingsOfMove(args, move);
     i++;
     if (i >= customArgs.numMovesToShow) {
       break;
     }
   }
-  customArgs.postLoop(args);
+  ret += customArgs.postLoop(args);
+
+  return ret;
 }
 
-void staticPreLoop(struct AIArgs *args);
-void staticLoopBody(struct AIArgs *args, Move &move, int i);
-void staticPostLoop(struct AIArgs *args);
+LongLetterString staticPreLoop(struct AIArgs *args);
+LongLetterString staticLoopBody(struct AIArgs *args, Move &move, int i);
+LongLetterString staticPostLoop(struct AIArgs *args);
 
 #define THEORETICAL_MAX_SCORE 1778
 #define HIGHEST_SCORE 365
@@ -144,41 +154,49 @@ struct StaticArgs {
   };
 };
 
-void staticPreLoop(struct AIArgs *args) {
+LongLetterString staticPreLoop(struct AIArgs *args) {
+  LongLetterString ret = "";
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
-  *(args->m_hints) += "The top " +
+  ret += "The top " +
                       to_string(customArgs->genericArgs.numMovesToShow) +
                       " moves are:\n";
+  return ret;
 }
 
-void staticLoopBody(struct AIArgs *args, Move &move, int i) {
+LongLetterString staticLoopBody(struct AIArgs *args, Move &move, int i) {
+  LongLetterString ret = "";
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   char buf[16];
   TWO_DP(move.equity);
-  *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr + ", has valuation " +
+  ret += to_string(i + 1) + ": " + moveAsStr + ", has valuation " +
                       buf + ", coming from:\n";
-  *(args->m_hints) += move.hint()->hint("  ");
+  ret += move.hint()->hint("  ");
+
+  return ret;
 }
 
-void staticPostLoop(struct AIArgs *args) {
+LongLetterString staticPostLoop(struct AIArgs *args) {
+  LongLetterString ret = "";
   char buf[16];
   struct StaticArgs *customArgs = (struct StaticArgs *)args->customArgs;
   TWO_DP(customArgs->lowestValuation);
-  *(args->m_hints) +=
+  ret +=
       "\nReally bad moves can have a valuation of " + LongLetterString(buf);
 
   TWO_DP(customArgs->highValuation);
-  *(args->m_hints) +=
+  ret +=
       ", whereas really good moves can have a valuation of its own score, "
       "which is theoretically up to " +
       LongLetterString(buf) +
       ". However, most very good moves will be within the 50 to 100 range.\n";
+
+  return ret;
 }
 
-void greedyPreLoop(struct AIArgs *args);
-void greedyLoopBody(struct AIArgs *args, Move &move, int i);
-void greedyPostLoop(struct AIArgs *args);
+LongLetterString greedyPreLoop(struct AIArgs *args);
+LongLetterString greedyLoopBody(struct AIArgs *args, Move &move, int i);
+LongLetterString greedyPostLoop(struct AIArgs *args);
 
 struct GreedyArgs {
   struct GenericArgs genericArgs = {greedyPreLoop, greedyLoopBody,
@@ -192,65 +210,81 @@ struct GreedyArgs {
       "https://bestlifeonline.com/highest-scoring-scrabble-move/ 2022/06/28";
 };
 
-void greedyPreLoop(struct AIArgs *args) {
+LongLetterString greedyPreLoop(struct AIArgs *args) {
+  LongLetterString ret = "";
   struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
-  *(args->m_hints) += "The top " +
-                      to_string(customArgs->genericArgs.numMovesToShow) +
+  ret += "The top " + to_string(customArgs->genericArgs.numMovesToShow) +
                       " highest scoring moves are:\n";
+
+  return ret;
 }
 
-void greedyLoopBody(struct AIArgs *args, Move &move, int i) {
+LongLetterString greedyLoopBody(struct AIArgs *args, Move &move, int i) {
+  LongLetterString ret = "";
   int moveScore = move.score;
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
-  *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr +
+  ret += to_string(i + 1) + ": " + moveAsStr +
                       ", with a score of " + to_string(moveScore) + ".";
+
+  return ret;
 }
 
-void greedyPostLoop(struct AIArgs *args) {
+LongLetterString greedyPostLoop(struct AIArgs *args) {
+  LongLetterString ret = "";
   struct GreedyArgs *customArgs = (struct GreedyArgs *)args->customArgs;
-  *(args->m_hints) +=
-      "\nThe highest scoring word ever recorded in Scrabble is " +
+  ret += "\nThe highest scoring word ever recorded in Scrabble is " +
       LongLetterString(customArgs->highestScoringWord) + " for " +
       to_string(customArgs->highestScore) + " points.\n" +
       "The theoretical maximum is " +
       to_string(customArgs->theoreticalMaxScore) + " points for " +
       customArgs->highestScoringTheoreticalWord + " (" + customArgs->source +
       ").\n";
+
+  return ret;
 }
 
-void champPreLoop(struct AIArgs *args);
-void champLoopBody(struct AIArgs *args, Move &move, int i);
-void champPostLoop(struct AIArgs *args);
+LongLetterString champPreLoop(struct AIArgs *args);
+LongLetterString champLoopBody(struct AIArgs *args, Move &move, int i);
+LongLetterString champPostLoop(struct AIArgs *args);
 
 struct ChampArgs {
   struct GenericArgs genericArgs = {champPreLoop, champLoopBody, champPostLoop,
                                     3};
 };
 
-void champPreLoop(struct AIArgs *args) {
+LongLetterString champPreLoop(struct AIArgs *args) {
+  LongLetterString ret = "";
   struct ChampArgs *customArgs = (struct ChampArgs *)args->customArgs;
-  *(args->m_hints) += "The top " +
+  ret += "The top " +
                       to_string(customArgs->genericArgs.numMovesToShow) +
                       " moves with highest win% are:\n";
+
+  return ret;
 }
 
-void champLoopBody(struct AIArgs *args, Move &move, int i) {
-  // TODO mm (low-medium): do the thing
+LongLetterString champLoopBody(struct AIArgs *args, Move &move, int i) {
+  LongLetterString ret = "";
+  // TODO mm (medium): do the thing
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   Hint *hint = move.hint();
   char buf[16];
   TWO_DP(100 * move.win);
-  *(args->m_hints) += to_string(i + 1) + ": " + moveAsStr +
+  ret += to_string(i + 1) + ": " + moveAsStr +
                       ", has win% chance of " + buf + "%, coming from:\n";
-  *(args->m_hints) += move.hint()->hint("  ");
+  ret += move.hint()->hint("  ");
+
+  return ret;
 }
 
-void champPostLoop(struct AIArgs *args) {
-  *(args->m_hints) +=
+LongLetterString champPostLoop(struct AIArgs *args) {
+  LongLetterString ret = "";
+  ret +=
       "\nHigher win% (starting at 0%, up to 100%) means that the "
       "AI is more confident of a win using this move.\n";
+
+  return ret;
 }
 
 vector<ComputerPlayer *> HintsGenerator::blacklistedAIs() const {
@@ -281,7 +315,7 @@ union CustomArgs {
   unsigned char buf[MAX_ARG_SIZE];
 };
 
-LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
+void HintsGenerator::generateHints(bool forceUpdateMoves) {
   for (ComputerPlayer *ai : whitelistedAIs()) {
     if (forceUpdateMoves || ai->cachedMoves().empty()) {
       // TODO mm (medium-high): can we make this non-blocking?
@@ -289,19 +323,23 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
       movesAs(ai);
     }
   }
+}
 
+void HintsGenerator::threadFinishedGeneratingMoves() {
   LongLetterString appendLater;
   LongLetterString appendNow;
   bool shouldAppendNow;
+
+  clearHints();
   // TODO mm (medium-high): if a hint is not shown, mention ir as a way we could
   //  have potentially increased the valuation of a move. Also, hide 0 score
   //  valuations with this method
   for (ComputerPlayer *ai : m_ais) {
     shouldAppendNow = true;
     bool skipCollection = false;
-    createAITitle(ai, &appendNow);
+    appendNow += createAITitle(ai);
 
-    struct AIArgs args = {&appendNow, ai, NULL, whitelistedAIs()};
+    struct AIArgs args = {ai, NULL, whitelistedAIs()};
     union CustomArgs customArgs;
     if (ai->isStatic()) {
       struct StaticArgs staticArgs;
@@ -320,7 +358,7 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
 
     if (!skipCollection) {
       args.customArgs = &customArgs;
-      collectHints(&args);
+      appendNow += collectHints(&args);
     }
 
     appendNow += "\n\n";
@@ -334,7 +372,8 @@ LongLetterString HintsGenerator::generateHints(bool forceUpdateMoves) {
   }
 
   m_hints += appendLater;
-  return m_hints;
+
+  emit hintsUpdated();
 }
 
 LongLetterString HintsGenerator::getHints() { return m_hints; }

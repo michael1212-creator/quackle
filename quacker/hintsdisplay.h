@@ -25,6 +25,7 @@ public slots:
   virtual void positionChanged(const Quackle::GamePosition &position);
 
 protected slots:
+  void hintsUpdated();
   virtual void showHints(const Quackle::LongLetterString &hints);
   void genChampHintsChanged();
   void genHints();
