@@ -60,12 +60,6 @@ double CatchallEvaluator::equity(const GamePosition &position,
       // conjunction with its location and length
       adjustment =
           QUACKLE_STRATEGY_PARAMETERS->vcPlace(start, length, consbits);
-      //      TWO_DP(adjustment);
-      //      ADD_HINT("  " + LongLetterString(buf) +
-      //               ": for the location and length of word, along with the
-      //               ordering " "of consonants and vowels in the word. At this
-      //               point of " "the game, horizontal vs. vertical placement
-      //               is irrelevant due " "to symmetry.");
       ADD_HINT((adjustment,
                ": for the location and length of word, along with the ordering "
                "of consonants and vowels in the word. At this point of "
@@ -77,10 +71,6 @@ double CatchallEvaluator::equity(const GamePosition &position,
       // weighted by 3.5
 
       adjustment = 3.5;
-      //      TWO_DP(adjustment);
-      //      ADD_HINT("  " + LongLetterString(buf) +
-      //               ": exchange moves get this as an extra by default "
-      //               "on first placement.");
       ADD_HINT((
           adjustment,
           ": Since we are first, we can use this advantage to improve our "
@@ -102,14 +92,6 @@ double CatchallEvaluator::equity(const GamePosition &position,
     double timingHeuristic = 0.0;
     if (leftInBagPlusSeven <= 12) {
       timingHeuristic = heuristicArray[leftInBagPlusSeven - 1];
-      //      TWO_DP(timingHeuristic);
-      //      ADD_HINT(LongLetterString(buf) +
-      //               ": since there would be 5 or less tiles left in the bag
-      //               after " "this move, but the move doesn't finish the game.
-      //               We want to be " "able to keep our options open, and
-      //               having more tiles is what " "allows this. It also
-      //               decreases the possibility of the opponent " "closing the
-      //               game. Has range [-8, 10].");
       ADD_HINT((timingHeuristic,
                ": since there would be 5 or less tiles left in the bag after "
                "this move, but the move doesn't finish the game. We want to be "
@@ -120,7 +102,6 @@ double CatchallEvaluator::equity(const GamePosition &position,
     return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
   } else {
     // When there are no more tiles in the bag; endgame situation
-//    ADD_HINT(to_string(move.score) + ": for the score the move gives us.");
     ADD_HINT((move.score, ": for the score the move gives us."));
     return endgameResult(position, move) + move.score;
   }
