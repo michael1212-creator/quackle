@@ -29,7 +29,7 @@ double CatchallEvaluator::equity(const GamePosition &position,
                                  const Move &move) const {
   Hint *hint = move.hint();
   if (position.board().isEmpty()) { // starting player
-    ADD_HINT("Because the board is currently empty:");
+    ADD_HINT(("Because the board is currently empty:"));
     double adjustment = 0;
 
     if (move.action == Move::Place) {
@@ -66,12 +66,12 @@ double CatchallEvaluator::equity(const GamePosition &position,
       //               ordering " "of consonants and vowels in the word. At this
       //               point of " "the game, horizontal vs. vertical placement
       //               is irrelevant due " "to symmetry.");
-      ADD_HINT(adjustment,
+      ADD_HINT((adjustment,
                ": for the location and length of word, along with the ordering "
                "of consonants and vowels in the word. At this point of "
                "the game, horizontal vs. vertical placement is irrelevant due "
                "to symmetry.",
-               "  ");
+               "  "));
     } else {
       //'favour' exchange (as opposed to word placement) on initial turn
       // weighted by 3.5
@@ -81,12 +81,12 @@ double CatchallEvaluator::equity(const GamePosition &position,
       //      ADD_HINT("  " + LongLetterString(buf) +
       //               ": exchange moves get this as an extra by default "
       //               "on first placement.");
-      ADD_HINT(
+      ADD_HINT((
           adjustment,
           ": Since we are first, we can use this advantage to improve our "
           "rack, and wait for opponent to potentially open up score multiplier "
           "spaces",
-          "  ");
+          "  "));
     }
 
     // Finally, use other equity evaluator to determine rest of equity
@@ -110,18 +110,18 @@ double CatchallEvaluator::equity(const GamePosition &position,
       //               having more tiles is what " "allows this. It also
       //               decreases the possibility of the opponent " "closing the
       //               game. Has range [-8, 10].");
-      ADD_HINT(timingHeuristic,
+      ADD_HINT((timingHeuristic,
                ": since there would be 5 or less tiles left in the bag after "
                "this move, but the move doesn't finish the game. We want to be "
                "able to keep our options open, and having more tiles is what "
                "allows this. It also decreases the possibility of the opponent "
-               "closing the game. Has range [-8, 10].");
+               "closing the game. Has range [-8, 10]."));
     }
     return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
   } else {
     // When there are no more tiles in the bag; endgame situation
 //    ADD_HINT(to_string(move.score) + ": for the score the move gives us.");
-    ADD_HINT(move.score, ": for the score the move gives us.");
+    ADD_HINT((move.score, ": for the score the move gives us."));
     return endgameResult(position, move) + move.score;
   }
 }
@@ -131,10 +131,10 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   Hint *hint = move.hint();
   Rack leave = position.currentPlayer().rack() - move;
 
-  ADD_HINT("We know the exact rack of the opponent:");
+  ADD_HINT(("We know the exact rack of the opponent:"));
   if (leave.empty()) {
     // the move ends the game
-    ADD_HINT("Because the this move would end the game:", "  ");
+    ADD_HINT(("Because the this move would end the game:", "  "));
 
     // add opposing player's sum of tiles score to deadwood
     double deadwood = 0;
@@ -145,17 +145,17 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
 
         char buf[16];
         TWO_DP(toAdd);
-        ADD_HINT(2 * toAdd,
+        ADD_HINT((2 * toAdd,
                  ": 2*" + LongLetterString(buf) + " for " + it->name() +
                      "'s rack score.",
-                 "  ");
+                 "  "));
         deadwood += toAdd;
       }
     }
 
-    ADD_HINT("(Doubled as we prefer to end the game ourselves due to the "
+    ADD_HINT(("(Doubled as we prefer to end the game ourselves due to the "
              "score bonus)",
-             "  ");
+             "  "));
     return deadwood * 2;
   }
 
@@ -163,11 +163,11 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   // ending the game, which can increase their score by a significant enough
   // amount, dependent on our rack.
   // The constant is there because we like ending the game (?)
-  ADD_HINT(-8.00 - 2.61 * leave.score(),
+  ADD_HINT((-8.00 - 2.61 * leave.score(),
            ": " + LongLetterString("-8.00-2.61*") + to_string(leave.score()) +
                ": This move would not end the game, meaning the opponent might "
                "have a chance to do so. This can increase their score "
                "proportionally to our remaining rack score.",
-           "  ");
+           "  "));
   return -8.00 - 2.61 * leave.score();
 }

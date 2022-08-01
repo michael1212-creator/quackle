@@ -28,36 +28,35 @@ public:
   Quackle::LongLetterString toString();
 
 private:
-  Quackle::LongLetterString m_hint;
+  Quackle::LongLetterString m_hint = "";
   vector<Message> m_messages;
 
   // in case we want to extend the hints, the way Championship Player does
   void messagesChanged();
 };
 
+
 inline void Hint::messagesChanged() { m_hint.clear(); }
 
 inline void Hint::addMsg(Quackle::LongLetterString msg,
                          Quackle::LongLetterString indent) {
-  messagesChanged();
-  m_messages.push_back(Message(msg, indent));
+  addMsg(Message(msg, indent));
 }
 
 inline void Hint::addMessage(Quackle::LongLetterString message,
                              Quackle::LongLetterString indent) {
-  addMsg(message, indent);
+  addMsg(Message(message, indent));
 }
 
 inline void Hint::addMsg(double equityAdd, Quackle::LongLetterString msg,
                          Quackle::LongLetterString indent) {
-  messagesChanged();
-  m_messages.push_back(Message(equityAdd, msg, indent));
+  addMsg(Message(equityAdd, msg, indent));
 }
 
 inline void Hint::addMessage(double equityAdd,
                              Quackle::LongLetterString message,
                              Quackle::LongLetterString indent) {
-  addMsg(equityAdd, message, indent);
+  addMsg(Message(equityAdd, message, indent));
 }
 
 inline void Hint::addMsg(Message msg) {

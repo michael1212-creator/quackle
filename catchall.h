@@ -23,7 +23,7 @@
 
 #define ADD_HINT(msg)                                                          \
   if (hint)                                                                    \
-  hint->addMsg(msg)
+  hint->addMsg msg
 
 namespace Quackle
 {
