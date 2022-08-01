@@ -316,6 +316,7 @@ void HintsGenerator::generateHints(bool forceUpdateMoves) {
   for (ComputerPlayer *ai : whitelistedAIs()) {
     if (forceUpdateMoves || ai->cachedMoves().empty()) {
       movesAs(ai);
+      threadFinishedGeneratingMoves();
     }
   }
 }
@@ -324,6 +325,7 @@ void HintsGenerator::threadFinishedGeneratingMoves() {
   LongLetterString appendLater;
   LongLetterString appendNow;
   bool shouldAppendNow;
+  // TODO mm (medium-low): allow player to choose how many top moves are shown
 
   clearHints();
   // TODO mm (medium-high): if a hint is not shown, mention it as a way we could
