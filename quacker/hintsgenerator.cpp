@@ -45,21 +45,32 @@ void HintsGenerator::addAIs(vector<ComputerPlayer *> ais) {
   m_ais.insert(m_ais.end(), ais.begin(), ais.end());
 }
 
-void HintsGenerator::committed(const Quackle::GamePosition &position) {
-  for (auto ai : m_ais) {
-    ai->setPosition(position);
-    // TODO mm (medium): rate player's move which they just made (just show its
-    //  ranking in various AI's cached lists)
-    clearHints();
-    ai->clearCachedMoves();
-  }
-}
+LongLetterString otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
+                                        LongLetterString indent = "- ");
 
 struct AIArgs {
   ComputerPlayer *ai;
   void *customArgs;
   vector<ComputerPlayer *> whitelistedAIs;
 };
+
+LongLetterString
+HintsGenerator::committed(const Quackle::GamePosition &position,
+                          Quackle::Move &move) {
+  LongLetterString otherAiRankings =
+      "Your move was: " +
+      QuackleIO::Util::moveToDetailedString(move).toStdString();
+  struct AIArgs aiargs = {NULL, NULL, whitelistedAIs()};
+  otherAiRankings += otherAIsRankingsOfMove(&aiargs, move);
+
+  for (auto ai : m_ais) {
+    ai->clearCachedMoves();
+    ai->setPosition(position);
+  }
+  clearHints();
+
+  return otherAiRankings;
+}
 
 #define MIN_NUM_MOVES_TO_GEN 20
 
@@ -71,7 +82,7 @@ struct GenericArgs {
 };
 
 LongLetterString otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
-                                        LongLetterString indent = "- ") {
+                                        LongLetterString indent) {
   LongLetterString ret = "";
   ret += "\n";
   for (auto it : args->whitelistedAIs) {

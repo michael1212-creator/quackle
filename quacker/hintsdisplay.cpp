@@ -86,8 +86,7 @@ void HintsDisplay::genHints() {
 
 void HintsDisplay::committed(Quackle::Move &move) {
   clearHints();
-//  showHints(QuackleIO::Util::moveToDetailedString(move).toStdString());
-  m_hintsGenerator->committed(m_position);
+  showHints(m_hintsGenerator->committed(m_position, move));
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {

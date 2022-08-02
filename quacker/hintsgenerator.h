@@ -26,7 +26,8 @@ public:
 
   void genChampHintsChanged(bool shouldGenChampHints);
 
-  void committed(const Quackle::GamePosition &position);
+  LongLetterString committed(const Quackle::GamePosition &position,
+                             Quackle::Move &move);
 
 signals:
   void hintsUpdated();
