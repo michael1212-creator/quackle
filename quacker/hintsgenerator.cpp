@@ -328,9 +328,6 @@ void HintsGenerator::threadFinishedGeneratingMoves() {
   // TODO mm (medium-low): allow player to choose how many top moves are shown
 
   clearHints();
-  // TODO mm (medium-high): if a hint is not shown, mention it as a way we could
-  //  have potentially increased the valuation of a move. Also, hide 0 score
-  //  valuations with this method
   for (ComputerPlayer *ai : m_ais) {
     shouldAppendNow = true;
     bool skipCollection = false;

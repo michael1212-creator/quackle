@@ -60,12 +60,13 @@ double CatchallEvaluator::equity(const GamePosition &position,
       // conjunction with its location and length
       adjustment =
           QUACKLE_STRATEGY_PARAMETERS->vcPlace(start, length, consbits);
-      ADD_HINT((adjustment,
-               ": for the location and length of word, along with the ordering "
-               "of consonants and vowels in the word. At this point of "
-               "the game, horizontal vs. vertical placement is irrelevant due "
-               "to symmetry.",
-               "  "));
+      ADD_HINT(
+          (adjustment,
+           ": for the location and length of word, along with the ordering "
+           "of consonants and vowels in the word. At this point of "
+           "the game, horizontal vs. vertical placement is irrelevant due "
+           "to symmetry.",
+           "  "));
     } else {
       //'favour' exchange (as opposed to word placement) on initial turn
       // weighted by 3.5
@@ -92,12 +93,13 @@ double CatchallEvaluator::equity(const GamePosition &position,
     double timingHeuristic = 0.0;
     if (leftInBagPlusSeven <= 12) {
       timingHeuristic = heuristicArray[leftInBagPlusSeven - 1];
-      ADD_HINT((timingHeuristic,
-               ": since there would be 5 or less tiles left in the bag after "
-               "this move, but the move doesn't finish the game. We want to be "
-               "able to keep our options open, and having more tiles is what "
-               "allows this. It also decreases the possibility of the opponent "
-               "closing the game. Has range [-8, 10]."));
+      ADD_HINT(
+          (timingHeuristic,
+           ": since there would be 5 or less tiles left in the bag after "
+           "this move, but the move doesn't finish the game. We want to be "
+           "able to keep our options open, and having more tiles is what "
+           "allows this. It also decreases the possibility of the opponent "
+           "closing the game. Has range [-8, 10]."));
     }
     return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
   } else {
@@ -127,16 +129,16 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
         char buf[16];
         TWO_DP(toAdd);
         ADD_HINT((2 * toAdd,
-                 ": 2*" + LongLetterString(buf) + " for " + it->name() +
-                     "'s rack score.",
-                 "  "));
+                  ": 2*" + LongLetterString(buf) + " for " + it->name() +
+                      "'s rack score.",
+                  "  "));
         deadwood += toAdd;
       }
     }
 
     ADD_HINT(("(Doubled as we prefer to end the game ourselves due to the "
-             "score bonus)",
-             "  "));
+              "score bonus)",
+              "  "));
     return deadwood * 2;
   }
 
@@ -144,11 +146,12 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   // ending the game, which can increase their score by a significant enough
   // amount, dependent on our rack.
   // The constant is there because we like ending the game (?)
-  ADD_HINT((-8.00 - 2.61 * leave.score(),
-           ": " + LongLetterString("-8.00-2.61*") + to_string(leave.score()) +
-               ": This move would not end the game, meaning the opponent might "
-               "have a chance to do so. This can increase their score "
-               "proportionally to our remaining rack score.",
-           "  "));
+  ADD_HINT(
+      (-8.00 - 2.61 * leave.score(),
+       ": " + LongLetterString("-8.00-2.61*") + to_string(leave.score()) +
+           ": This move would not end the game, meaning the opponent might "
+           "have a chance to do so. This can increase their score "
+           "proportionally to our remaining rack score.",
+       "  "));
   return -8.00 - 2.61 * leave.score();
 }
