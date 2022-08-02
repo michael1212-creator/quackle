@@ -29,6 +29,7 @@ protected slots:
   virtual void showHints(const Quackle::LongLetterString &hints);
   void genChampHintsChanged();
   void genHints();
+  void committed(Quackle::Move &move);
 
 private:
   void clearHints();
@@ -38,11 +39,7 @@ private:
   QTextEdit *m_textEdit;
   QPushButton *m_genHintsBtn;
   Quackle::HintsGenerator *m_hintsGenerator;
-
-  //Used to tell us whether the positionChanged was a commit
-  // (vs. only just visual, such as when a player selects a move from generated
-  // choices)
-  Quackle::LongLetterString m_unseenTiles;
+  Quackle::GamePosition m_position;
 };
 
 #endif // QUACKLE_QUACKER_HINTSDISPLAY_H_

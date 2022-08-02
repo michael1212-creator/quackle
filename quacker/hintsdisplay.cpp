@@ -8,13 +8,13 @@
 #include "hintsdisplay.h"
 
 HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
-  // logic part
   m_hintsGenerator = new Quackle::HintsGenerator(toplevel);
+  connect(toplevel, &TopLevel::committed, this, &HintsDisplay::committed);
 
   // TODO mm (low): perhaps add a selection screen for user to choose
   //  which AIs to generate hints?
-  // TODO mm (low-medium): instead of creating new AIs here, can we use the existing
-  //  ones from ComputerPlayerCollection::fullCollection() ?
+  // TODO mm (low-medium): instead of creating new AIs here, can we use the
+  //  existing ones from ComputerPlayerCollection::fullCollection() ?
   Quackle::ComputerPlayer *torontoPlayer = new Quackle::TorontoPlayer();
   Quackle::ComputerPlayer *staticPlayer = new Quackle::StaticPlayer();
   Quackle::ComputerPlayer *greedyPlayer = new Quackle::GreedyPlayer();
@@ -27,7 +27,6 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
   connect(m_hintsGenerator, &Quackle::HintsGenerator::hintsUpdated, this,
           &HintsDisplay::hintsUpdated);
 
-  // visual part
   QVBoxLayout *layout = new QVBoxLayout(this);
   QWidget *interactive = new QWidget;
   QHBoxLayout *interactiveLayout = new QHBoxLayout(interactive);
@@ -43,14 +42,12 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
 
   m_genChampHints = new QCheckBox(
       tr("Generate Championship Player hints?\nThis may take some time."));
-  m_genChampHints->setChecked(
-      false);
+  m_genChampHints->setChecked(false);
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
 
   m_forceMovesUpdate = new QCheckBox(tr("Force move recalculation?"));
-  m_forceMovesUpdate->setChecked(
-      false);
+  m_forceMovesUpdate->setChecked(false);
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));
   m_genHintsBtn->setEnabled(false);
@@ -83,25 +80,23 @@ void HintsDisplay::genChampHintsChanged() {
 }
 
 void HintsDisplay::genHints() {
-  clearHints();
   m_hintsGenerator->generateHints(m_forceMovesUpdate->isChecked());
   showHints(m_hintsGenerator->getHints());
 }
 
-void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
-  if (position.unseenBag().tiles() != m_unseenTiles) {
-    m_genHintsBtn->setEnabled(true);
-    clearHints();
-    m_hintsGenerator->positionChanged(position);
-  }
-
-  m_unseenTiles = position.unseenBag().tiles();
-}
-
-void HintsDisplay::hintsUpdated() {
+void HintsDisplay::committed(Quackle::Move &move) {
   clearHints();
-  showHints(m_hintsGenerator->getHints());
+//  showHints(QuackleIO::Util::moveToDetailedString(move).toStdString());
+  m_hintsGenerator->committed(m_position);
 }
+
+void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
+  m_genHintsBtn->setEnabled(true);
+  m_position = position;
+  m_hintsGenerator->positionChanged(position);
+}
+
+void HintsDisplay::hintsUpdated() { showHints(m_hintsGenerator->getHints()); }
 
 void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {
   if (hints.empty()) {

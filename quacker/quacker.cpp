@@ -199,13 +199,16 @@ void TopLevel::commit() {
     return;
   }
 
-  if (m_game->candidate().isAMove()) {
+  Quackle::Move candidate = m_game->candidate();
+  if (candidate.isAMove()) {
     stopEverything();
 
     m_game->commitCandidate();
     setModified(true);
 
     advanceGame();
+
+    emit committed(candidate);
   } else {
     statusMessage(tr("No move specified."));
   }

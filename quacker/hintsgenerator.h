@@ -18,13 +18,15 @@ public:
   void addAI(ComputerPlayer *ai);
   void addAIs(vector<ComputerPlayer *> ais);
 
-  void positionChanged(const Quackle::GamePosition &position);
+  void positionChanged(const Quackle::GamePosition &position) {}
 
   void generateHints(bool forceUpdateMoves = false);
   LongLetterString getHints();
   void clearHints();
 
   void genChampHintsChanged(bool shouldGenChampHints);
+
+  void committed(const Quackle::GamePosition &position);
 
 signals:
   void hintsUpdated();

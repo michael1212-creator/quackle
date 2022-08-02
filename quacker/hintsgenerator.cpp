@@ -3,10 +3,10 @@
 #include "alphabetparameters.h"
 #include "hintsgenerator.h"
 
-#include <message.h>
-#include <hint.h>
-#include <catchall.h>
 #include <algorithm>
+#include <catchall.h>
+#include <hint.h>
+#include <message.h>
 
 using namespace Quackle;
 
@@ -45,12 +45,12 @@ void HintsGenerator::addAIs(vector<ComputerPlayer *> ais) {
   m_ais.insert(m_ais.end(), ais.begin(), ais.end());
 }
 
-void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {
+void HintsGenerator::committed(const Quackle::GamePosition &position) {
   for (auto ai : m_ais) {
+    ai->setPosition(position);
     // TODO mm (medium): rate player's move which they just made (just show its
     //  ranking in various AI's cached lists)
     clearHints();
-    ai->setPosition(position);
     ai->clearCachedMoves();
   }
 }

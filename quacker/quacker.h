@@ -246,6 +246,8 @@ signals:
   // emitted when views of history must update
   void historyChanged(const Quackle::History &history);
 
+  void committed(Quackle::Move &move);
+
 protected:
   Quackle::DataManager m_dataManager;
   Quackle::Game *m_game;
