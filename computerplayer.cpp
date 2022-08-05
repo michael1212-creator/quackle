@@ -81,7 +81,6 @@ MoveList StaticPlayer::moves(int nmoves) {
   m_simulator.currentPosition().kibitz(INT_MAX);
   m_cachedMoves = m_simulator.currentPosition().moves();
   return m_cachedMoves.top(nmoves);
-  return m_simulator.currentPosition().moves().top(nmoves);
 }
 
 ScalingDispatch::ScalingDispatch(ComputerDispatch *shadow, double scale,

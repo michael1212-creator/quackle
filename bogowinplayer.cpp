@@ -95,11 +95,12 @@ MoveList SmartBogowin::moves(int nmoves) {
   const int zerothPrune = 33;
   int plies = 2;
 
-  if (currentPosition().bag().size() <= QUACKLE_PARAMETERS->rackSize() * 2) {
+  if (currentPosition().bag().size() <= QUACKLE_PARAMETERS->rackSize() * 2 ) {
+    // if there are 14 or less remaining tiles in the bag
     plies = -1;
   }
 
-  const int initialCandidates = m_additionalInitialCandidates /* 13 */ + nmoves;
+  const int initialCandidates = m_additionalInitialCandidates /* 13 */ + nmoves /* 15(?) */;
 
   currentPosition().kibitz(initialCandidates);
 
@@ -107,7 +108,7 @@ MoveList SmartBogowin::moves(int nmoves) {
   // generated (these are also probably also the only ones?)
   m_simulator.setIncludedMoves(m_simulator.currentPosition().moves());
 
-  // only keep the moves with equity at least 'zerothPrune' below the equity of
+  // only keep the moves with equity at most 'zerothPrune' below the equity of
   // the move with highest equity; however if there are more than
   // 'initialCandidates' such moves, discard the rest.
   m_simulator.pruneTo(zerothPrune, initialCandidates);
@@ -131,7 +132,7 @@ MoveList SmartBogowin::moves(int nmoves) {
   m_simulator.setIncludedMoves(firstMove);
   m_simulator.simulate(plies, minIterations() /* 20 if nested, 40 if not OR 66 and 132 (if called from resolvent) */);
 
-  Move best = *m_simulator.moves(true, true).begin();
+  Move best = *(m_simulator.moves(true, true).begin());
   simmedMoves.push_back(best);
 
   double bestbp = bogopoints(best);
@@ -143,15 +144,15 @@ MoveList SmartBogowin::moves(int nmoves) {
             static_cast<float>(stopwatch.elapsed()) /
                 static_cast<float>(m_parameters.secondsPerTurn)));
 
-    if (shouldAbort())
+    if (shouldAbort()) {
       goto sort_and_return;
+    }
 
     MoveList lookFurther;
     lookFurther.push_back(*it);
     m_simulator.setIncludedMoves(lookFurther);
     m_simulator.simulate(plies, minIterations());
-    Move move =
-        *m_simulator.moves(true, true).begin();
+    Move move = *m_simulator.moves(true, true).begin();
     double movebp = bogopoints(move);
 
     if (movebp + 1.96 * 35.0 / sqrt((double)minIterations()) > bestbp) {
