@@ -2,15 +2,14 @@ TEMPLATE = app
 DEPENDPATH += .. ../quackleio
 INCLUDEPATH += . ..
 
+# enable/disable debug symbols
+# CONFIG += debug
 
 CONFIG += console c++14
 CONFIG -= x11
 CONFIG -= app_bundle
 CONFIG += release
-#CONFIG -= debug
-
-# enable/disable debug symbols
-CONFIG += debug
+CONFIG -= debug
 
 debug {
   OBJECTS_DIR = obj/debug

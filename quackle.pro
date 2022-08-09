@@ -18,8 +18,8 @@ release {
 }
 
 # enable/disable debug symbols
+#CONFIG += debug staticlib
 CONFIG += release staticlib c++14
-CONFIG += debug staticlib
 CONFIG -= x11
 
 # Input
@@ -33,7 +33,7 @@ SOURCES -= \
 	quackletest.cpp
 
 macx {
-	CONFIG += x86	
+	CONFIG += x86
   QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
 }
 

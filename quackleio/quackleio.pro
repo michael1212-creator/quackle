@@ -16,8 +16,8 @@ release {
 MOC_DIR = moc
 
 # enable/disable debug symbols
+#CONFIG += debug staticlib
 CONFIG += release staticlib c++14
-CONFIG += debug staticlib
 CONFIG -= x11
 
 !msvc {
@@ -30,7 +30,7 @@ HEADERS += *.h
 SOURCES += *.cpp
 
 macx {
-  CONFIG += x86	
+  CONFIG += x86
   QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
 }
 
