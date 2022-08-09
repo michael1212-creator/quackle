@@ -23,13 +23,13 @@ Clone the repo or download the tarball and untar.  Use qmake to build quackle.pr
 	qmake quackle.pro && make
 	cd quackleio && qmake && make && cd ..
 
-Finally, build the main binary.
+Finally, build the main binary, which will be inside the quacker directory:
 
 	cd quacker && qmake && make
 
 i.e.
 
-    qmake quackle.pro && make && cd quackleio && qmake && make && cd .. && cd quacker && qmake && make && ./Quackle && cd ..
+    rm -f quacker/Quackle && qmake quackle.pro && make && cd quackleio && qmake && make && cd .. && cd quacker && qmake && make && cd ..
  
 to clean:
     

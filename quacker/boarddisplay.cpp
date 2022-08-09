@@ -58,7 +58,7 @@ BoardWithQuickEntry::BoardWithQuickEntry(QWidget *parent)
 
 	QPushButton *scoreAdditionButton = new QPushButton(tr("+5"));
 	connect(scoreAdditionButton, SIGNAL(clicked()), this, SLOT(plusFive()));
-	placeEditLayout->addWidget(scoreAdditionButton);
+//	placeEditLayout->addWidget(scoreAdditionButton);
 
 	m_commitButton = new QPushButton(tr("Commit"));
 	connect(m_commitButton, SIGNAL(clicked()), this, SLOT(performCommit()));
