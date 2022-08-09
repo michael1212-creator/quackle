@@ -8,13 +8,21 @@ DEBUG = False
 # p1_name = "Champ1"
 # p2_name = "Champ2"
 
-base_dir = "Static_v_Champ_results/"
-p1_name = "Champ"
-p2_name = "Static"
+# base_dir = "Static_v_Champ_results/"
+# p1_name = "Champ"
+# p2_name = "Static"
 
 # base_dir = "Static1_v_Static2_results/"
 # p1_name = "Static1"
 # p2_name = "Static2"
+
+# base_dir = "Champ_v_Greedy_results/"
+# p1_name = "Champ"
+# p2_name = "Greedy"
+
+base_dir = "Static_v_Greedy_results/"
+p1_name = "Static"
+p2_name = "Greedy"
 
 out_file_name = "results"
 out_file = base_dir + out_file_name
@@ -82,7 +90,7 @@ p2_bingos_per_game = []
 
 p1_scores_per_game = []
 p2_scores_per_game = []
-for i in range(1, 1028):
+for i in range(1, 2048):
     table = []
     p1_final_score = 0
     p2_final_score = 0
@@ -127,6 +135,7 @@ for i in range(1, 1028):
     except Exception as e:
         print("Something went wrong:")
         print(e)
+        print("In file " + str(i))
         continue
 
     if table[-1][0] == p1_name:

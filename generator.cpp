@@ -64,7 +64,11 @@ void Generator::kibitz(int kibitzLength, int flags, bool greedy) {
     if (i >= kibitzLength)
       break;
 
-    m_kibitzList.push_back(*it);
+    if (!greedy || (*it).action == Move::Place) {
+      m_kibitzList.push_back(*it);
+    } else {
+      m_kibitzList.push_back(Move::createPassMove());
+    }
   }
 }
 

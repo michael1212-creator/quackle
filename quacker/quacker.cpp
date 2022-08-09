@@ -1543,9 +1543,11 @@ void TopLevel::showToHuman() {
   if (m_game->currentPosition().gameOver()) {
     statusMessage(tr("Simulating"));
     m_filenamenum++;
+//    m_filename = QString("Champ1_v_Champ2_results/%1").arg(m_filenamenum);
 //    m_filename = QString("Static_v_Champ_results/%1").arg(m_filenamenum);
 //    m_filename = QString("Static1_v_Static2_results/%1").arg(m_filenamenum);
-    m_filename = QString("Champ1_v_Champ2_results/%1").arg(m_filenamenum);
+    m_filename = QString("Champ_v_Greedy_results/%1").arg(m_filenamenum);
+//    m_filename = QString("Static_v_Greedy_results/%1").arg(m_filenamenum);
     writeFile(m_filename);
     Quackle::PlayerList pl(m_game->players());
     initializeGame(pl);

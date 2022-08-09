@@ -1,0 +1,53 @@
+A total of 1136 games were played, with 8 draws.
+The mode number of turns per game is 24 with a count of 216
+The mean number of turns per game is 23.947183098591548
+The standard deviation of number of turns per game is 2.158921668169507
+The median number of turns per game is 24.0
+The inter-quartile range of number of turns per game is 3.0 - from 22.0 to 25.0
+The range of number of turns per game is 19 - from 18 to 37
+
+Static wins 740 times (65.14084507042253% of games), which is 65.60283687943263% of all non-draw games.
+Greedy wins 388 times (34.15492957746479% of games), which is 34.39716312056738% of all non-draw games.
+There were 8 draws (0.704225352112676% of all games).
+
+Static's mode score is 443 with a count of 15
+Static's mean score is 437.943661971831
+Static's standard deviation in score is 61.23826701624845
+Static's median score is 435.0
+Static's inter-quartile range score is 82.0 - from 396.0 to 478.0
+Static's range in score is 453 - from 255 to 708
+Greedy's mode score is 437 with a count of 16
+Greedy's mean score is 396.67341549295776
+Greedy's standard deviation in score is 59.50340146766176
+Greedy's median score is 392.0
+Greedy's inter-quartile range score is 84.0 - from 353.0 to 437.0
+Greedy's range in score is 382 - from 247 to 629
+They have a combined mean of 417.30853873239437
+
+Static's mean score per turn mode is 32.0 with a count of 8
+Static's mean score per turn mean is 36.52288353164987
+Static's mean score per turn standard deviation is 6.372070037414905
+Static's mean score per turn median is 36.0
+Static's mean score per turn inter-quartile range is 8.426282051282051 - from 32.083333333333336 to 40.50961538461539
+Static's mean score per turn range is 45.86363636363636 - from 18.5 to 64.36363636363636
+Greedy's mean score per turn mode is 31.0 with a count of 12
+Greedy's mean score per turn mean is 33.84864957396867
+Greedy's mean score per turn standard deviation is 6.276119185055937
+Greedy's mean score per turn median is 33.25
+Greedy's mean score per turn inter-quartile range is 8.921765734265733 - from 29.16346153846154 to 38.08522727272727
+Greedy's mean score per turn range is 37.0 - from 19.0 to 56.0
+They have a combined mean of 35.18576655280927
+
+Static has a mode of 2 bingos per game with a count of 400.
+Static has a mean of 2.2684859154929575 bingos per game.
+Static's standard deviation in bingos per game is 1.0527929804385958.
+Static has a median of 2.0 bingos per game.
+Static's inter-quartile range in bingos per game is 1.0 - from 2.0 to 3.0.
+Static's range in bingos per game is 6 - from 0 to 6.
+Greedy has a mode of 1 bingos per game with a count of 394.
+Greedy has a mean of 1.2235915492957747 bingos per game.
+Greedy's standard deviation in bingos per game is 1.0368253561152503.
+Greedy has a median of 1.0 bingos per game.
+Greedy's inter-quartile range in bingos per game is 2.0 - from 0.0 to 2.0.
+Greedy's range in bingos per game is 5 - from 0 to 5.
+They have a combined mean of 1.746038732394366

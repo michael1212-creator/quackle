@@ -1,0 +1,31 @@
+#character-encoding UTF-8
+#player1 Static Static
+#player2 Greedy Greedy
+>Static: BEHIORS 8G HOB +8 8
+>Greedy: AIIMNOU 9G MIAOU +28 28
+>Static: EIRRSTV L9 STRIVER +80 88
+>Greedy: CIINOTU 15J CO.TIN +24 52
+>Static: BDLNOUW J7 WO.D +21 109
+>Greedy: AIIOSTU 11J ST.IA +19 71
+>Static: ABLNRTU N10 T.BUL. +20 129
+>Greedy: EEILNOU O7 LOUIE +23 94
+>Static: AAGLNOR N1 GRANOLA +72 201
+>Greedy: EKNNNOV M3 KEN +30 124
+>Static: AEFIMNR 1H FRAMIN. +42 243
+>Greedy: NNOQSUV 1H .......S +42 166
+>Static: AADEILP 7H PA. +20 263
+>Greedy: ENNOQUV 4J QUE.. +28 194
+>Static: AADEILP 13L .A. +12 275
+>Greedy: DNNOTVW 2J WOT +33 227
+>Static: ADEEILP 5I DIP +31 306
+>Greedy: DIJNNTV 14K D.I. +11 238
+>Static: AEEELRZ 2F ZEE +37 343
+>Greedy: HJNNSTV O4 SH +28 266
+>Static: ?AEELRX 3C rELAXER +128 471
+>Greedy: GJNNTVY D2 J.NNY +30 296
+>Static: ?AEEEER E3 .EE +12 483
+>Greedy: DFGGTVY F2 ..G +17 313
+>Static: ?AEEIOR C5 OAtIER +14 497
+>Greedy: CDFGTVY 10B F.Y +17 330
+>Static: E D10 .E +5 502
+>Static:  (CDGTV) +24 526

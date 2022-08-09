@@ -1,0 +1,30 @@
+#character-encoding UTF-8
+#player1 Static Static
+#player2 Greedy Greedy
+>Static: AEIIOQS -AIIOQ +0 0
+>Greedy: IILMRUU 8H ILIUM +10 10
+>Static: AEEELST L7 E.E +5 5
+>Greedy: DINORRU M9 DURION +23 33
+>Static: ?AELQST J4 TEQu.LAS +88 93
+>Greedy: CEFGRST 14J FER.S +32 65
+>Static: AIMNOTY K3 YONI +31 124
+>Greedy: CDDGIRT K10 GIRD.D +25 90
+>Static: AEMOTUW L1 MEOW +41 165
+>Greedy: ?CDENTU 1H DoCU.ENT +158 248
+>Static: AAJNRTU 9C JURANT +24 189
+>Greedy: BBELNRW 10D NEW +31 279
+>Static: AEGIOVZ 11E ZAG +56 245
+>Greedy: BBHLLOR 3K ..BBO +24 303
+>Static: EEFIORV 15E OVERFE. +47 292
+>Greedy: CHLLRTX 7L .X +17 320
+>Static: AAEIIST 6M AI +13 305
+>Greedy: CHLLRTY O6 LYCH +39 359
+>Static: AEEIIST 4J ...IE +16 321
+>Greedy: AGHLNRT 2N AH +28 387
+>Static: AEIOOST G11 .OO +5 326
+>Greedy: GILNORT 5D NITROG.. +18 405
+>Static: AEIKPST H12 KI +24 350
+>Greedy: AAAELTV 4A VALET +30 435
+>Static: AEPPSST C9 .APES +35 385
+>Greedy: AA 3B AA +10 445
+>Greedy:  (PST) +10 455

@@ -1,0 +1,42 @@
+#character-encoding UTF-8
+#player1 Static Static
+#player2 Greedy Greedy
+>Static: AELOPWY 8G YOW +9 9
+>Greedy: DEGOSVZ J4 DOZES +45 45
+>Static: ABDEELP K3 PEDAL +38 47
+>Greedy: BEGIUVY L4 VEG +45 90
+>Static: BEENNTU 9D BUTENE +24 71
+>Greedy: BDINOUY 7B UNIBODY +81 171
+>Static: AIKNNOX 6A OX +50 121
+>Greedy: ?AAIJNT 6D TAJ +57 228
+>Static: AIKMNNS 10H INK +30 151
+>Greedy: ?AAEIIN M4 AAs +28 256
+>Static: AMNOSTU 11B OUTMANS +76 227
+>Greedy: AEIILNW 12A WINE +30 286
+>Static: EFGGIOQ A12 .IFE +30 257
+>Greedy: AAEEIIL 13A .LIA +20 306
+>Static: CGGHOQR -GGQ +0 257
+>Greedy: AEEIIST B9 ET...ES +30 336
+>Static: CCHLORU A8 CRU +19 276
+>Greedy: ?AAGIIR A1 AdAGI. +24 360
+>Static: CHLLOOR B1 HOLO +26 302
+>Greedy: AEIIRRR C2 REAR +20 380
+>Static: CGLNRRV -CGLNRRV +0 302
+>Greedy: FHIIQRT 14D RIFT +19 399
+>Static: DEEMOPS D1 OPED +37 339
+>Greedy: HIILQRT F9 .H.T +15 414
+>Static: CEMNRSV 1D .VERS +24 363
+>Greedy: GIILQR E5 G.. +12 426
+>Static: CMN F1 .M +10 373
+>Greedy: IILQR 13A ....L +7 433
+>Static: CN E13 ..N +3 376
+>Greedy: IIQR J10 .IR +7 440
+>Static: C -  +0 376
+>Greedy: IQ G13 I. +3 443
+>Static: C -  +0 376
+>Greedy: Q -  +0 443
+>Static: C -  +0 376
+>Greedy: Q -  +0 443
+>Static: C -  +0 376
+>Greedy: Q -  +0 443
+>Greedy: Q (Q) +-10 433

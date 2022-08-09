@@ -1,0 +1,32 @@
+#character-encoding UTF-8
+#player1 Greedy Greedy
+#player2 Static Static
+>Greedy: AEEORTX 8H RETAX +20 20
+>Static: IIJLNOS J6 JO. +26 26
+>Greedy: AEEEENO 9I NAE +20 40
+>Static: CIIKLNS 7I K.S +27 53
+>Greedy: ?EEEGOW 10H WOs +24 64
+>Static: CIILNOW 11D WILCO +25 78
+>Greedy: DEEEGMT 12A METED +35 99
+>Static: AILMNOV 10B VIOLA +32 110
+>Greedy: EEGIOSY 12H SIEGE +21 120
+>Static: DGMNNPU A12 .UMP +30 140
+>Greedy: BFIOTUY B14 YO +28 148
+>Static: ?DGHLNN 8H .....iNG +45 185
+>Greedy: ABFIITU 11K AFT +23 171
+>Static: DHLNOSY 13I SLOYD +38 223
+>Greedy: BIIQRUZ 7M QI +43 214
+>Static: CDEHINP C12 .ECH +36 259
+>Greedy: ABIRRUZ 6N ZA +63 277
+>Static: BDINOPS D9 B...D +14 273
+>Greedy: BEGIRRU N6 ...EB +22 299
+>Static: EINOPSV O10 ENVOIS +43 316
+>Greedy: AGIRRUU N14 GI +14 313
+>Static: AADPRRR F6 PARR.. +14 330
+>Greedy: AERRUUU L11 ...ER +12 325
+>Static: ADEELRT 15E TREADLE. +77 407
+>Greedy: AFRTUUU E5 TUFA +25 350
+>Static: AHIINOT O1 TAHIN. +30 437
+>Greedy: INNRUU N2 NU +13 363
+>Static: IO D4 OI +6 443
+>Static:  (INRU) +8 451
