@@ -1,0 +1,53 @@
+A total of 230 games were played, with 2 draws.
+The mode number of turns per game is 25 with a count of 45
+The mean number of turns per game is 24.38695652173913
+The standard deviation of number of turns per game is 2.5199731447544345
+The median number of turns per game is 24.0
+The inter-quartile range of number of turns per game is 3.0 - from 23.0 to 26.0
+The range of number of turns per game is 16 - from 20 to 36
+
+Champ wins 180 times (78.26086956521739% of games), which is 78.94736842105263% of all non-draw games.
+Greedy wins 48 times (20.869565217391305% of games), which is 21.05263157894737% of all non-draw games.
+There were 2 draws (0.8695652173913043% of all games).
+
+Champ's mode score is 412 with a count of 5
+Champ's mean score is 444.53913043478263
+Champ's standard deviation in score is 59.87324102258207
+Champ's median score is 440.5
+Champ's inter-quartile range score is 81.75 - from 403.25 to 485.0
+Champ's range in score is 287 - from 300 to 587
+Greedy's mode score is 302 with a count of 5
+Greedy's mean score is 381.004347826087
+Greedy's standard deviation in score is 58.02192223080237
+Greedy's median score is 372.5
+Greedy's inter-quartile range score is 78.5 - from 339.25 to 417.75
+Greedy's range in score is 351 - from 268 to 619
+They have a combined mean of 412.7717391304348
+
+Champ's mean score per turn mode is 41.0 with a count of 4
+Champ's mean score per turn mean is 36.350218462270895
+Champ's mean score per turn standard deviation is 6.135361434871974
+Champ's mean score per turn median is 36.19871794871795
+Champ's mean score per turn inter-quartile range is 8.852793040293037 - from 31.65521978021978 to 40.50801282051282
+Champ's mean score per turn range is 33.0 - from 20.0 to 53.0
+Greedy's mean score per turn mode is 24.0 with a count of 3
+Greedy's mean score per turn mean is 32.042372778187996
+Greedy's mean score per turn standard deviation is 6.043992028018692
+Greedy's mean score per turn median is 30.91287878787879
+Greedy's mean score per turn inter-quartile range is 8.363636363636367 - from 27.454545454545453 to 35.81818181818182
+Greedy's mean score per turn range is 30.440476190476193 - from 21.142857142857142 to 51.583333333333336
+They have a combined mean of 34.19629562022945
+
+Champ has a mode of 2 bingos per game with a count of 78.
+Champ has a mean of 2.208695652173913 bingos per game.
+Champ's standard deviation in bingos per game is 1.046697931375769.
+Champ has a median of 2.0 bingos per game.
+Champ's inter-quartile range in bingos per game is 2.0 - from 1.0 to 3.0.
+Champ's range in bingos per game is 5 - from 0 to 5.
+Greedy has a mode of 1 bingos per game with a count of 87.
+Greedy has a mean of 1.0565217391304347 bingos per game.
+Greedy's standard deviation in bingos per game is 0.9651880136539841.
+Greedy has a median of 1.0 bingos per game.
+Greedy's inter-quartile range in bingos per game is 2.0 - from 0.0 to 2.0.
+Greedy's range in bingos per game is 4 - from 0 to 4.
+They have a combined mean of 1.632608695652174

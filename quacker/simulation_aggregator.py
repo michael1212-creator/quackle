@@ -16,16 +16,18 @@ DEBUG = False
 # p1_name = "Static1"
 # p2_name = "Static2"
 
-# base_dir = "Champ_v_Greedy_results/"
-# p1_name = "Champ"
-# p2_name = "Greedy"
-
-base_dir = "Static_v_Greedy_results/"
-p1_name = "Static"
+base_dir = "Champ_v_Greedy_results/"
+p1_name = "Champ"
 p2_name = "Greedy"
+
+# base_dir = "Static_v_Greedy_results/"
+# p1_name = "Static"
+# p2_name = "Greedy"
 
 out_file_name = "results"
 out_file = base_dir + out_file_name
+
+STOP_AFTER_N_MANY_NOT_FOUND = 5
 
 
 class Play:
@@ -90,6 +92,8 @@ p2_bingos_per_game = []
 
 p1_scores_per_game = []
 p2_scores_per_game = []
+
+not_found_count = 0
 for i in range(1, 2048):
     table = []
     p1_final_score = 0
@@ -132,11 +136,19 @@ for i in range(1, 2048):
                         , int(str_record[3])  # Should be a '0'
                         , int(str_record[4])
                     ])
+    except FileNotFoundError as e:
+        not_found_count += 1
+        print(e)
+        if not_found_count >= STOP_AFTER_N_MANY_NOT_FOUND:
+            break
+        continue
     except Exception as e:
         print("Something went wrong:")
         print(e)
         print("In file " + str(i))
         continue
+
+    not_found_count = 0
 
     if table[-1][0] == p1_name:
         p1_final_score = table[-1][-1]
