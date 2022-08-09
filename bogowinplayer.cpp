@@ -24,9 +24,9 @@
 #include "endgameplayer.h"
 #include "gameparameters.h"
 #include "strategyparameters.h"
-//#include "enumerator.h"
+// #include "enumerator.h"
 
-//#define DEBUG_COMPUTERPLAYER
+// #define DEBUG_COMPUTERPLAYER
 
 using namespace Quackle;
 
@@ -95,12 +95,13 @@ MoveList SmartBogowin::moves(int nmoves) {
   const int zerothPrune = 33;
   int plies = 2;
 
-  if (currentPosition().bag().size() <= QUACKLE_PARAMETERS->rackSize() * 2 ) {
+  if (currentPosition().bag().size() <= QUACKLE_PARAMETERS->rackSize() * 2) {
     // if there are 14 or less remaining tiles in the bag
     plies = -1;
   }
 
-  const int initialCandidates = m_additionalInitialCandidates /* 13 */ + nmoves /* 15(?) */;
+  const int initialCandidates =
+      m_additionalInitialCandidates /* 13 */ + nmoves /* 15(?) */;
 
   currentPosition().kibitz(initialCandidates);
 
@@ -118,7 +119,8 @@ MoveList SmartBogowin::moves(int nmoves) {
   m_simulator.setIgnoreOppos(false);
 
   MoveList staticMoves = m_simulator.moves(true, false);
-  m_simulator.moveConsideredMovesToBeginning(staticMoves); // doesn't seem to consider sortedness
+  m_simulator.moveConsideredMovesToBeginning(
+      staticMoves); // doesn't seem to consider sortedness
 
   MoveList firstMove;
   MoveList simmedMoves;
@@ -152,10 +154,13 @@ MoveList SmartBogowin::moves(int nmoves) {
     lookFurther.push_back(*it);
     m_simulator.setIncludedMoves(lookFurther);
     m_simulator.simulate(plies, minIterations());
-    Move move = *m_simulator.moves(true, true).begin();
+    Move move = *(m_simulator.moves(true, true).begin());
     double movebp = bogopoints(move);
 
     if (movebp + 1.96 * 35.0 / sqrt((double)minIterations()) > bestbp) {
+      // the below call to simulate() only causes *it to be simulated due to
+      // the above call to setIncludedMoves(). No other moves will be
+      // re-simulated!
       m_simulator.simulate(plies, maxIterations() - minIterations());
       Move move2 = *m_simulator.moves(true, true).begin();
       movebp = bogopoints(move2);

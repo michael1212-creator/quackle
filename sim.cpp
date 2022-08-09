@@ -28,7 +28,7 @@
 #include "strategyparameters.h"
 
 // define this to get lame debugging messages
-//#define DEBUG_SIM
+// #define DEBUG_SIM
 
 using namespace Quackle;
 
@@ -242,8 +242,9 @@ void Simulator::simulate(int plies) {
   randomizeOppoRacks();
   randomizeDrawingOrder();
 
-  if (plies < 0)
+  if (plies < 0) {
     plies = 1000;
+  }
 
   // specified plies doesn't include candidate play
   ++plies;
@@ -253,11 +254,13 @@ void Simulator::simulate(int plies) {
   constants.startPlayerId =
       m_originalGame.currentPosition().currentPlayer().id();
   constants.playerCount = m_originalGame.currentPosition().players().size();
-  // level one's first move is the zeroth ply (the candidate)
-  constants.decimalTurns = (plies % constants.playerCount);
-  // also one-indexed
+  constants.decimalTurns =
+      plies % constants.playerCount; /*= 0 (plies % 2)
+how many players beyond the one we are simulating for will also have a simulated
+move; e.g. for 3 ply (which gets incremented to 4) with 2 players, it is
+current, next, current, next */
   // calculates how many cycles are gone through for the simulation
-  constants.levelCount =
+  constants.levelCount = /*= 1 ((plies - plies % 2) / 2)*/
       (int)((plies - constants.decimalTurns) / constants.playerCount);
   constants.ignoreOppos = m_ignoreOppos;
   constants.isLogging = isLogging();
@@ -293,6 +296,9 @@ void Simulator::simulate(int plies) {
     message.levels.setNumberLevels(constants.levelCount + 1);
     message.levels = moveIt.levels;
     message.xmlIndent = m_xmlIndent;
+    // levels tells us how many times the current player will make a move,
+    // excluding the simulated move; this is why when we 'setNumberLevels', we
+    // add an extra 1
 
     // there is a monitor on the m_sendQueue which gets notified each time
     // we do a push like here. This in turn calls 'simThreadFunc' and eventually
@@ -317,6 +323,7 @@ void Simulator::simulate(int plies) {
 void Simulator::simulateOnePosition(SimmedMoveMessage &message,
                                     const SimmedMoveConstants &constants) {
   // message is what gets 'returned'
+
   Game game = constants.game;
   double residual = 0;
 
@@ -332,10 +339,12 @@ void Simulator::simulateOnePosition(SimmedMoveMessage &message,
     // on the last iteration of this loop)
     // and (constants.decimalTurns == 0, i.e. plies is divisible
     // by number of players)
-    if (decimal == 0)
+    if (decimal == 0) {
       continue; // probably equivalent to break in this case
+    }
 
     // initialize the list of scores for each level
+    // (pushes back into 'statistics' member)
     (*levelIt).setNumberScores(decimal);
 
     int playerNumber = 0;
@@ -363,7 +372,9 @@ void Simulator::simulateOnePosition(SimmedMoveMessage &message,
       } else if (constants.ignoreOppos && playerId != constants.startPlayerId) {
         move = Move::createPassMove();
       } else {
-        // generate the best static move possible from this position
+        // If this isn't the first step of the simulation, and we aren't
+        // ignoring opponent's moves, then generate a 'good enough' move for the
+        // chosen player (be it the player we are generating for or not)
         move = game.currentPosition().staticBestMove();
       }
 
@@ -389,12 +400,13 @@ void Simulator::simulateOnePosition(SimmedMoveMessage &message,
       // record future-looking residuals
       bool isFinalTurnForPlayerOfSimulation = false;
 
-      if (levelNumber == constants.levelCount)
-        isFinalTurnForPlayerOfSimulation =
-            playerNumber > constants.decimalTurns;
-      else if (levelNumber == constants.levelCount + 1)
+      if (levelNumber == constants.levelCount /*= 1*/) {
+        isFinalTurnForPlayerOfSimulation = /* true */
+            playerNumber > constants.decimalTurns /*= 0*/;
+      } else if (levelNumber == constants.levelCount + 1) {
         isFinalTurnForPlayerOfSimulation =
             playerNumber <= constants.decimalTurns;
+      }
 
       const bool isVeryFinalTurnOfSimulation =
           (constants.decimalTurns == 0 && levelNumber == constants.levelCount &&
@@ -406,14 +418,16 @@ void Simulator::simulateOnePosition(SimmedMoveMessage &message,
           !(constants.ignoreOppos && playerId != constants.startPlayerId)) {
         double residualAddend =
             game.currentPosition().calculatePlayerConsideration(move);
-        if (constants.isLogging)
+        if (constants.isLogging) {
           message.logStream << message.xmlIndent << "<pc value=\""
                             << residualAddend << "\" />" << endl;
+        }
 
-        if (playerId == constants.startPlayerId)
+        if (playerId == constants.startPlayerId) {
           residual += residualAddend;
-        else
+        } else {
           residual -= residualAddend;
+        }
       }
 
       // committing the move will account for deadwood again
@@ -440,23 +454,26 @@ void Simulator::simulateOnePosition(SimmedMoveMessage &message,
     message.wins = spread > 0 ? 1 : spread == 0 ? 0.5 : 0;
   } else {
     message.bogowin = true;
-    if (game.currentPosition().currentPlayer().id() == constants.startPlayerId)
+    if (game.currentPosition().currentPlayer().id() ==
+        constants.startPlayerId) {
       message.wins = QUACKLE_STRATEGY_PARAMETERS->bogowin(
           (int)(spread + residual),
           game.currentPosition().bag().size() + QUACKLE_PARAMETERS->rackSize(),
           0);
-    else
+    } else {
       message.wins = 1.0 - QUACKLE_STRATEGY_PARAMETERS->bogowin(
                                (int)(-spread - residual),
                                game.currentPosition().bag().size() +
                                    QUACKLE_PARAMETERS->rackSize(),
                                0);
+    }
   }
 }
 
 void Simulator::incorporateMessage(const SimmedMoveMessage &message) {
-  if (isLogging())
+  if (isLogging()) {
     m_logfileStream << message.logStream.str();
+  }
   for (auto &moveIt : m_simmedMoves) {
     if (moveIt.id() == message.id) {
       if (isLogging()) {

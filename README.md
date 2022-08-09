@@ -30,6 +30,10 @@ Finally, build the main binary.
 i.e.
 
     qmake quackle.pro && make && cd quackleio && qmake && make && cd .. && cd quacker && qmake && make && ./Quackle && cd ..
+ 
+to clean:
+    
+    for dir in ./*; do (cd "$dir" && make clean); done
 
 Also check out https://www.jetbrains.com/help/clion/qt-tutorial.html#qt-setup-in-clion for using Qt in CLion
 
