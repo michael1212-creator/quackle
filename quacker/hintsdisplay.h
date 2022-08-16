@@ -30,6 +30,7 @@ protected slots:
   void genChampHintsChanged();
   void genHints();
   void committed(Quackle::Move &move);
+  void newGame(const Quackle::GamePosition &position);
 
 private:
   void clearHints();
@@ -39,7 +40,7 @@ private:
   QTextEdit *m_textEdit;
   QPushButton *m_genHintsBtn;
   Quackle::HintsGenerator *m_hintsGenerator;
-  Quackle::GamePosition m_position;
+  Quackle::GamePosition *m_position;
 };
 
 #endif // QUACKLE_QUACKER_HINTSDISPLAY_H_

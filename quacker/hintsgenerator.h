@@ -18,7 +18,7 @@ public:
   void addAI(ComputerPlayer *ai);
   void addAIs(vector<ComputerPlayer *> ais);
 
-  void positionChanged(const Quackle::GamePosition &position) {}
+  void positionChanged(const Quackle::GamePosition &position);
 
   void generateHints(bool forceUpdateMoves = false);
   LongLetterString getHints();
@@ -28,6 +28,8 @@ public:
 
   LongLetterString committed(const Quackle::GamePosition &position,
                              Quackle::Move &move);
+
+  void updateAIState(const Quackle::GamePosition &position);
 
 signals:
   void hintsUpdated();
@@ -43,6 +45,7 @@ private:
   bool m_shouldGenChampHints;
   vector<ComputerPlayer *> m_ais;
   LongLetterString m_hints;
+//  LongLetterString m_positionTiles;
 
   // AIs which have been disabled from generating hints
   vector<ComputerPlayer *> blacklistedAIs() const;

@@ -10,6 +10,7 @@
 HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
   m_hintsGenerator = new Quackle::HintsGenerator(toplevel);
   connect(toplevel, &TopLevel::committed, this, &HintsDisplay::committed);
+  connect(toplevel, &TopLevel::newGameSig, this, &HintsDisplay::newGame);
 
   // TODO mm (low): perhaps add a selection screen for user to choose
   //  which AIs to generate hints?
@@ -79,19 +80,25 @@ void HintsDisplay::genChampHintsChanged() {
   m_hintsGenerator->genChampHintsChanged(m_genChampHints->isChecked());
 }
 
+void HintsDisplay::newGame(const Quackle::GamePosition &position) {
+  clearHints();
+  m_hintsGenerator->updateAIState(position);
+}
+
 void HintsDisplay::genHints() {
   m_hintsGenerator->generateHints(m_forceMovesUpdate->isChecked());
   showHints(m_hintsGenerator->getHints());
 }
 
 void HintsDisplay::committed(Quackle::Move &move) {
-  clearHints();
-  showHints(m_hintsGenerator->committed(m_position, move));
+  showHints(m_hintsGenerator->committed(*m_position, move));
+  m_hintsGenerator->updateAIState(*m_position);
 }
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
   m_genHintsBtn->setEnabled(true);
-  m_position = position;
+  m_position = (Quackle::GamePosition *) &position;
+
   m_hintsGenerator->positionChanged(position);
 }
 

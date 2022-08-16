@@ -54,6 +54,18 @@ struct AIArgs {
   vector<ComputerPlayer *> whitelistedAIs;
 };
 
+void HintsGenerator::updateAIState(const Quackle::GamePosition &position) {
+  for (auto ai : m_ais) {
+    ai->clearCachedMoves();
+    ai->setPosition(position);
+  }
+  clearHints();
+}
+
+void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {
+
+}
+
 LongLetterString
 HintsGenerator::committed(const Quackle::GamePosition &position,
                           Quackle::Move &move) {
@@ -63,11 +75,7 @@ HintsGenerator::committed(const Quackle::GamePosition &position,
   struct AIArgs aiargs = {NULL, NULL, whitelistedAIs()};
   otherAiRankings += otherAIsRankingsOfMove(&aiargs, move);
 
-  for (auto ai : m_ais) {
-    ai->clearCachedMoves();
-    ai->setPosition(position);
-  }
-  clearHints();
+  updateAIState(position);
 
   return otherAiRankings;
 }

@@ -790,6 +790,8 @@ void TopLevel::newGame() {
   case QDialog::Rejected:
     break;
   }
+
+  emit newGameSig(m_game->currentPosition());
 }
 
 void TopLevel::setCaption(const QString &text) {

@@ -236,6 +236,8 @@ signals:
   // that should be shown)
   void positionChanged(const Quackle::GamePosition &position);
 
+  void newGameSig(const Quackle::GamePosition &position);
+
   void movesChanged(const Quackle::MoveList &moves);
 
   // emitted when views of history must update
