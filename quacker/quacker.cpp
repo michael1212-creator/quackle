@@ -145,10 +145,6 @@ void TopLevel::finishInitialization() {
   connect(m_simulationTimer, SIGNAL(timeout()), this,
           SLOT(incrementSimulation()));
 
-  // Birthday
-  m_birthdayTimer = new QTimer(this);
-  connect(m_birthdayTimer, SIGNAL(timeout()), this, SLOT(birthdayBash()));
-
   QTimer::singleShot(0, this, SLOT(introduceToUser()));
 }
 
@@ -794,9 +790,6 @@ void TopLevel::newGame() {
   case QDialog::Rejected:
     break;
   }
-
-  // Birthday
-  startBirthday();
 }
 
 void TopLevel::setCaption(const QString &text) {
@@ -1281,8 +1274,6 @@ void TopLevel::loadFile(const QString &filename) {
 
   statusMessage(tr("Loaded game from `%1'.").arg(filename));
   setModified(false);
-
-  startBirthday();
 
   showToHuman();
 }
@@ -2331,81 +2322,6 @@ void TopLevel::loadSettings() {
 
 QString TopLevel::dialogText(const QString &text) {
   return QString("<html>%1</html>").arg(text);
-}
-
-void TopLevel::startBirthday() {
-  if (!m_game || !m_game->hasPositions()) {
-    return;
-  }
-
-  // Happy Birthday, Ong Suanne.
-
-  bool isBirthday = false;
-  const Quackle::PlayerList &players = m_game->currentPosition().players();
-  for (Quackle::PlayerList::const_iterator it = players.begin();
-       it != players.end(); ++it) {
-    if ((*it).name() == "zorbonauts") {
-      isBirthday = true;
-      break;
-    }
-  }
-
-  if (!isBirthday) {
-    m_birthdayTimer->stop();
-    return;
-  }
-
-  m_birthdayIndex = 0;
-  m_birthdayTimer->start(800);
-}
-
-void TopLevel::birthdayBash() {
-  birthdayGram(m_birthdayIndex);
-  ++m_birthdayIndex;
-  if (m_birthdayIndex >= 11)
-    m_birthdayIndex = 0;
-  birthdayGram(m_birthdayIndex);
-}
-
-void TopLevel::birthdayGram(int index) {
-  switch (index) {
-  case 0:
-    setCaption(tr("HURRRRRRRRRRRRRRRRRRRRRRRRR"));
-    break;
-  case 1:
-    m_newAction->setIconText(tr("New game"));
-    break;
-  case 2:
-    m_generateAction->setIconText(tr("Generate word list"));
-    break;
-  case 3:
-    m_kibitzAction->setIconText(tr("Generate choices"));
-    break;
-  case 4:
-    m_nextPositionAction->setIconText(tr("Forward"));
-    break;
-  case 5:
-    m_kibitzAsActions->actions().front()->setIconText(
-        tr("Ask Championship Player"));
-    break;
-  case 6:
-    m_simulateAction->setIconText(tr("Simulate"));
-    break;
-  case 7:
-    m_tabWidget->setTabText(0, tr("Histor&y"));
-    break;
-  case 8:
-    m_tabWidget->setTabText(1, tr("&Choices"));
-    break;
-  case 9:
-    m_tabWidget->setTabText(2, tr("Se&ttings"));
-    break;
-  case 10:
-    statusMessage(tr(""));
-    break;
-  default:
-    break;
-  }
 }
 
 //////////////

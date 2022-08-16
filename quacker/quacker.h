@@ -230,11 +230,6 @@ protected slots:
   void partialOppoRackChanged();
   void showSimulationDetails();
 
-  // Birthday
-  void startBirthday();
-  void birthdayBash();
-  void birthdayGram(int index);
-
 signals:
   // emitted when views (eg board) should update based on the
   // current position (includes board information, current candidate play
@@ -423,10 +418,6 @@ private:
   void createMenu();
   void createWidgets();
   void switchToTab(TabIndex index);
-
-  // Birthday
-  QTimer *m_birthdayTimer;
-  int m_birthdayIndex;
 };
 
 class KibitzerListener : public QObject {
