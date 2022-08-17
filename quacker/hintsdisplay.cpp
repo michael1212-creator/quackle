@@ -97,7 +97,7 @@ void HintsDisplay::committed(Quackle::Move &move) {
 
 void HintsDisplay::positionChanged(const Quackle::GamePosition &position) {
   m_genHintsBtn->setEnabled(true);
-  m_position = (Quackle::GamePosition *) &position;
+  m_position = (Quackle::GamePosition *)&position;
 
   m_hintsGenerator->positionChanged(position);
 }

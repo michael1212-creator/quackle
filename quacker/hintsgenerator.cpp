@@ -62,9 +62,7 @@ void HintsGenerator::updateAIState(const Quackle::GamePosition &position) {
   clearHints();
 }
 
-void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {
-
-}
+void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {}
 
 LongLetterString
 HintsGenerator::committed(const Quackle::GamePosition &position,

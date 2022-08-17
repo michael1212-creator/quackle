@@ -45,7 +45,7 @@ private:
   bool m_shouldGenChampHints;
   vector<ComputerPlayer *> m_ais;
   LongLetterString m_hints;
-//  LongLetterString m_positionTiles;
+  //  LongLetterString m_positionTiles;
 
   // AIs which have been disabled from generating hints
   vector<ComputerPlayer *> blacklistedAIs() const;
