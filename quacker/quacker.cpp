@@ -925,7 +925,8 @@ void TopLevel::kibitz(int numberOfPlays,
     if (hintsGenerator) {
       connect(thread, &OppoThread::finished, hintsGenerator,
               [hintsGenerator, computerPlayer]() {
-                hintsGenerator->threadFinishedGeneratingMoves(computerPlayer->id());
+                hintsGenerator->threadFinishedGeneratingMoves(
+                    computerPlayer->id());
               });
       connect(thread, &OppoThread::hasAborted, hintsGenerator,
               &Quackle::HintsGenerator::hasAborted);
