@@ -73,6 +73,7 @@ protected:
 
 signals:
 	void fractionDone(double fraction, OppoThread *thread);
+        void hasAborted(bool hasAborted, int AIid);
 
 private slots:
 	void signalFractionDone(double fractionDone);

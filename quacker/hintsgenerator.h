@@ -37,7 +37,8 @@ signals:
                 bool shouldClone, bool updateGameMoves);
 
 public slots:
-  void threadFinishedGeneratingMoves();
+  void threadFinishedGeneratingMoves(int AIid);
+  void hasAborted(bool hasAborted, int AIid);
 
 private:
   LongLetterString createAITitle(ComputerPlayer *ai);
@@ -45,7 +46,7 @@ private:
   bool m_shouldGenChampHints;
   vector<ComputerPlayer *> m_ais;
   LongLetterString m_hints;
-  //  LongLetterString m_positionTiles;
+  map<int, bool> m_abortedAIs;
 
   // AIs which have been disabled from generating hints
   vector<ComputerPlayer *> blacklistedAIs() const;

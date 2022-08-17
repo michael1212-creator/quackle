@@ -924,7 +924,11 @@ void TopLevel::kibitz(int numberOfPlays,
     });
     if (hintsGenerator) {
       connect(thread, &OppoThread::finished, hintsGenerator,
-              &Quackle::HintsGenerator::threadFinishedGeneratingMoves);
+              [hintsGenerator, computerPlayer]() {
+                hintsGenerator->threadFinishedGeneratingMoves(computerPlayer->id());
+              });
+      connect(thread, &OppoThread::hasAborted, hintsGenerator,
+              &Quackle::HintsGenerator::hasAborted);
     }
     connect(thread, SIGNAL(fractionDone(double, OppoThread *)), this,
             SLOT(playerFractionDone(double, OppoThread *)));

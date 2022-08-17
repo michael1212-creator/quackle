@@ -62,6 +62,8 @@ void OppoThread::run()
 	m_player->setPosition(m_position);
 	m_player->setDispatch(m_dispatch);
 	m_moves = m_player->moves(m_nmoves);
+
+        emit hasAborted(m_dispatch->shouldAbort(), m_player->id());
 }
 
 void OppoThread::signalFractionDone(double fraction)

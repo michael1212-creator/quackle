@@ -39,10 +39,14 @@ LongLetterString HintsGenerator::createAITitle(ComputerPlayer *ai) {
 
 void HintsGenerator::addAI(ComputerPlayer *ai) {
   m_ais.insert(m_ais.end(), ai);
+  m_abortedAIs[ai->id()] = true;
 }
 
 void HintsGenerator::addAIs(vector<ComputerPlayer *> ais) {
   m_ais.insert(m_ais.end(), ais.begin(), ais.end());
+  for (auto &ai : ais){
+    m_abortedAIs[ai->id()] = true;
+  }
 }
 
 LongLetterString otherAIsRankingsOfMove(struct AIArgs *args, Move &move,
@@ -58,6 +62,10 @@ void HintsGenerator::updateAIState(const Quackle::GamePosition &position) {
   for (auto ai : m_ais) {
     ai->clearCachedMoves();
     ai->setPosition(position);
+  }
+
+  for (auto &ai : m_ais){
+    m_abortedAIs[ai->id()] = true;
   }
   clearHints();
 }
@@ -333,12 +341,21 @@ void HintsGenerator::generateHints(bool forceUpdateMoves) {
   for (ComputerPlayer *ai : whitelistedAIs()) {
     if (forceUpdateMoves || ai->cachedMoves().empty()) {
       movesAs(ai);
-      threadFinishedGeneratingMoves();
+      threadFinishedGeneratingMoves(ai->id());
     }
   }
 }
 
-void HintsGenerator::threadFinishedGeneratingMoves() {
+void HintsGenerator::hasAborted(bool hasAborted, int AIid) {
+  m_abortedAIs[AIid] = hasAborted;
+}
+
+void HintsGenerator::threadFinishedGeneratingMoves(int aiID) {
+
+  if (m_abortedAIs[aiID]) {
+    return;
+  }
+
   LongLetterString appendLater;
   LongLetterString appendNow;
   bool shouldAppendNow;
