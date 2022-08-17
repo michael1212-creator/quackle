@@ -63,9 +63,7 @@ double CatchallEvaluator::equity(const GamePosition &position,
       ADD_HINT(
           (adjustment,
            ": for the location and length of word, along with the ordering "
-           "of consonants and vowels in the word. At this point of "
-           "the game, horizontal vs. vertical placement is irrelevant due "
-           "to symmetry.",
+           "of consonants and vowels in the word.",
            "  "));
     } else {
       //'favour' exchange (as opposed to word placement) on initial turn
