@@ -62,7 +62,7 @@ public:
 	// starts the thread
 	void findBestMoves(int nmoves);
 
-	void abort();
+	void abort(bool finishNowTriggered = false);
 
 	const Quackle::MoveList &moves() const;
 
@@ -89,6 +89,8 @@ private:
 	QMutex m_mutex;
 
         bool m_isPlayerCloned;
+
+        bool m_finishNowTriggered;
 };
 
 inline const bool OppoThread::isCloned() const {

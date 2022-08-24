@@ -37,7 +37,7 @@ public:
 	void setValue(int value);
 
 protected slots:
-	void cancel();
+	void cancel(bool finishNowTriggered = false);
 
 protected:
 	OppoThread *m_thread;

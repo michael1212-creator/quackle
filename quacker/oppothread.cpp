@@ -63,7 +63,10 @@ void OppoThread::run()
 	m_player->setDispatch(m_dispatch);
 	m_moves = m_player->moves(m_nmoves);
 
-        emit hasAborted(m_dispatch->shouldAbort(), m_player->id());
+        // if we were forced to abort, but not through a click of the 'finish
+        // now' button (i.e. by committing while still simulating moves)
+        emit hasAborted(m_dispatch->shouldAbort() && !m_finishNowTriggered,
+                        m_player->id());
 }
 
 void OppoThread::signalFractionDone(double fraction)
@@ -83,7 +86,7 @@ void OppoThread::setPlayer(Quackle::ComputerPlayer *player)
 {
 	if (isRunning())
 		return;
-	
+
 	m_player = player;
 }
 
@@ -105,8 +108,9 @@ const Quackle::MoveList &OppoThread::moves() const
 	return m_moves;
 }
 
-void OppoThread::abort()
+void OppoThread::abort(bool finishNowTriggered)
 {
+        m_finishNowTriggered = finishNowTriggered;
 	m_dispatch->setShouldAbort(true);
 }
 

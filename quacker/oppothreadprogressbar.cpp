@@ -19,31 +19,28 @@
 #include <QtWidgets>
 
 #include "geometry.h"
-#include "oppothreadprogressbar.h"
 #include "oppothread.h"
+#include "oppothreadprogressbar.h"
 
 OppoThreadProgressBar::OppoThreadProgressBar(OppoThread *thread)
-	: m_thread(thread)
-{
-	QHBoxLayout *layout = new QHBoxLayout(this);
-	Geometry::setupInnerLayout(layout);
+    : m_thread(thread) {
+  QHBoxLayout *layout = new QHBoxLayout(this);
+  Geometry::setupInnerLayout(layout);
 
-	m_progressBar = new QProgressBar;
-	m_progressBar->setRange(0, 100);
-	layout->addWidget(m_progressBar);
+  m_progressBar = new QProgressBar;
+  m_progressBar->setRange(0, 100);
+  layout->addWidget(m_progressBar);
 
-	m_cancelButton = new QPushButton(tr("Finish Now"));
-	connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
-	layout->addWidget(m_cancelButton);
+  m_cancelButton = new QPushButton(tr("Finish Now"));
+  connect(m_cancelButton, &QPushButton::clicked, this,
+          [this]() { this->cancel(true); });
+  layout->addWidget(m_cancelButton);
 }
 
-void OppoThreadProgressBar::setValue(int value)
-{
-	m_progressBar->setValue(value);
+void OppoThreadProgressBar::setValue(int value) {
+  m_progressBar->setValue(value);
 }
 
-void OppoThreadProgressBar::cancel()
-{
-	m_thread->abort();
+void OppoThreadProgressBar::cancel(bool finishNowTriggered) {
+  m_thread->abort(finishNowTriggered);
 }
-
