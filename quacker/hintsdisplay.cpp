@@ -47,7 +47,7 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
 
-  m_forceMovesUpdate = new QCheckBox(tr("Force move recalculation?"));
+  m_forceMovesUpdate = new QCheckBox(tr("Force move recalculation?\nThis clears the current hints\nand generates them anew next time\n'Generate Hints' is pressed."));
   m_forceMovesUpdate->setChecked(false);
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));

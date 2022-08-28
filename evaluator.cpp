@@ -105,7 +105,9 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
     if (QUACKLE_STRATEGY_PARAMETERS->hasWorths()) {
       // each letter is assigned a value for how good it is; add it to value
 
-      ADD_HINT(("Each letter is assigned a value for how 'good' it is:", "  "));
+      ADD_HINT(("Each letter is assigned a value for how 'good' it is (this "
+                "does not change between turns or games):",
+                "  "));
       for (const auto &leaveIt : leave) {
         double toAdd = QUACKLE_STRATEGY_PARAMETERS->tileWorth(leaveIt);
 
@@ -233,13 +235,11 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
   };
 
   double toAdd = vcvalues[vowels][cons];
-  ADD_HINT(
-      (toAdd,
-       ": vowel-consonant (v:c) balance of " + to_string(vowels) +
-           "v:" + to_string(cons) +
-           "c. Has range [-23.5, 2.5], with mostly negative values, and most "
-           "positive values at 1-3v:2-3c.",
-       "  "));
+  ADD_HINT((toAdd,
+            ": vowel-consonant (v:c) balance of " + to_string(vowels) +
+                "v:" + to_string(cons) +
+                "c. This is maximised around a ratio of 3v:3c.",
+            "  "));
   value += toAdd;
 
   if (value < -40) {

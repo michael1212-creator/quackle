@@ -97,7 +97,7 @@ double CatchallEvaluator::equity(const GamePosition &position,
            "this move, but the move doesn't finish the game. We want to be "
            "able to keep our options open, and having more tiles is what "
            "allows this. It also decreases the possibility of the opponent "
-           "closing the game. Has range [-8, 10]."));
+           "closing the game."));
     }
     return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
   } else {
