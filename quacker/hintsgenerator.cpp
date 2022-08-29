@@ -44,7 +44,7 @@ void HintsGenerator::addAI(ComputerPlayer *ai) {
 
 void HintsGenerator::addAIs(vector<ComputerPlayer *> ais) {
   m_ais.insert(m_ais.end(), ais.begin(), ais.end());
-  for (auto &ai : ais){
+  for (auto &ai : ais) {
     m_abortedAIs[ai->id()] = true;
   }
 }
@@ -64,13 +64,25 @@ void HintsGenerator::updateAIState(const Quackle::GamePosition &position) {
     ai->setPosition(position);
   }
 
-  for (auto &ai : m_ais){
+  for (auto &ai : m_ais) {
     m_abortedAIs[ai->id()] = true;
   }
   clearHints();
 }
 
 void HintsGenerator::positionChanged(const Quackle::GamePosition &position) {}
+
+LongLetterString staticPreLoop(struct AIArgs *args);
+LongLetterString staticLoopBody(struct AIArgs *, Move &move, int i);
+LongLetterString staticPostLoop(struct AIArgs *args);
+
+LongLetterString greedyPreLoop(struct AIArgs *args);
+LongLetterString greedyLoopBody(struct AIArgs *args, Move &move, int i);
+LongLetterString greedyPostLoop(struct AIArgs *args);
+
+LongLetterString champPreLoop(struct AIArgs *args);
+LongLetterString champLoopBody(struct AIArgs *args, Move &move, int i);
+LongLetterString champPostLoop(struct AIArgs *args);
 
 LongLetterString
 HintsGenerator::committed(const Quackle::GamePosition &position,
@@ -80,6 +92,7 @@ HintsGenerator::committed(const Quackle::GamePosition &position,
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   struct AIArgs aiargs = {NULL, NULL, whitelistedAIs()};
   otherAiRankings += otherAIsRankingsOfMove(&aiargs, move);
+  otherAiRankings += staticLoopBody(NULL, move, -1);
 
   updateAIState(position);
 
@@ -159,10 +172,6 @@ LongLetterString collectHints(struct AIArgs *args) {
   return ret;
 }
 
-LongLetterString staticPreLoop(struct AIArgs *args);
-LongLetterString staticLoopBody(struct AIArgs *args, Move &move, int i);
-LongLetterString staticPostLoop(struct AIArgs *args);
-
 #define THEORETICAL_MAX_SCORE 1778
 #define HIGHEST_SCORE 365
 
@@ -188,14 +197,14 @@ LongLetterString staticPreLoop(struct AIArgs *args) {
   return ret;
 }
 
-LongLetterString staticLoopBody(struct AIArgs *args, Move &move, int i) {
+LongLetterString staticLoopBody(struct AIArgs *, Move &move, int i) {
   LongLetterString ret = "";
   LongLetterString moveAsStr =
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   char buf[16];
   TWO_DP(move.equity);
-  ret += to_string(i + 1) + ": " + moveAsStr + ", has 'valuation' (heuristic score) " + buf +
-         ", coming from:\n";
+  ret += (i < 0 ? "" : (to_string(i + 1) + ": ")) + moveAsStr +
+         ", has 'valuation' (heuristic score) " + buf + ", coming from:\n";
   ret += move.hint()->hint("  ");
 
   return ret;
@@ -217,10 +226,6 @@ LongLetterString staticPostLoop(struct AIArgs *args) {
 
   return ret;
 }
-
-LongLetterString greedyPreLoop(struct AIArgs *args);
-LongLetterString greedyLoopBody(struct AIArgs *args, Move &move, int i);
-LongLetterString greedyPostLoop(struct AIArgs *args);
 
 struct GreedyArgs {
   struct GenericArgs genericArgs = {greedyPreLoop, greedyLoopBody,
@@ -267,10 +272,6 @@ LongLetterString greedyPostLoop(struct AIArgs *args) {
 
   return ret;
 }
-
-LongLetterString champPreLoop(struct AIArgs *args);
-LongLetterString champLoopBody(struct AIArgs *args, Move &move, int i);
-LongLetterString champPostLoop(struct AIArgs *args);
 
 struct ChampArgs {
   struct GenericArgs genericArgs = {champPreLoop, champLoopBody, champPostLoop,

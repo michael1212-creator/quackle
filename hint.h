@@ -30,8 +30,11 @@ public:
 private:
   Quackle::LongLetterString m_hint = "";
   vector<Message> m_messages;
+  Quackle::LongLetterString m_eol = "\n";
+  Quackle::LongLetterString m_indentation = "";
 
-  // in case we want to extend the hints, the way Championship Player does
+  //in case we want to extend the hints, the way Championship Player does
+  // for Static
   void messagesChanged();
 };
 

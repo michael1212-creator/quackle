@@ -43,12 +43,12 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
 
 
   m_genChampHints = new QCheckBox(
-      tr("Generate Championship Player hints?\nThis may take some time.\nPress 'Generate Hints' to see effect."));
+      tr("Generate Championship Player\nhints? This may take some time.\nPress 'Generate Hints' to\nsee effect."));
   m_genChampHints->setChecked(false);
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
 
-  m_forceMovesUpdate = new QCheckBox(tr("Force hint recalculation?\nThis clears the current hints\nand generates them anew next time\n'Generate Hints' is pressed."));
+  m_forceMovesUpdate = new QCheckBox(tr("Force hint regeneration?\nThis clears the current cached hints\nand generates them anew next\ntime 'Generate Hints' is pressed."));
   m_forceMovesUpdate->setChecked(false);
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));

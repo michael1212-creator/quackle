@@ -105,8 +105,8 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
     if (QUACKLE_STRATEGY_PARAMETERS->hasWorths()) {
       // each letter is assigned a value for how good it is; add it to value
 
-      ADD_HINT(("Each letter is assigned a value for how 'good' it is (this "
-                "does not change between turns or games):",
+      ADD_HINT(("Each letter is assigned a value for how 'good' it is (these "
+                "do not change between turns or games):",
                 "  "));
       for (const auto &leaveIt : leave) {
         double toAdd = QUACKLE_STRATEGY_PARAMETERS->tileWorth(leaveIt);

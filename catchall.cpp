@@ -112,7 +112,7 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   Hint *hint = move.hint();
   Rack leave = position.currentPlayer().rack() - move;
 
-  ADD_HINT(("We know the exact rack of the opponent:"));
+  ADD_HINT(("We know the exact rack of the opponent (it is exactly the unseen tiles):"));
   if (leave.empty()) {
     // the move ends the game
     ADD_HINT(("Because the this move would end the game:", "  "));
@@ -127,7 +127,8 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
         char buf[16];
         TWO_DP(toAdd);
         ADD_HINT((2 * toAdd,
-                  ": 2*" + LongLetterString(buf) + " for " + it->name() +
+                  ": 2*" + LongLetterString(buf) +
+                      " (2 * sum of opponent's rack points) for " + it->name() +
                       "'s rack score.",
                   "  "));
         deadwood += toAdd;
@@ -147,9 +148,11 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   ADD_HINT(
       (-8.00 - 2.61 * leave.score(),
        ": " + LongLetterString("-8.00-2.61*") + to_string(leave.score()) +
-           ": This move would not end the game, meaning the opponent might "
+           " (" + to_string(leave.score()) +
+           " is the sum of our rack leave points): This move would not end "
+           "the game, meaning the opponent might "
            "have a chance to do so. This can increase their score "
-           "proportionally to our remaining rack score.",
+           "linearly (with precomputed constants) to our remaining rack score.",
        "  "));
   return -8.00 - 2.61 * leave.score();
 }
