@@ -194,7 +194,7 @@ LongLetterString staticLoopBody(struct AIArgs *args, Move &move, int i) {
       QuackleIO::Util::moveToDetailedString(move).toStdString();
   char buf[16];
   TWO_DP(move.equity);
-  ret += to_string(i + 1) + ": " + moveAsStr + ", has valuation " + buf +
+  ret += to_string(i + 1) + ": " + moveAsStr + ", has 'valuation' (heuristic score) " + buf +
          ", coming from:\n";
   ret += move.hint()->hint("  ");
 

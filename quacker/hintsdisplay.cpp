@@ -36,18 +36,19 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
 
   m_textEdit = new QTextEdit;
   m_textEdit->setReadOnly(true);
-  m_textEdit->setFontFamily("Courier");
+  m_textEdit->setFontFamily(QString("Helvetica"));
   m_textEdit->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
   m_textEdit->setPlainText("No hints to give."
                            "\nStart a game to be able to generate hints!");
 
+
   m_genChampHints = new QCheckBox(
-      tr("Generate Championship Player hints?\nThis may take some time."));
+      tr("Generate Championship Player hints?\nThis may take some time.\nPress 'Generate Hints' to see effect."));
   m_genChampHints->setChecked(false);
   connect(m_genChampHints, SIGNAL(stateChanged(int)), this,
           SLOT(genChampHintsChanged()));
 
-  m_forceMovesUpdate = new QCheckBox(tr("Force move recalculation?\nThis clears the current hints\nand generates them anew next time\n'Generate Hints' is pressed."));
+  m_forceMovesUpdate = new QCheckBox(tr("Force hint recalculation?\nThis clears the current hints\nand generates them anew next time\n'Generate Hints' is pressed."));
   m_forceMovesUpdate->setChecked(false);
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));

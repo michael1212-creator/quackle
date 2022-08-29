@@ -63,6 +63,7 @@ TopLevel::TopLevel(QWidget *parent)
   QCoreApplication::setOrganizationName("Quackle.org");
   QCoreApplication::setOrganizationDomain("quackle.org");
   QCoreApplication::setApplicationName("Quackle");
+  this->setStyleSheet("QSplitter::handle{background: light grey;}");
 
   qRegisterMetaType<OppoThread *>("OppoThread*");
 
@@ -2235,12 +2236,12 @@ void TopLevel::hints() {
       "possible (or pass if none remain in the bag). It does not think "
       "ahead.</li>"
       "<li>Static Player: As this AI generates moves, it gives each move a "
-      "'valuation' or 'equity' score. This is an arbitrary score, and the "
+      "'valuation' or 'equity' score. This is an arbitrary (heuristic) score, and the "
       "higher, the better. It is allowed to be negative. This score comes "
       "from multiple factors, but the main two are"
       " the number of points the move itself gives us, and how 'good' the"
-      " rack leave (i.e. the letter tiles we have left after the play) is. "
-      "It does not think ahead.</li>"
+      " <b>RACK LEAVE</b> (i.e. the letter tiles we have left after the move) "
+      "is. It does not think ahead.</li>"
       "<li>Championship Player: This AI is build on top of the Static"
       " Player AI. Firstly, it generates moves the same way "
       "Static does. Afterwards, it takes a set number of the top moves "
