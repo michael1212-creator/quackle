@@ -36,7 +36,7 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
 
   m_textEdit = new QTextEdit;
   m_textEdit->setReadOnly(true);
-  m_textEdit->setFontFamily(QString("Helvetica"));
+  m_textEdit->setFontFamily(QString("Arial"));
   m_textEdit->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
   m_textEdit->setPlainText("No hints to give."
                            "\nStart a game to be able to generate hints!");
