@@ -418,9 +418,7 @@ void GamePosition::makeMove(const Move &move, bool maintainBoard) {
 
 void GamePosition::scoreMove(Move &move) {
   move.score = calculateScore(move);
-
-  // TODO mm: This line below seems unnecessary
-//  move.equity = calculateEquity(move);
+  move.equity = calculateEquity(move);
 }
 
 void GamePosition::ensureBoardIsPreparedForAnalysis() {

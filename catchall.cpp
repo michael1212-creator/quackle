@@ -27,6 +27,11 @@ using namespace Quackle;
 
 double CatchallEvaluator::equity(const GamePosition &position,
                                  const Move &move) const {
+  if (move.equityCalculated) {
+    return move.equity;
+  }
+  ((Move &)move).equityCalculated = true;
+
   Hint *hint = move.hint();
   if (position.board().isEmpty()) { // starting player
     ADD_HINT(("Because the board is currently empty:"));

@@ -66,6 +66,7 @@ public:
   int effectiveScore() const;
 
   double equity = 0.;
+  bool equityCalculated = false;
   double win = 0.; // between 0 and 1 inclusive
   double possibleWin = 0.;
 
