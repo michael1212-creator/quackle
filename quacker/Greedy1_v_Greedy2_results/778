@@ -1,0 +1,33 @@
+#character-encoding UTF-8
+#player1 Greedy1 Greedy1
+#player2 Greedy2 Greedy2
+>Greedy1: NNNOOOP 8H POON +6 6
+>Greedy2: AAIIOTT K4 TITA.IA +14 14
+>Greedy1: ALNNOPS J5 SAL.OP +36 42
+>Greedy2: EJORRSU L1 JUROR +47 61
+>Greedy1: AGGNNNO 1L .AGG +39 81
+>Greedy2: CEILMRS H4 CRIM.LES +67 128
+>Greedy1: CNNNOOY L10 CONY +25 106
+>Greedy2: ?EIMSTT 11C METrI.TS +77 205
+>Greedy1: EHNNOQY C9 HY.EN +34 140
+>Greedy2: ?EERRTU O1 .EsTURER +77 282
+>Greedy1: DDNOQTZ 12B Z.D +32 172
+>Greedy2: AADEIOO B12 .EDA +30 312
+>Greedy1: DEINOQT 15A Q.ID +48 220
+>Greedy2: AFILOOU M11 FOOL +31 343
+>Greedy1: AEENOTW N12 TWAE +30 250
+>Greedy2: AAEIIKU O11 KAE +23 366
+>Greedy1: EEGLNOU 14D EUGENOL +67 317
+>Greedy2: ABIIIUX 15H AX +42 408
+>Greedy1: ABDEHRV 13G HAVE +49 366
+>Greedy2: BIIINSU B7 SNUB +30 438
+>Greedy1: BDEFNRV M9 BE.... +22 388
+>Greedy2: IIIIW G13 ..W +22 460
+>Greedy1: DFNRV 15N .F +15 403
+>Greedy2: IIII 8A I. +6 466
+>Greedy1: DNRV 10J ....D +14 417
+>Greedy2: III 9M .I +7 473
+>Greedy1: NRV 7J ..V +6 423
+>Greedy2: II 7B .I +3 476
+>Greedy1: NR 2K R.N +5 428
+>Greedy1:  (I) +2 430

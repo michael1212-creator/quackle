@@ -1,0 +1,31 @@
+#character-encoding UTF-8
+#player1 Greedy1 Greedy1
+#player2 Greedy2 Greedy2
+>Greedy1: DHMMOPT 8H HMM +10 10
+>Greedy2: AGHINOU 7I HONGI +29 29
+>Greedy1: ADEOOPT 6H DOPE +36 46
+>Greedy2: AENNOUZ 5K ZONAE +52 81
+>Greedy1: ACCEGOT O5 .COTAGE +30 76
+>Greedy2: AINRTUW H1 INWAR. +33 114
+>Greedy1: CDFRTVY L5 .R.Y +20 96
+>Greedy2: ADELNTU N10 ADULT +24 138
+>Greedy1: CDEFTTV O14 EF +17 113
+>Greedy2: AEIILNR H8 .AIRLINE +86 224
+>Greedy1: ?CDITTV 11F Ve.DICT +24 137
+>Greedy2: EEIOPQS G13 QI +44 268
+>Greedy1: BEIINRT 3G T.INIER +24 161
+>Greedy2: AEEOPST 12L OP.S +30 298
+>Greedy1: ABOOSUX 2G U.BOX +35 196
+>Greedy2: ADEEEKT F14 KA +33 331
+>Greedy1: AGIORSS I11 .OSAS +32 228
+>Greedy2: DEEEETW 13K WEE. +25 356
+>Greedy1: GIORSTY 15C GYR.S.. +27 255
+>Greedy2: ADEENTU D11 NEED. +18 374
+>Greedy1: ?FILLOT 9A FlOTILL. +62 317
+>Greedy2: AEERTUV A9 .EATURE +33 407
+>Greedy1: ABJU J10 J.B +33 350
+>Greedy2: V -  +0 407
+>Greedy1: AU M12 ..A +8 358
+>Greedy2: V -  +0 407
+>Greedy1: U F9 .U. +8 366
+>Greedy1:  (V) +8 374

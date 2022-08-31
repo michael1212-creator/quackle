@@ -1,0 +1,40 @@
+#character-encoding UTF-8
+#player1 Greedy2 Greedy2
+#player2 Greedy1 Greedy1
+>Greedy2: EEGIILR 8D GIRLIE +9 9
+>Greedy1: AADEOSU 9D ODEA +17 17
+>Greedy2: AAAEIUY 7H AYE +21 30
+>Greedy1: AADDISU 6I ADDS +23 40
+>Greedy2: ?AAAIUY J6 ..rAY +23 53
+>Greedy1: AGIILTU K9 GAULT +20 60
+>Greedy2: AAISSUV L9 ASSAI +28 81
+>Greedy1: AEIIIOW M12 WE +22 82
+>Greedy2: ENORTUV L1 VOTER. +26 107
+>Greedy1: AIIIIOR 1L .AIR +21 103
+>Greedy2: ACMNNQU 10B QUA +36 143
+>Greedy1: HIIINOT 11B INTO +26 129
+>Greedy2: BCMNNNV 2K C.NN +18 161
+>Greedy1: ?EHIINO A11 pHONE +37 166
+>Greedy2: BEMNRTV E4 VERB.. +24 185
+>Greedy1: CEIIJST 4C JI.IEST +36 202
+>Greedy2: IIMNOOT 3D TOOM +33 218
+>Greedy1: CEEFNOU B13 FUN +23 225
+>Greedy2: IIKNOTX N8 TOXIN +35 253
+>Greedy1: CEEEOPZ O7 ZEP +52 277
+>Greedy2: EHIKPRU 2F KEPI +42 295
+>Greedy1: BCEEGOW 1H OBE +31 308
+>Greedy2: DHLMRRU 14M DUH +21 316
+>Greedy1: CEFGLW K4 WE. +23 331
+>Greedy2: LMRR O14 .M +21 337
+>Greedy1: CFGL 13A ..F +18 349
+>Greedy2: LRR 10I R... +7 344
+>Greedy1: CGL F8 ..C +11 360
+>Greedy2: LR 5K ..R +3 347
+>Greedy1: GL 15A ..G +4 364
+>Greedy2: L -  +0 347
+>Greedy1: L -  +0 364
+>Greedy2: L -  +0 347
+>Greedy1: L -  +0 364
+>Greedy2: L -  +0 347
+>Greedy1: L -  +0 364
+>Greedy1: L (L) +-1 363

@@ -12,6 +12,7 @@ if DEBUG:
 
 dirs_and_names = [
     ("Static1_v_Static2_results/", "Static1", "Static2"),
+    ("Greedy1_v_Greedy2_results/", "Greedy1", "Greedy2"),
     ("Champ_v_Greedy_results/", "Champ", "Greedy"),
     ("Champ1_v_Champ2_results/", "Champ1", "Champ2"),
     ("Static_v_Champ_results/", "Champ", "Static"),
