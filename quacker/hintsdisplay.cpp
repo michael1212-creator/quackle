@@ -54,25 +54,30 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
           SLOT(genChampHintsChanged()));
 
   m_forceMovesUpdate = new QCheckBox(
-      tr("Force hint regeneration?\nThis clears the currently cached hints."));
-  m_forceMovesUpdate->setChecked(false);
+      tr("Force hint regeneration? This\nclears the currently cached hints."));
+  m_forceMovesUpdate->setChecked(true);
 
   m_genHintsBtn = new QPushButton(tr("Generate Hints"));
   m_genHintsBtn->setEnabled(false);
   connect(m_genHintsBtn, SIGNAL(clicked()), this, SLOT(genHints()));
   genChampHintsChanged();
 
+  tickBoxes->addStretch(1);
   tickBoxes->addWidget(m_genChampHints);
   tickBoxes->addWidget(m_forceMovesUpdate);
-  tickBoxes->setStretchFactor(m_genChampHints, 1);
-  tickBoxes->setStretchFactor(m_forceMovesUpdate, 1);
+  tickBoxes->addStretch(1);
+  tickBoxes->setStretchFactor(m_genChampHints, 2);
+  tickBoxes->setStretchFactor(m_forceMovesUpdate, 2);
 
+  buttonLayout->addStretch(1);
   buttonLayout->addWidget(m_genHintsBtn);
+  buttonLayout->setStretchFactor(m_genHintsBtn, 1);
   buttonLayout->setStretchFactor(interactiveButtonLayout, 1);
 
   QLabel *buttonLabel = new QLabel(tr("Press 'Generate Hints' to see effect of toggling tickboxes."));
   buttonLabel->setBuddy(m_genHintsBtn);
   buttonLayout->addWidget(buttonLabel);
+  buttonLayout->addStretch(1);
   buttonLayout->setStretchFactor(buttonLabel, 5);
 
   layout->addWidget(interactiveTickBoxes);

@@ -94,7 +94,7 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
         return QUACKLE_STRATEGY_PARAMETERS->superleave(alphabetized);
   */
 
-  ADD_HINT(("\nWe now look at our rack leave (" +
+  ADD_HINT(("\nWe now look at our rack leave (leftover tiles - " +
             QUACKLE_ALPHABET_PARAMETERS->userVisible(leave) + ")."));
 
   double value = 0;
@@ -105,9 +105,10 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
     if (QUACKLE_STRATEGY_PARAMETERS->hasWorths()) {
       // each letter is assigned a value for how good it is; add it to value
 
-      ADD_HINT(("Each letter is assigned a value for how 'good' it is (these "
-                "do not change between turns or games):",
+      ADD_HINT(("Each letter, duplicate letters and two unique letters factor "
+                "into the valuation calculation. These are always the same for the same letters:",
                 "  "));
+      ADD_HINT(("Single letters:", "  "));
       for (const auto &leaveIt : leave) {
         double toAdd = QUACKLE_STRATEGY_PARAMETERS->tileWorth(leaveIt);
 
@@ -125,8 +126,7 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
         if (alphabetized[i] == alphabetized[i + 1]) {
           if (!hintAdded) {
 
-            ADD_HINT(("Duplicate letters have values for how 'good' they are:",
-                      "  "));
+            ADD_HINT(("Duplicate letters:", "  "));
             hintAdded = true;
           }
           double toAdd = QUACKLE_STRATEGY_PARAMETERS->syn2(alphabetized[i],
@@ -142,9 +142,8 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
       }
       if (!hintAdded) {
 
-        ADD_HINT(("Duplicate letters have values for how 'good' they are. "
-                  "However, the rack leave from this move has no duplicates.",
-                  "  "));
+        ADD_HINT(
+            ("The rack leave from this move has no duplicate letters.", "  "));
       }
     }
 
@@ -176,7 +175,7 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
       }
 
       if (numberOfSynergies > 1) {
-        ADD_HINT((synergy, "", "  Total synergy = "));
+        ADD_HINT((synergy, "", "  Total (two letter) synergy = "));
       }
 
       // letters with a worth <-5.5 are considered bad; does the player hold

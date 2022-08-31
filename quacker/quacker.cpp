@@ -2005,7 +2005,8 @@ void TopLevel::createWidgets() {
   brbSplitter->addWidget(m_brb);
   m_brb->split(brbSplitter, bhSplitter, this);
 
-  m_splitter->setStretchFactor(1, 4);
+  m_splitter->setStretchFactor(0, 100);
+  m_splitter->setStretchFactor(1, 1);
 
   m_listerDialog = new ListerDialog(this, "quackle", tr("Quackle"),
                                     ListerDialog::NothingToReturn);
