@@ -31,8 +31,9 @@ HintsGenerator::~HintsGenerator() {
 LongLetterString HintsGenerator::createAITitle(ComputerPlayer *ai) {
   LongLetterString ret = "";
 
+  ret += "====================================\n";
   ret += "According to " + ai->name() + "\n";
-  ret += "-----------------------------\n";
+  ret += "====================================\n";
 
   return ret;
 }

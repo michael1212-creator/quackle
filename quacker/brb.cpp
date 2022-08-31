@@ -56,10 +56,10 @@ BRB::~BRB() {}
 View *BRB::getBoardView() const { return m_boardDisplay; }
 
 void BRB::split(QSplitter *brbSplitter, QSplitter *bhSplitter, TopLevel *toplevel) {
-  QWidget *topRightSide = new QWidget;
-  QVBoxLayout *topRightVerticalLayout = new QVBoxLayout(topRightSide);
-  QWidget *botRightSide = new QWidget;
-  QVBoxLayout *botRightVerticalLayout = new QVBoxLayout(botRightSide);
+  QWidget *leftSideBag = new QWidget;
+  QVBoxLayout *topRightVerticalLayout = new QVBoxLayout(leftSideBag);
+  QWidget *rightSideHints = new QWidget;
+  QVBoxLayout *botRightVerticalLayout = new QVBoxLayout(rightSideHints);
 
   Geometry::setupInnerLayout(topRightVerticalLayout);
   Geometry::setupInnerLayout(botRightVerticalLayout);
@@ -70,8 +70,8 @@ void BRB::split(QSplitter *brbSplitter, QSplitter *bhSplitter, TopLevel *topleve
   m_hintsDisplay = m_widgetFactory->createHintsDisplay(toplevel);
   botRightVerticalLayout->addWidget(m_hintsDisplay);
 
-  bhSplitter->addWidget(topRightSide);
-  bhSplitter->addWidget(botRightSide);
+  bhSplitter->addWidget(leftSideBag);
+  bhSplitter->addWidget(rightSideHints);
 
   brbSplitter->addWidget(bhSplitter);
 

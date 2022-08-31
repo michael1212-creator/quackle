@@ -2000,7 +2000,7 @@ void TopLevel::createWidgets() {
 
   m_splitter->addWidget(leftSide);
   auto brbSplitter = new QSplitter(Qt::Horizontal, this);
-  auto bhSplitter = new QSplitter(Qt::Vertical, this);
+  auto bhSplitter = new QSplitter(Qt::Horizontal, this);
   m_splitter->addWidget(brbSplitter);
   brbSplitter->addWidget(m_brb);
   m_brb->split(brbSplitter, bhSplitter, this);
