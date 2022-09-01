@@ -121,7 +121,7 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
 
   ADD_HINT(("We know the exact rack of the opponent (it is exactly the unseen "
             "tiles):"));
-  ADD_HINT(("<div style = \"margin-left: 10px\">"));
+  ADD_HINT(("<div style = \"margin-left: 16px\">"));
   if (leave.empty()) {
     // the move ends the game
     ADD_HINT(("Because the this move would end the game:"));

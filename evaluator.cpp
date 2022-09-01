@@ -56,7 +56,7 @@ double ScorePlusLeaveEvaluator::equity(const GamePosition &position,
   Hint *hint = move.hint();
   auto toAdd = move.effectiveScore();
 
-  ADD_HINT((toAdd, ": for the score the move gives us."));
+  ADD_HINT((toAdd, ": for the score the move gives us.</div>", "<div style=\"margin-left:16px\">"));
   return playerConsideration(position, move) +
          sharedConsideration(position, move) /*= 0*/ + toAdd;
 }
@@ -67,7 +67,7 @@ double ScorePlusLeaveEvaluator::playerConsideration(
   if (leave.empty()) {
     Hint *hint = move.hint();
     ADD_HINT(
-        ("<br/>As this move is a bingo, there is no rack leave to evaluate."));
+        ("<br/><br/>As this move is a bingo, there is no rack leave to evaluate.<br/><br/>"));
     return 0;
   }
   return leaveValue(leave, move.hint());
@@ -98,7 +98,7 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
 
   double value = 0;
 
-  ADD_HINT(("<div style = \"margin-left: 10px\">"));
+  ADD_HINT(("<div style = \"margin-left: 16px\">"));
 
   if (!leave.empty()) {
     LetterString uniqleave;
@@ -204,7 +204,7 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
       if ((synergy > 3.0) && !holding_bad_tile) {
         double toAdd = 1.5 * (synergy - 3.0);
         ADD_HINT((toAdd, " = 1.5*(synergy-3): our bonus valuation.</div>",
-                  "<div style = \"margin-left: 10px\">"));
+                  "<div style = \"margin-left: 16px\">"));
         synergy += toAdd;
       }
 

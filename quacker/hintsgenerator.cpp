@@ -169,9 +169,8 @@ LongLetterString collectHints(struct AIArgs *args) {
     }
   }
 
-  ret += "<p>";
+  ret += "<br/>";
   ret += customArgs.postLoop(args);
-  ret += "</p>";
 
   return ret;
 }
@@ -208,7 +207,7 @@ LongLetterString staticLoopBody(struct AIArgs *, Move &move, int i) {
   char buf[16];
   TWO_DP(move.equity);
   ret += (i < 0 ? "" : (to_string(i + 1) + ": ")) + moveAsStr +
-         ", has 'valuation' (heuristic score) " + buf + ", coming from:<br/>";
+         ", has 'valuation' (heuristic score) " + buf + ", coming from:";
   ret += move.hint()->hint("", "");
 
   return ret;
