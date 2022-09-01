@@ -74,7 +74,8 @@ HintsDisplay::HintsDisplay(TopLevel *toplevel, QWidget *parent) : View(parent) {
   buttonLayout->setStretchFactor(m_genHintsBtn, 1);
   buttonLayout->setStretchFactor(interactiveButtonLayout, 1);
 
-  QLabel *buttonLabel = new QLabel(tr("Press 'Generate Hints' to see effect of toggling tickboxes."));
+  QLabel *buttonLabel = new QLabel(
+      tr("Press 'Generate Hints' to see effect of toggling tickboxes."));
   buttonLabel->setBuddy(m_genHintsBtn);
   buttonLayout->addWidget(buttonLabel);
   buttonLayout->addStretch(1);
@@ -148,7 +149,8 @@ void HintsDisplay::showHints(const Quackle::LongLetterString &hints) {
   if (lineWidth > maxLineWidth)
     maxLineWidth = lineWidth;
 
-  m_textEdit->setPlainText(text);
+  m_textEdit->setHtml(text);
+//  m_textEdit->setPlainText(text);
 
   const int minimumMaxLineWidth = 32;
   if (maxLineWidth < minimumMaxLineWidth)

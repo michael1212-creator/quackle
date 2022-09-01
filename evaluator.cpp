@@ -44,7 +44,7 @@ double Evaluator::sharedConsideration(const GamePosition &position,
   return 0;
 }
 
-double Evaluator::leaveValue(const LetterString &leave) const {
+double Evaluator::leaveValue(const LetterString &leave, Hint *hint) const {
   (void)leave;
   return 0;
 }
@@ -61,14 +61,13 @@ double ScorePlusLeaveEvaluator::equity(const GamePosition &position,
          sharedConsideration(position, move) /*= 0*/ + toAdd;
 }
 
-double
-ScorePlusLeaveEvaluator::playerConsideration(const GamePosition &position,
-                                             const Move &move) const {
+double ScorePlusLeaveEvaluator::playerConsideration(
+    const GamePosition &position, const Move &move) const {
   auto leave = (position.currentPlayer().rack() - move).tiles();
   if (leave.empty()) {
     Hint *hint = move.hint();
     ADD_HINT(
-        ("\nAs this move is a bingo, there is no rack leave to evaluate."));
+        ("<br/>As this move is a bingo, there is no rack leave to evaluate."));
     return 0;
   }
   return leaveValue(leave, move.hint());
@@ -94,10 +93,12 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
         return QUACKLE_STRATEGY_PARAMETERS->superleave(alphabetized);
   */
 
-  ADD_HINT(("\nWe now look at our rack leave (leftover tiles - " +
+  ADD_HINT(("<br/>We now look at our rack leave (leftover tiles - " +
             QUACKLE_ALPHABET_PARAMETERS->userVisible(leave) + ")."));
 
   double value = 0;
+
+  ADD_HINT(("<div style = \"margin-left: 10px\">"));
 
   if (!leave.empty()) {
     LetterString uniqleave;
@@ -106,17 +107,20 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
       // each letter is assigned a value for how good it is; add it to value
 
       ADD_HINT(("Each letter, duplicate letters and two unique letters factor "
-                "into the valuation calculation. These are always the same for the same letters:",
-                "  "));
-      ADD_HINT(("Single letters:", "  "));
+                "into the valuation calculation. These are always the same for "
+                "the same letters:"));
+      ADD_HINT(("Single letters:"));
+      ADD_HINT(("<ul>"));
       for (const auto &leaveIt : leave) {
         double toAdd = QUACKLE_STRATEGY_PARAMETERS->tileWorth(leaveIt);
 
-        ADD_HINT((toAdd,
-                  ": " + QUACKLE_ALPHABET_PARAMETERS->userVisible(leaveIt),
-                  "    "));
+        ADD_HINT(
+            (toAdd,
+             ": " + QUACKLE_ALPHABET_PARAMETERS->userVisible(leaveIt) + "</li>",
+             "<li>"));
         value += toAdd;
       }
+      ADD_HINT(("</ul>"));
     }
 
     if (QUACKLE_STRATEGY_PARAMETERS->hasSyn2()) {
@@ -126,7 +130,8 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
         if (alphabetized[i] == alphabetized[i + 1]) {
           if (!hintAdded) {
 
-            ADD_HINT(("Duplicate letters:", "  "));
+            ADD_HINT(("Duplicate letters:"));
+            ADD_HINT(("<ul>"));
             hintAdded = true;
           }
           double toAdd = QUACKLE_STRATEGY_PARAMETERS->syn2(alphabetized[i],
@@ -135,15 +140,16 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
           ADD_HINT((
               toAdd,
               ": " + QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i]) +
-                  QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i]),
-              "    "));
+                  QUACKLE_ALPHABET_PARAMETERS->userVisible(alphabetized[i]) +
+                  "</li>",
+              "<li>"));
           value += toAdd;
         }
       }
       if (!hintAdded) {
-
-        ADD_HINT(
-            ("The rack leave from this move has no duplicate letters.", "  "));
+        ADD_HINT(("The rack leave from this move has no duplicate letters."));
+      } else {
+        ADD_HINT(("</ul>"));
       }
     }
 
@@ -159,7 +165,8 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
       double synergy = 0;
       // consider the value add of each pair of unique letters
       int numberOfSynergies = 0;
-      ADD_HINT(("Two letter synergies:", "  "));
+      ADD_HINT(("Two letter synergies:"));
+      ADD_HINT(("<ul>"));
       for (unsigned int i = 0; i < uniqleave.length() - 1; ++i) {
         for (unsigned int j = i + 1; j < uniqleave.length(); ++j) {
           double toAdd =
@@ -167,15 +174,17 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
           ADD_HINT((toAdd,
                     ": " +
                         QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[i]) +
-                        QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[j]),
-                    "    "));
+                        QUACKLE_ALPHABET_PARAMETERS->userVisible(uniqleave[j]) +
+                        "</li>",
+                    "<li>"));
           synergy += toAdd;
           numberOfSynergies++;
         }
       }
+      ADD_HINT(("</ul>"));
 
       if (numberOfSynergies > 1) {
-        ADD_HINT((synergy, "", "  Total (two letter) synergy = "));
+        ADD_HINT((synergy, "", "Total (two letter) synergy = "));
       }
 
       // letters with a worth <-5.5 are considered bad; does the player hold
@@ -189,13 +198,13 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
 
       ADD_HINT(("If we have no letters which are very bad (-5.5 or "
                 "less), and good synergy (3 or more) of non-duplicate letters, "
-                "we can get a bonus.",
-                "  "));
+                "we can get a bonus."));
       // if there is no bad letter and the pairs of letters we have are good
       //  (synergise well), then add extra value to the leave rack
       if ((synergy > 3.0) && !holding_bad_tile) {
         double toAdd = 1.5 * (synergy - 3.0);
-        ADD_HINT((toAdd, " = 1.5*(synergy-3): our bonus valuation.", "    "));
+        ADD_HINT((toAdd, " = 1.5*(synergy-3): our bonus valuation.</div>",
+                  "<div style = \"margin-left: 10px\">"));
         synergy += toAdd;
       }
 
@@ -203,8 +212,7 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
     } else if (QUACKLE_STRATEGY_PARAMETERS->hasSyn2()) {
       assert(uniqleave.length() == 1);
       ADD_HINT(("It is possible to gain value from two letter synergies, "
-                "however our rack leave consists of only one letter.",
-                "  "));
+                "however our rack leave consists of only one letter."));
     }
   }
 
@@ -234,12 +242,12 @@ double ScorePlusLeaveEvaluator::leaveValue(const LetterString &leave,
   };
 
   double toAdd = vcvalues[vowels][cons];
-  ADD_HINT((toAdd,
-            ": vowel-consonant (v:c) balance of " + to_string(vowels) +
-                "v:" + to_string(cons) +
-                "c. This is maximised around a ratio of 3v:3c.",
-            "  "));
+  ADD_HINT((toAdd, ": vowel-consonant (v:c) balance of " + to_string(vowels) +
+                       "v:" + to_string(cons) +
+                       "c. This is maximised around a ratio of 3v:3c."));
   value += toAdd;
+
+  ADD_HINT(("</div>"));
 
   if (value < -40) {
     ADD_HINT(("-40 is the lowest we would ever need to consider."));

@@ -6,13 +6,15 @@
 #include "alphabetparameters.h"
 #include "message.h"
 
+#define EOL ""
+
 class Hint {
 public:
   Hint();
   ~Hint();
 
   Quackle::LongLetterString hint(Quackle::LongLetterString indentation = "",
-                                 Quackle::LongLetterString eol = "\n");
+                                 Quackle::LongLetterString eol = EOL);
 
   void addMsg(Quackle::LongLetterString msg,
               Quackle::LongLetterString indent = "");
@@ -30,7 +32,7 @@ public:
 private:
   Quackle::LongLetterString m_hint = "";
   vector<Message> m_messages;
-  Quackle::LongLetterString m_eol = "\n";
+  Quackle::LongLetterString m_eol = EOL;
   Quackle::LongLetterString m_indentation = "";
 
   //in case we want to extend the hints, the way Championship Player does

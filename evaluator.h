@@ -43,7 +43,7 @@ public:
 	virtual double playerConsideration(const GamePosition &position, const Move &move) const;
 	virtual double sharedConsideration(const GamePosition &position, const Move &move) const;
 
-	virtual double leaveValue(const LetterString &leave) const;
+	virtual double leaveValue(const LetterString &leave, Hint *hint = 0) const;
 };
 
 class ScorePlusLeaveEvaluator : public Evaluator

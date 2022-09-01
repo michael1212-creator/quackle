@@ -210,7 +210,7 @@ public:
   double calculatePlayerConsideration(const Move &move);
 
   // just get me the leave value, please
-  double leaveValue(const LetterString &leave) const;
+  double leaveValue(const LetterString &leave, Hint *hint = 0) const;
 
   // 3. other considerations like board geometry
   double calculateSharedConsideration(const Move &move);

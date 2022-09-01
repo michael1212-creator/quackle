@@ -25,8 +25,7 @@
 
 using namespace Quackle;
 
-double CatchallEvaluator::equity(const GamePosition &position,
-                                 const Move &move) const {
+double CatchallEvaluator::equity(const GamePosition &position, const Move &move) const {
   if (move.equityCalculated) {
     return move.equity;
   }
@@ -37,6 +36,7 @@ double CatchallEvaluator::equity(const GamePosition &position,
     ADD_HINT(("Because the board is currently empty:"));
     double adjustment = 0;
 
+    ADD_HINT(("<ul>"));
     if (move.action == Move::Place) {
       // this assumes symmetry between horizontal and vertical start:
 
@@ -68,8 +68,8 @@ double CatchallEvaluator::equity(const GamePosition &position,
       ADD_HINT(
           (adjustment,
            ": for the location and length of word, along with the ordering "
-           "of consonants and vowels in the word.",
-           "  "));
+           "of consonants and vowels in the word.</li>",
+           "<li>"));
     } else {
       //'favour' exchange (as opposed to word placement) on initial turn
       // weighted by 3.5
@@ -79,9 +79,10 @@ double CatchallEvaluator::equity(const GamePosition &position,
           adjustment,
           ": Since we are first, we can use this advantage to improve our "
           "rack, and wait for opponent to potentially open up score multiplier "
-          "spaces",
-          "  "));
+          "spaces</li>",
+          "<li>"));
     }
+    ADD_HINT(("</ul>"));
 
     // Finally, use other equity evaluator to determine rest of equity
     return ScorePlusLeaveEvaluator::equity(position, move) + adjustment;
@@ -104,7 +105,8 @@ double CatchallEvaluator::equity(const GamePosition &position,
            "allows this. It also decreases the possibility of the opponent "
            "closing the game."));
     }
-    return ScorePlusLeaveEvaluator::equity(position, move) + timingHeuristic;
+    return ScorePlusLeaveEvaluator::equity(position, move) +
+           timingHeuristic;
   } else {
     // When there are no more tiles in the bag; endgame situation
     ADD_HINT((move.score, ": for the score the move gives us."));
@@ -117,10 +119,12 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
   Hint *hint = move.hint();
   Rack leave = position.currentPlayer().rack() - move;
 
-  ADD_HINT(("We know the exact rack of the opponent (it is exactly the unseen tiles):"));
+  ADD_HINT(("We know the exact rack of the opponent (it is exactly the unseen "
+            "tiles):"));
+  ADD_HINT(("<div style = \"margin-left: 10px\">"));
   if (leave.empty()) {
     // the move ends the game
-    ADD_HINT(("Because the this move would end the game:", "  "));
+    ADD_HINT(("Because the this move would end the game:"));
 
     // add opposing player's sum of tiles score to deadwood
     double deadwood = 0;
@@ -131,18 +135,15 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
 
         char buf[16];
         TWO_DP(toAdd);
-        ADD_HINT((2 * toAdd,
-                  ": 2*" + LongLetterString(buf) +
-                      " (2 * sum of opponent's rack points) for " + it->name() +
-                      "'s rack score.",
-                  "  "));
+        ADD_HINT((2 * toAdd, ": 2*" + LongLetterString(buf) +
+                                 " (2 * sum of opponent's rack points) for " +
+                                 it->name() + "'s rack score."));
         deadwood += toAdd;
       }
     }
 
     ADD_HINT(("(Doubled as we prefer to end the game ourselves due to the "
-              "score bonus)",
-              "  "));
+              "score bonus)"));
     return deadwood * 2;
   }
 
@@ -157,7 +158,8 @@ double CatchallEvaluator::endgameResult(const GamePosition &position,
            " is the sum of our rack leave points): This move would not end "
            "the game, meaning the opponent might "
            "have a chance to do so. This can increase their score "
-           "linearly (with precomputed constants) to our remaining rack score.",
-       "  "));
+           "linearly (with precomputed constants) to our remaining rack "
+           "score."));
+  ADD_HINT(("</div>"));
   return -8.00 - 2.61 * leave.score();
 }

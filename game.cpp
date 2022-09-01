@@ -16,9 +16,9 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <climits>
 #include <iostream>
 #include <sstream>
-#include <climits>
 
 #include "computerplayer.h"
 #include "datamanager.h"
@@ -235,8 +235,10 @@ GamePosition::GamePosition()
 
 void GamePosition::kibitz(int nmoves, bool greedy) {
   Generator generator(*this);
-  generator.kibitz(nmoves, exchangeAllowed() ? Generator::RegularKibitz
-                                             : Generator::CannotExchange, greedy);
+  generator.kibitz(nmoves,
+                   exchangeAllowed() ? Generator::RegularKibitz
+                                     : Generator::CannotExchange,
+                   greedy);
 
   m_moves = generator.kibitzList();
 
@@ -439,7 +441,7 @@ double GamePosition::calculatePlayerConsideration(const Move &move) {
   return QUACKLE_EVALUATOR->playerConsideration(*this, move);
 }
 
-double GamePosition::leaveValue(const LetterString &leave) const {
+double GamePosition::leaveValue(const LetterString &leave, Hint *hint) const {
   return QUACKLE_EVALUATOR->leaveValue(leave);
 }
 
